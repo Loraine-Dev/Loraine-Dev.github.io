@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07090e" />
+    <title>弥洛生 MILOQEN — Living Imagination</title>
+    <meta
+      name="description"
+      content="弥洛生 MILOQEN 原创游戏开发品牌。让想象拥有生命。首款原创节奏游戏《奇妙拍档》开发中，首发目标手机与 PC。"
+    />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="./images/mark.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      as="image"
+      href="./images/poster-desktop.webp"
+      media="(min-width: 760px)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./images/poster-mobile.webp"
+      media="(max-width: 759px)"
+    />
+    <script type="module" src="/src/entry.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#threshold">跳至探索内容</a>
+    <header class="header">
+      <a class="brand" href="#top" aria-label="MILOQEN 弥洛生 首页"
+        ><img src="./images/mark.svg" width="34" height="34" alt="" /><span
+          >MILOQEN<small>弥洛生</small></span
+        ></a
+      ><a class="header-link" href="#studio">关于弥洛生 <span>↗</span></a>
+    </header>
+    <main>
+      <div class="experience" id="top">
+        <div class="scene-frame" aria-hidden="true">
+          <picture class="poster"
+            ><source
+              srcset="./images/poster-mobile.webp"
+              media="(max-width:759px)" />
+            <img
+              src="./images/poster-desktop.webp"
+              width="1600"
+              height="1000"
+              fetchpriority="high"
+              alt=""
+          /></picture>
+          <div id="scene" data-scene-state="poster"></div>
+          <div class="scene-shade"></div>
+        </div>
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="eyebrow opening">
+              MILOQEN <span>/</span> 弥洛生
+            </p>
+            <h1 id="hero-title" class="opening">让想象<br>拥有生命。</h1>
+            <p class="hero-sub opening">在秩序与未知之间，
+创造值得被记住的互动体验。</p>
+            <a href="#threshold" class="explore opening"
+              >开启探索 <span>↓</span></a
+            >
+          </div>
+          <div class="art-caption">
+            <span>THE LIVING FORM</span><span>生命形态 / 原创品牌艺术</span>
+          </div>
+          <div class="hero-foot">
+            <span>LIVING IMAGINATION</span
+            ><button
+              id="motion-toggle"
+              type="button"
+              aria-pressed="false"
+              hidden
+            >
+              暂停动态 <span>Ⅱ</span>
+            </button>
+          </div>
+        </section>
+        <section
+          class="threshold"
+          id="threshold"
+          aria-labelledby="threshold-title"
+        >
+          <div class="threshold-copy">
+            <p class="eyebrow">THRESHOLD / 开启</p>
+            <h2 id="threshold-title">想象，没有<br>固定的形状。</h2>
+            <p>一个念头，一次生长。
+让尚未被看见的世界，慢慢展开。</p>
+            <a href="#studio" class="quiet-link">认识弥洛生 <span>↗</span></a>
+          </div>
+        </section>
+      </div>
+      <section class="studio" id="studio" aria-labelledby="studio-title">
+        <p class="eyebrow">A WORLD BEYOND THE SCREEN</p>
+        <div class="studio-grid">
+          <h2 id="studio-title">
+            游戏，是秩序<br />与<span>想象</span>之间的艺术。
+          </h2>
+          <div class="studio-copy">
+            <p>
+              弥洛生 MILOQEN
+              是一个专注于原创游戏、视觉艺术与互动设计的创作品牌。
+            </p>
+            <p>
+              我们正专注于首款原创节奏游戏《奇妙拍档》的开发，首发目标为手机与 PC。
+            </p>
+            <a
+              class="quiet-link"
+              href="https://github.com/Loraine-Dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              >官方 GitHub <span>↗</span></a
+            >
+          </div>
+        </div>
+        <div class="studio-foot">
+          <span>奇妙拍档 <span> / </span> 原创节奏游戏</span
+          ><span class="status">开发中</span>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <a href="#top">MILOQEN <span>弥洛生</span></a>
+      <p>让想象拥有生命。</p>
+      <span>© 2026 MILOQEN</span>
+    </footer>
+  </body>
+</html>

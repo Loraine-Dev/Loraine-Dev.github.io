@@ -1,0 +1,5 @@
+node_modules/
+dist/
+artifacts/
+.codebase-memory/
+npm-cache/
