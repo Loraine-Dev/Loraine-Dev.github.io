@@ -3,18 +3,12 @@
     "name": "弥洛生",
     "english": "MILOQEN",
     "tagline": "让想象拥有生命。",
-    "concept": "LIVING IMAGINATION"
+    "concept": "BEYOND THE GATE — A LIVING WORLD"
   },
   "hero": {
-    "eyebrow": "原创游戏 · 视觉艺术 · 互动想象",
-    "title": ["让想象", "拥有生命。"],
-    "description": "在秩序与未知之间，\n创造值得被记住的互动体验。",
-    "explore": "开启探索"
-  },
-  "threshold": {
-    "label": "THRESHOLD / 开启",
-    "title": ["想象，没有", "固定的形状。"],
-    "description": "一个念头，一次生长。\n让尚未被看见的世界，慢慢展开。"
+    "eyebrow": "INDEPENDENT GAME STUDIO",
+    "explore": "探索世界",
+    "description": "在想象的另一侧，相遇。"
   },
   "github": "https://github.com/Loraine-Dev",
   "game": {

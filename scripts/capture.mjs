@@ -16,8 +16,17 @@ for (const [name, width, height] of [
     if (m.type() === "error") console.log("CONSOLE", m.text());
   });
   await p.goto("http://127.0.0.1:4176/", { waitUntil: "networkidle" });
-  await p.waitForFunction(() => document.querySelector('#scene')?.dataset.sceneState === 'live' || document.querySelector('#motion-toggle')?.textContent.includes('开启实时形态'), null, {timeout:60000});
-  if(await p.locator('#scene').getAttribute('data-scene-state') !== 'live') await p.getByRole('button',{name:/开启实时形态/}).click();
+  await p.waitForFunction(
+    () =>
+      document.querySelector("#scene")?.dataset.sceneState === "live" ||
+      document
+        .querySelector("#motion-toggle")
+        ?.textContent.includes("开启实时形态"),
+    null,
+    { timeout: 60000 },
+  );
+  if ((await p.locator("#scene").getAttribute("data-scene-state")) !== "live")
+    await p.getByRole("button", { name: /开启实时形态/ }).click();
   await p.waitForFunction(
     () => document.querySelector("#scene")?.dataset.sceneState === "live",
     { timeout: 30000 },

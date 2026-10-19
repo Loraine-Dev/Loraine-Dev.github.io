@@ -13,9 +13,24 @@ async function watch(page) {
   });
 }
 async function ensureLive(page) {
-  await page.waitForFunction(() => document.querySelector('#scene')?.dataset.sceneState === 'live' || document.querySelector('#motion-toggle')?.textContent.includes('开启实时形态'), null, {timeout:60000});
-  if(await page.locator('#scene').getAttribute('data-scene-state') !== 'live') await page.getByRole('button',{name:/开启实时形态/}).click();
-  await page.waitForFunction(() => document.querySelector('#scene')?.dataset.sceneState === 'live', null, {timeout:60000});
+  await page.waitForFunction(
+    () =>
+      document.querySelector("#scene")?.dataset.sceneState === "live" ||
+      document
+        .querySelector("#motion-toggle")
+        ?.textContent.includes("开启实时形态"),
+    null,
+    { timeout: 60000 },
+  );
+  if (
+    (await page.locator("#scene").getAttribute("data-scene-state")) !== "live"
+  )
+    await page.getByRole("button", { name: /开启实时形态/ }).click();
+  await page.waitForFunction(
+    () => document.querySelector("#scene")?.dataset.sceneState === "live",
+    null,
+    { timeout: 60000 },
+  );
 }
 const chromiumBrowser = await chromium.launch({
   args: ["--enable-unsafe-swiftshader"],
@@ -249,9 +264,12 @@ try {
   await chromiumBrowser.close();
 }
 let firefoxBrowser;
-try { firefoxBrowser = await firefox.launch(); }
-catch(e) { results.push({engine:'Firefox',unavailable:e.message}); }
-if(firefoxBrowser) {
+try {
+  firefoxBrowser = await firefox.launch();
+} catch (e) {
+  results.push({ engine: "Firefox", unavailable: e.message });
+}
+if (firefoxBrowser) {
   const browser = firefoxBrowser;
   const page = await browser.newPage({
     viewport: { width: 1280, height: 800 },
