@@ -1,11 +1,9 @@
 import {
-  Color,
   Mesh,
   MeshBasicMaterial,
   PerspectiveCamera,
   PlaneGeometry,
   Scene,
-  ShaderMaterial,
   SRGBColorSpace,
   Texture,
   TextureLoader,
@@ -23,6 +21,7 @@ interface Options {
   limited: boolean;
   signal: AbortSignal;
   onFailure: () => void;
+  onPose: (pose: { x: number; y: number; z: number }) => void;
 }
 export async function createWorldScene({
   host,
@@ -30,6 +29,7 @@ export async function createWorldScene({
   limited,
   signal,
   onFailure,
+  onPose,
 }: Options): Promise<WorldController> {
   const cleanup: Array<() => void> = [];
   let disposed = false;
@@ -51,7 +51,6 @@ export async function createWorldScene({
   try {
     const loader = new TextureLoader();
     const urls = [
-      mobile ? art.assets.mobile : art.assets.desktop,
       art.assets.shore,
       mobile ? art.assets.mobileGate : art.assets.gate,
     ];
@@ -68,7 +67,7 @@ export async function createWorldScene({
     if (signal.aborted) throw new DOMException("Cancelled", "AbortError");
     const renderer = new WebGLRenderer({
       antialias: false,
-      alpha: false,
+      alpha: true,
       powerPreference: "low-power",
     });
     own(() => renderer.dispose());
@@ -76,7 +75,7 @@ export async function createWorldScene({
     host.append(canvas);
     own(() => canvas.remove());
     renderer.outputColorSpace = SRGBColorSpace;
-    renderer.setClearColor(0x070b12, 1);
+    renderer.setClearColor(0x070b12, 0);
     let pixelRatio = Math.min(
       devicePixelRatio,
       limited
@@ -87,38 +86,20 @@ export async function createWorldScene({
     );
     renderer.setPixelRatio(pixelRatio);
     const scene = new Scene();
-    scene.background = new Color(0x070b12);
+
     const camera = new PerspectiveCamera(art.camera.fov, 1, 0.1, 100);
     camera.position.z = art.camera.startZ;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const fine = matchMedia("(pointer:fine)");
-    const time = { value: 0 },
-      exposure = { value: 1 };
-    const worldMaterial = new ShaderMaterial({
-      uniforms: {
-        uMap: { value: textures[0] },
-        uTime: time,
-        uExposure: exposure,
-        uMobile: { value: mobile ? 1 : 0 },
-        uAmplitude: { value: art.motion.leafAmplitude },
-      },
-      vertexShader:
-        "varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
-      fragmentShader: `uniform sampler2D uMap;uniform float uTime;uniform float uExposure;uniform float uMobile;uniform float uAmplitude;varying vec2 vUv;
-  void main(){vec2 uv=vUv;float leaves=smoothstep(.45,.64,uv.y)*smoothstep(mix(.36,.12,uMobile),mix(.48,.2,uMobile),uv.x);uv.x+=sin(uv.y*49.+uTime*.23)*uAmplitude*leaves;vec4 color=texture2D(uMap,uv);gl_FragColor=vec4(color.rgb*uExposure,1.);
-  #include <colorspace_fragment>
-  }`,
-    });
-    own(() => worldMaterial.dispose());
     const shoreMaterial = new MeshBasicMaterial({
-      map: textures[1],
+      map: textures[0],
       transparent: true,
       depthWrite: false,
       alphaTest: 0.004,
     });
     own(() => shoreMaterial.dispose());
     const gateMaterial = new MeshBasicMaterial({
-      map: textures[2],
+      map: textures[1],
       transparent: true,
       depthWrite: false,
       alphaTest: 0.004,
@@ -136,7 +117,7 @@ export async function createWorldScene({
     }> = [];
     function addPlane(
       texture: Texture,
-      material: MeshBasicMaterial | ShaderMaterial,
+      material: MeshBasicMaterial,
       z: number,
       order: number,
       u0 = 0,
@@ -157,35 +138,16 @@ export async function createWorldScene({
       planes.push({ mesh, z, u0, u1, v0, v1, cover, texture });
       return mesh;
     }
-    addPlane(textures[0], worldMaterial, art.layers.world, 0, 0, 1, 0, 1, true);
-    addPlane(textures[1], shoreMaterial, art.layers.shore, 1, 0, 1, 0, 1, true);
-    addPlane(textures[2], gateMaterial, art.layers.gate, 2, 0, 0.5, 0, 1, true);
-    addPlane(textures[2], gateMaterial, art.layers.gate, 2, 0.5, 1, 0, 1, true);
+    addPlane(textures[0], shoreMaterial, art.layers.shore, 1, 0, 1, 0, 1, true);
+    addPlane(textures[1], gateMaterial, art.layers.gate, 2, 0, 0.5, 0, 1, true);
+    addPlane(textures[1], gateMaterial, art.layers.gate, 2, 0.5, 1, 0, 1, true);
 
-    const mistMaterial = new ShaderMaterial({
-      transparent: true,
-      depthWrite: false,
-      uniforms: { uTime: time, uOpacity: { value: art.motion.mistOpacity } },
-      vertexShader:
-        "varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
-      fragmentShader: `uniform float uTime;uniform float uOpacity;varying vec2 vUv;void main(){float wave=.5+.5*sin(vUv.x*12.+uTime*.09+sin(vUv.x*6.-uTime*.07));float edge=sin(vUv.y*3.14159);float alpha=pow(edge,2.)*(.3+wave*.7)*uOpacity;gl_FragColor=vec4(.22,.28,.34,alpha);
-  #include <colorspace_fragment>
-  }`,
-    });
-    own(() => mistMaterial.dispose());
-    const mistGeometry = new PlaneGeometry(1, 1);
-    own(() => mistGeometry.dispose());
-    const mist = new Mesh(mistGeometry, mistMaterial);
-    mist.position.z = -7;
-    mist.renderOrder = 3;
-    if (!limited) scene.add(mist);
     let raf = 0,
       ready = false,
       paused = false,
       active = true,
       lost = false,
       last = 0,
-      clock = 0,
       count = 0,
       progress = 0,
       px = 0,
@@ -236,9 +198,6 @@ export async function createWorldScene({
         plane.mesh.position.x = w * ((plane.u0 + plane.u1) / 2 - 0.5);
         plane.mesh.position.y = h * ((plane.v0 + plane.v1) / 2 - 0.5);
       }
-      const fogFit = fitLayer(13, camera.aspect, 2, art.camera.fov);
-      mist.scale.set(fogFit.viewWidth * 1.2, fogFit.viewHeight * 0.2, 1);
-      mist.position.y = -fogFit.viewHeight * 0.29;
       dirty = true;
       wake();
     }
@@ -265,12 +224,15 @@ export async function createWorldScene({
       }
       last = now;
       const still = paused || reduced.matches;
-      const ambient = !limited && !still;
-      if (ambient) clock += Math.min(elapsed / 1000, 0.1);
+      const ambient = false;
       const pose = cameraAt(
-        reduced.matches ? 0 : progress,
+        reduced.matches ||
+          !art.camera.enabled ||
+          new URLSearchParams(location.search).get("camera") === "off"
+          ? 0
+          : progress,
         art.camera.startZ,
-        art.camera.travel,
+        mobile ? art.camera.mobileTravel : art.camera.travel,
       );
       camera.position.set(
         pose.x + (still ? 0 : px * art.motion.pointer),
@@ -278,8 +240,11 @@ export async function createWorldScene({
         pose.z,
       );
       camera.lookAt(camera.position.x, camera.position.y, -40);
-      time.value = clock;
-      exposure.value = 1 + (still ? 0 : progress * 0.022);
+      onPose({
+        x: camera.position.x,
+        y: camera.position.y,
+        z: camera.position.z,
+      });
 
       const start = performance.now();
       renderer.render(scene, camera);
@@ -305,7 +270,15 @@ export async function createWorldScene({
     addEventListener(
       "pointermove",
       (event) => {
-        if (!fine.matches || mobile || paused || reduced.matches) return;
+        if (
+          !fine.matches ||
+          mobile ||
+          paused ||
+          reduced.matches ||
+          !art.motion.pointerEnabled ||
+          new URLSearchParams(location.search).get("pointer") === "off"
+        )
+          return;
         px = event.clientX / innerWidth - 0.5;
         py = event.clientY / innerHeight - 0.5;
         dirty = true;
@@ -317,7 +290,6 @@ export async function createWorldScene({
       "change",
       () => {
         stop();
-        clock = 0;
         dirty = true;
         wake();
       },
@@ -352,6 +324,7 @@ export async function createWorldScene({
         stop();
         host.classList.remove("is-ready");
         host.dataset.state = "context-lost";
+        onPose({ x: 0, y: 0, z: art.camera.startZ });
       },
       { signal: events.signal },
     );

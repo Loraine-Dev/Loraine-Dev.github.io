@@ -1,0 +1,99 @@
+{
+  "generator": "scripts/prepare-motion-assets.cjs",
+  "source": "Existing unchanged original MILOQEN art; manually authored analytic masks; seeded mathematical fog, no third-party assets",
+  "assets": [
+    {
+      "path": "public/art/world-tree/motion/desktop-farFog.webp",
+      "bytes": 10412,
+      "bounds": {
+        "x": 0.1865234375,
+        "y": 0.4704861111111111,
+        "width": 0.3623046875,
+        "height": 0.1597222222222222
+      },
+      "sha256": "be292f06308aaddd05d3b4f152416a24161160bf7e8d11680b6ebb408c381860"
+    },
+    {
+      "path": "public/art/world-tree/motion/desktop-midFog.webp",
+      "bytes": 16704,
+      "bounds": {
+        "x": 0.224609375,
+        "y": 0.5451388888888888,
+        "width": 0.7646484375,
+        "height": 0.1753472222222222
+      },
+      "sha256": "1158f0bca01ae899e26ef6b2a552f10c4547990acb43850737b124562880115b"
+    },
+    {
+      "path": "public/art/world-tree/motion/desktop-treeLight.webp",
+      "bytes": 30798,
+      "bounds": {
+        "x": 0.4501953125,
+        "y": 0.10243055555555555,
+        "width": 0.46484375,
+        "height": 0.2743055555555556
+      },
+      "sha256": "209948ffa85ad300e4cb684be8bbfd37b28f1e70d378f9dd659f37cd43e031c7"
+    },
+    {
+      "path": "public/art/world-tree/motion/desktop-waterLight.webp",
+      "bytes": 5410,
+      "bounds": {
+        "x": 0.583984375,
+        "y": 0.6458333333333334,
+        "width": 0.1865234375,
+        "height": 0.1684027777777778
+      },
+      "sha256": "2a7528eb5b0c32bec0a17a55cb206e54cb028c7876e66281eab4fd03a9d93802"
+    },
+    {
+      "path": "public/art/world-tree/motion/mobile-farFog.webp",
+      "bytes": 13628,
+      "bounds": {
+        "x": 0.0185546875,
+        "y": 0.34249587685541505,
+        "width": 0.3271484375,
+        "height": 0.07751511819681144
+      },
+      "sha256": "78d30296713198a103232a2c5f1b53353bb326ffb6ba70e9cb3641e0fa45addf"
+    },
+    {
+      "path": "public/art/world-tree/motion/mobile-midFog.webp",
+      "bytes": 25598,
+      "bounds": {
+        "x": 0.0322265625,
+        "y": 0.3925233644859813,
+        "width": 0.9306640625,
+        "height": 0.11929631665750412
+      },
+      "sha256": "45b426c63d55824eafcc8e201672b9623c8f8495855584990474a6985786a5ee"
+    },
+    {
+      "path": "public/art/world-tree/motion/mobile-treeLight.webp",
+      "bytes": 61962,
+      "bounds": {
+        "x": 0.2705078125,
+        "y": 0.1605277625068719,
+        "width": 0.6513671875,
+        "height": 0.16327652556349642
+      },
+      "sha256": "ca63d5b4946e92b64c514dc5afee87957141110ffb458f707d8da113537324c6"
+    },
+    {
+      "path": "public/art/world-tree/motion/mobile-waterLight.webp",
+      "bytes": 9438,
+      "bounds": {
+        "x": 0.515625,
+        "y": 0.4931280923584387,
+        "width": 0.177734375,
+        "height": 0.1159978009895547
+      },
+      "sha256": "04a0f29916dec17bf814fb0bad3d2b310e0ee1ec954902f6d3ba17b20bbb994e"
+    },
+    {
+      "path": "public/art/world-tree/motion/fog.webp",
+      "bytes": 120972,
+      "sha256": "6aba1b9faee3c2df69c17dcf628e2914798e38dbdc4bbbafbce96b01a84feaac"
+    }
+  ]
+}

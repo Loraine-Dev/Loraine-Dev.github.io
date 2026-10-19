@@ -7,11 +7,14 @@
     "dev": "node scripts/render.mjs && vite --host 127.0.0.1 --port 4176",
     "build": "node scripts/render.mjs && tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4176",
-    "test:unit": "node --test tests/geometry.test.ts tests/world-space.test.ts",
+    "test:unit": "node --test tests/geometry.test.ts tests/world-space.test.ts tests/environment-space.test.ts",
     "test:browser": "node tests/world-browser.mjs && node tests/hero-focus.mjs",
     "format": "prettier --write src scripts tests review index.html vite.config.ts tsconfig.json",
     "capture": "node scripts/capture-world.mjs",
-    "assets": "node scripts/prepare-world-assets.cjs"
+    "assets": "node scripts/prepare-world-assets.cjs",
+    "test:environment": "node tests/environment-browser.mjs",
+    "assets:motion": "node scripts/prepare-motion-assets.cjs",
+    "record:environment": "node scripts/record-environment.mjs"
   },
   "dependencies": {
     "three": "0.186.1"

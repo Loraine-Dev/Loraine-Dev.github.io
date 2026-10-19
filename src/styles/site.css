@@ -102,7 +102,47 @@ p {
   object-fit: cover;
 }
 .world-art {
-  transform: scale(1.025);
+  transform: none;
+}
+.world-layer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+  transform: translate(-50%, -50%) scale(1.025);
+}
+.environment {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.environment-mask {
+  position: absolute;
+  inset: 0;
+  mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  overflow: hidden;
+}
+.environment-drift {
+  position: absolute;
+  inset: -5%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.farFog,
+.midFog {
+  mix-blend-mode: screen;
+}
+.treeLight .environment-drift {
+  background: radial-gradient(ellipse at 70% 45%, #ffe9c8, #c8dded 65%);
+}
+.waterLight .environment-drift {
+  background: radial-gradient(ellipse at 55% 55%, #ead4b1, transparent 70%);
+}
+.world-stage:has(#world-canvas.is-ready) .static-scene > .shore-art,
+.world-stage:has(#world-canvas.is-ready) .static-scene > .gate-art {
+  visibility: hidden;
 }
 #world-canvas {
   z-index: -2;

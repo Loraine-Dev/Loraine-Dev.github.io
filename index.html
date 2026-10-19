@@ -32,17 +32,20 @@
     <main class="world-experience" id="top" data-mode="static">
       <div class="world-stage">
         <div class="static-scene" aria-hidden="true">
-          <picture class="world-art"
-            ><source
-              srcset="./art/world-tree/world-mobile.webp"
-              media="(max-width:759px), (max-aspect-ratio:4/5)" />
-            <img
-              src="./art/world-tree/world-desktop.webp"
-              width="1672"
-              height="941"
-              alt=""
-              fetchpriority="high" /></picture
-          ><img
+          <div class="world-layer">
+            <picture class="world-art"
+              ><source
+                srcset="./art/world-tree/world-mobile.webp"
+                media="(max-width:759px), (max-aspect-ratio:4/5)" />
+              <img
+                src="./art/world-tree/world-desktop.webp"
+                width="1672"
+                height="941"
+                alt=""
+                fetchpriority="high"
+            /></picture>
+          </div>
+          <img
             class="shore-art"
             src="./art/world-tree/shore.webp"
             width="1672"

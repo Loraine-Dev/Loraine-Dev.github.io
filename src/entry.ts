@@ -1,8 +1,13 @@
 import "./styles/site.css";
 import type { WorldController } from "./scenes/world-scene";
+import { createEnvironment } from "./scenes/environment";
 const host = document.querySelector<HTMLElement>("#world-canvas")!;
 const experience = document.querySelector<HTMLElement>(".world-experience")!;
 const stage = document.querySelector<HTMLElement>(".world-stage")!;
+const environment = createEnvironment(
+  document.querySelector<HTMLElement>(".world-layer")!,
+  stage,
+);
 const toggle = document.querySelector<HTMLButtonElement>("#motion-toggle")!;
 const back = document.querySelector<HTMLAnchorElement>(".return")!;
 const copy = document.querySelector<HTMLElement>(".brand-copy")!;
@@ -19,7 +24,8 @@ function poster() {
   host.classList.remove("is-ready");
   host.dataset.state = "poster";
   experience.dataset.mode = "static";
-  toggle.hidden = true;
+  toggle.hidden = !environment.available;
+  environment.reset();
   updateProgress();
 }
 function label() {
@@ -51,6 +57,7 @@ addEventListener("pageshow", updateProgress);
 toggle.addEventListener("click", () => {
   paused = !paused;
   instance?.setPaused(paused);
+  environment.setPaused(paused);
   label();
 });
 reduce.addEventListener("change", () => {
@@ -107,6 +114,7 @@ async function start(force = false) {
       mobile: mobile.matches,
       limited: software,
       signal,
+      onPose: environment.sync,
       onFailure: () => {
         if (ticket === generation) poster();
       },
@@ -116,7 +124,7 @@ async function start(force = false) {
       return;
     }
     instance = controller;
-    host.dataset.renderStrategy = software ? "on-demand" : "animated";
+    host.dataset.renderStrategy = "on-demand";
     instance.setPaused(paused);
     experience.dataset.mode = "live";
     toggle.hidden = false;
@@ -137,6 +145,7 @@ mobile.addEventListener("change", () => {
   void start();
 });
 function activate() {
+  environment.activate();
   activated = true;
   if (deferred) {
     deferred = false;
@@ -154,3 +163,5 @@ else
   addEventListener("load", () => setTimeout(() => void start(), 250), {
     once: true,
   });
+toggle.hidden = !environment.available;
+label();
