@@ -24,6 +24,9 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   root.className = "environment";
   root.setAttribute("aria-hidden", "true");
   world.append(root);
+  root.dataset.revision = config.revision;
+  const overrides = new Map<string, boolean>();
+  let playbackRate = 1;
   const records: Array<{
     name: string;
     layer: HTMLElement;
@@ -31,7 +34,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
     enabled: boolean;
   }> = [];
   let paused = false,
-    armed = !media.matches || config.mobileStart !== 'interaction',
+    armed = !media.matches || config.mobileStart !== "interaction",
     active = true,
     pose: Pose = { x: 0, y: 0, z: art.camera.startZ };
   function sync(next: Pose = pose) {
@@ -67,20 +70,28 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
     root.dataset.paused = String(paused);
   }
   function rebuild() {
+    const phases = new Map(
+      records.map((r) => [
+        r.name,
+        r.animations.map((a) => Number(a.currentTime) || 0),
+      ]),
+    );
     for (const r of records) for (const a of r.animations) a.cancel();
     records.length = 0;
     root.replaceChildren();
     if (!config.enabled || saveData || !armed) {
-      root.dataset.deferred=String(!armed);
-      root.dataset.effects='';
+      root.dataset.deferred = String(!armed);
+      root.dataset.effects = "";
       state();
       sync();
       return;
     }
     const prefix = media.matches ? config.assets.mobile : config.assets.desktop;
-    root.dataset.deferred='false';
+    root.dataset.deferred = "false";
     for (const [name, effect] of Object.entries(config.effects)) {
-      const enabled = selection ? selection.has(name) : effect.enabled;
+      const enabled =
+        overrides.get(name) ??
+        (selection ? selection.has(name) : effect.enabled);
       if (!enabled) continue;
       const layer = document.createElement("div");
       layer.className = `environment-mask ${name}`;
@@ -142,6 +153,13 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
       );
       move.currentTime = effect.duration * effect.phase;
       breath.currentTime = effect.duration * effect.phase;
+      const previous = phases.get(name);
+      if (previous) {
+        move.currentTime = previous[0];
+        breath.currentTime = previous[1];
+      }
+      move.updatePlaybackRate(playbackRate);
+      breath.updatePlaybackRate(playbackRate);
       records.push({ name, layer, animations: [move, breath], enabled });
     }
     root.dataset.effects = records.map((r) => r.name).join(",");
@@ -172,7 +190,61 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   rebuild();
   return {
     available: config.enabled && !saveData,
-    activate() { if(!armed){armed=true;rebuild();} },
+    setEffect(name: string, enabled: boolean) {
+      overrides.set(name, enabled);
+      rebuild();
+    },
+    setRate(value: number) {
+      playbackRate = Math.max(0.25, Math.min(4, value));
+      for (const r of records)
+        for (const a of r.animations) a.updatePlaybackRate(playbackRate);
+    },
+    snapshot() {
+      return {
+        revision: config.revision,
+        enabled: config.enabled,
+        paused,
+        armed,
+        active,
+        hidden: document.hidden,
+        reduced: reduced.matches,
+        saveData,
+        playbackRate,
+        modules: Object.entries(config.effects).map(([name, effect]) => {
+          const record = records.find((r) => r.name === name);
+          return {
+            name,
+            enabled:
+              overrides.get(name) ??
+              (selection ? selection.has(name) : effect.enabled),
+            initialized: !!record,
+            mask: record?.layer.style.maskImage || "",
+            opacity: record ? getComputedStyle(record.layer).opacity : "0",
+            animations:
+              record?.animations.map((a) => ({
+                state: a.playState,
+                time: Number(a.currentTime) || 0,
+                progress: a.effect?.getComputedTiming().progress ?? 0,
+              })) || [],
+          };
+        }),
+        assets: records.flatMap((r) => {
+          const prefix = media.matches
+            ? config.assets.mobile
+            : config.assets.desktop;
+          return [
+            `${prefix}${r.name}.webp`,
+            ...(r.name.endsWith("Fog") ? [config.assets.fog] : []),
+          ];
+        }),
+      };
+    },
+    activate() {
+      if (!armed) {
+        armed = true;
+        rebuild();
+      }
+    },
     sync,
     setPaused(value: boolean) {
       paused = value;

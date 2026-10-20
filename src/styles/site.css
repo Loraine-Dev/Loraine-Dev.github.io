@@ -135,7 +135,12 @@ p {
   mix-blend-mode: screen;
 }
 .treeLight .environment-drift {
-  background: radial-gradient(ellipse at 70% 45%, #ffe9c8, #c8dded 65%);
+  background: radial-gradient(
+    ellipse 22% 19% at 70% 28%,
+    #111e2c 15%,
+    #253d50 55%,
+    transparent 100%
+  );
 }
 .waterLight .environment-drift {
   background: radial-gradient(ellipse at 55% 55%, #ead4b1, transparent 70%);

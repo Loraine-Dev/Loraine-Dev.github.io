@@ -4,6 +4,8 @@
 
 当前版本已加入两层雾、局部叶冠光、水面反射及受控镜头，原主视觉未替换。开关、素材来源与录屏方法见 [docs/living-scene.md](docs/living-scene.md)，本轮验证见 [docs/living-verification.md](docs/living-verification.md)。旧阶段记录保留作历史参考。
 
+2026-10-20 静止故障修复：手机环境层改为无需交互自动启动，校准雾与树冠局部明暗的可见幅度；镜头仍按需初始化。诊断、实际像素对照和录屏说明见 [docs/idle-motion-fix.md](docs/idle-motion-fix.md)。尚待用户动态审美验收，未发布。
+
 ## 运行
 
 ```sh

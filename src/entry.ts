@@ -8,6 +8,14 @@ const environment = createEnvironment(
   document.querySelector<HTMLElement>(".world-layer")!,
   stage,
 );
+if (
+  import.meta.env.DEV &&
+  new URLSearchParams(location.search).get("debugMotion") === "1"
+) {
+  void import("./dev/motion-debug").then(({ mountMotionDebug }) =>
+    mountMotionDebug(environment),
+  );
+}
 const toggle = document.querySelector<HTMLButtonElement>("#motion-toggle")!;
 const back = document.querySelector<HTMLAnchorElement>(".return")!;
 const copy = document.querySelector<HTMLElement>(".brand-copy")!;

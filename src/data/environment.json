@@ -1,6 +1,7 @@
 {
   "enabled": true,
-  "mobileStart": "interaction",
+  "mobileStart": "auto",
+  "revision": "v6-idle-fix.1",
   "assets": {
     "fog": "./art/world-tree/motion/fog.webp",
     "desktop": "./art/world-tree/motion/desktop-",
@@ -8,34 +9,34 @@
   },
   "desktopAspect": 1.7777777778,
   "mobileAspect": 0.5627705628,
-  "mobileStrength": 0.65,
+  "mobileStrength": 0.85,
   "effects": {
     "farFog": {
       "enabled": true,
-      "duration": 96000,
-      "opacity": 0.18,
-      "travel": 1.2,
-      "rise": 0.16,
-      "phase": 0.17,
-      "opacityDuration": 155328
+      "duration": 60000,
+      "opacity": 0.65,
+      "travel": 4.5,
+      "rise": 0.3,
+      "phase": 0.3,
+      "opacityDuration": 38000
     },
     "midFog": {
       "enabled": true,
-      "duration": 71000,
-      "opacity": 0.24,
-      "travel": -1.8,
-      "rise": 0.24,
+      "duration": 46000,
+      "opacity": 0.6,
+      "travel": -6,
+      "rise": 0.45,
       "phase": 0.37,
-      "opacityDuration": 114878.00000000001
+      "opacityDuration": 31000
     },
     "treeLight": {
       "enabled": true,
-      "duration": 43000,
-      "opacity": 0.055,
+      "duration": 22000,
+      "opacity": 0.18,
       "travel": 0,
       "rise": 0,
-      "phase": 0.21,
-      "opacityDuration": 43000
+      "phase": 0.08,
+      "opacityDuration": 22000
     },
     "waterLight": {
       "enabled": true,

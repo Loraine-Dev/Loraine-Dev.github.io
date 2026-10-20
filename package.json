@@ -14,7 +14,9 @@
     "assets": "node scripts/prepare-world-assets.cjs",
     "test:environment": "node tests/environment-browser.mjs",
     "assets:motion": "node scripts/prepare-motion-assets.cjs",
-    "record:environment": "node scripts/record-environment.mjs"
+    "record:environment": "node scripts/record-environment.mjs",
+    "test:idle": "node tests/idle-start.mjs && node tests/motion-debug.mjs",
+    "verify:idle": "node scripts/verify-idle-motion.mjs && node tests/idle-pixels.mjs"
   },
   "dependencies": {
     "three": "0.186.1"
