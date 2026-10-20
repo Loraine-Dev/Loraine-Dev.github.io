@@ -1,5 +1,7 @@
 # 弥洛生 MILOQEN · 完整官网验收版
 
+2026-10-21：已进入发布前质量候选，仍未部署。LCP 三轮中位数 4.216 → 3.759 秒，2.5 秒目标未达，冷启动存在待复核异常。完整数据和实验取舍见 [本轮记录](docs/发布前质量优化-20261021.md)。当前预览为 `/review/quality.html?device=desktop`、`?device=tablet`、`?device=mobile`；逐屏资料为 `/review/quality-gallery.html`。
+
 保留《星门之外的世界树》主视觉的静态多页官网：Home、Works、Philosophy、About、Journal、Contact，含 404、SEO 和站点地图。当前只在本地验收，未发布。
 
 《奇妙拍档》为策划与研究中的原创节奏游戏，尚未正式开发，计划平台手机与 PC。没有实机、角色、下载或发布日期。

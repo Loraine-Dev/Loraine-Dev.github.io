@@ -5,7 +5,8 @@
   "assets": {
     "fog": "./art/world-tree/motion/cloud-bank-v2.webp",
     "desktop": "./art/world-tree/motion/desktop-",
-    "mobile": "./art/world-tree/motion/mobile-"
+    "mobile": "./art/world-tree/motion/mobile-",
+    "fogAvif": "./art/world-tree/cloud-bank-v2.avif"
   },
   "desktopAspect": 1.7777777778,
   "mobileAspect": 0.5627705628,

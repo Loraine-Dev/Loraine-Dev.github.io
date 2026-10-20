@@ -218,7 +218,12 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
         for (let index = 0; index < 2; index++) {
           const cloud = document.createElement("div");
           cloud.className = `cloud-billow cloud-billow-${index}`;
-          cloud.style.backgroundImage = `url("${config.assets.fog}")`;
+          cloud.style.backgroundImage = CSS.supports(
+            "background-image",
+            'image-set(url("a.avif") type("image/avif"))',
+          )
+            ? `image-set(url("${config.assets.fogAvif}") type("image/avif"), url("${config.assets.fog}") type("image/webp"))`
+            : `url("${config.assets.fog}")`;
           drift.append(cloud);
           const a = cloud.animate(
             [
@@ -281,29 +286,34 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
           easing: "ease-in-out",
         },
       );
-      const breath = layer.animate(
-        [
-          {
-            opacity: fog
-              ? opacity
-              : opacity * (name === "treeLight" ? 0.55 : config.minimumOpacity),
-          },
-          { opacity },
-          {
-            opacity: fog
-              ? opacity
-              : opacity * (name === "treeLight" ? 0.55 : config.minimumOpacity),
-          },
-        ],
-        {
-          duration: effect.opacityDuration,
-          iterations: Infinity,
-          easing: "ease-in-out",
-        },
-      );
+      layer.style.opacity = String(opacity);
+      const breath = fog
+        ? undefined
+        : layer.animate(
+            [
+              {
+                opacity: fog
+                  ? opacity
+                  : opacity *
+                    (name === "treeLight" ? 0.55 : config.minimumOpacity),
+              },
+              { opacity },
+              {
+                opacity: fog
+                  ? opacity
+                  : opacity *
+                    (name === "treeLight" ? 0.55 : config.minimumOpacity),
+              },
+            ],
+            {
+              duration: effect.opacityDuration,
+              iterations: Infinity,
+              easing: "ease-in-out",
+            },
+          );
       move.currentTime = effect.duration * effect.phase;
-      breath.currentTime = effect.duration * effect.phase;
-      const animations = [move, ...billows, breath];
+      if (breath) breath.currentTime = effect.duration * effect.phase;
+      const animations = [move, ...billows, ...(breath ? [breath] : [])];
       const previous = phases.get(name);
       if (previous) {
         animations.forEach((a, i) => {

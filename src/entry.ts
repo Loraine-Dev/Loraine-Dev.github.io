@@ -179,13 +179,18 @@ async function start(force = false) {
       error instanceof Error ? error.message : String(error);
   }
 }
-mobile.addEventListener("change", () => {
+function reconfigureScene() {
   if (!started) return;
   instance?.dispose();
   instance = undefined;
   poster();
   void start();
-});
+}
+mobile.addEventListener("change", reconfigureScene);
+matchMedia("(max-aspect-ratio:9/16)").addEventListener(
+  "change",
+  reconfigureScene,
+);
 function activate() {
   environment.activate();
   activated = true;

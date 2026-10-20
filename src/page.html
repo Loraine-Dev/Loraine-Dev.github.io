@@ -25,9 +25,27 @@
       media="(max-width:759px), (max-aspect-ratio:4/5)"
       fetchpriority="high"
     />
-<link rel="preload" as="image" href="./art/world-tree/motion/cloud-bank-v2.webp">
-<link rel="preload" as="image" href="./art/world-tree/motion/desktop-midFog.webp" media="(min-width:760px) and (min-aspect-ratio:4/5)">
-<link rel="preload" as="image" href="./art/world-tree/motion/mobile-midFog.webp" media="(max-width:759px), (max-aspect-ratio:4/5)">
+    <link
+      rel="preload"
+      as="image"
+      href="./art/world-tree/cloud-bank-v2.avif"
+      type="image/avif"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./art/world-tree/motion/desktop-midFog.webp"
+      fetchpriority="high"
+      media="(min-width:760px) and (min-aspect-ratio:4/5)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./art/world-tree/motion/mobile-midFog.webp"
+      fetchpriority="high"
+      media="(max-width:759px), (max-aspect-ratio:4/5)"
+    />
     <script type="module" src="/src/entry.ts"></script>
   </head>
   <body>
@@ -48,14 +66,24 @@
                 fetchpriority="high"
             /></picture>
           </div>
-          <img
-            class="shore-art"
-            src="./art/world-tree/shore.webp"
-            width="1672"
-            height="941"
-            alt=""
-          /><picture class="gate-art"
+          <picture class="shore-art"
             ><source
+              type="image/avif"
+              srcset="./art/world-tree/shore-portrait.avif"
+              media="(max-aspect-ratio:9/16)" />
+            <source type="image/avif" srcset="./art/world-tree/shore.avif" />
+            <img
+              src="./art/world-tree/shore.webp"
+              width="1672"
+              height="941"
+              alt="" /></picture
+          ><picture class="gate-art"
+            ><source
+              type="image/avif"
+              srcset="./art/world-tree/gate-mobile.avif"
+              media="(max-width:759px), (max-aspect-ratio:4/5)" />
+            <source type="image/avif" srcset="./art/world-tree/gate.avif" />
+            <source
               srcset="./art/world-tree/gate-mobile.webp"
               media="(max-width:759px), (max-aspect-ratio:4/5)" />
             <img

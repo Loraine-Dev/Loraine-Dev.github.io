@@ -1,0 +1,76 @@
+[
+  {
+    "name": "gate",
+    "source": "art-source/world-tree/gate.png",
+    "fallback": "public/art/world-tree/gate.webp",
+    "output": "public/art/world-tree/gate.avif",
+    "quality": 70,
+    "chromaSubsampling": "4:4:4",
+    "width": 1536,
+    "height": 864,
+    "bytes": 136785,
+    "sourceSha256": "0e7b8e4ef55290a82f09809b09e3629deb1d60bccd971de8e177128fbad88588",
+    "sha256": "ccb04daafd3d73c120854886cc8f479a1ea4f3cc6bbed3d4869508c5d7381998"
+  },
+  {
+    "name": "gate-mobile",
+    "source": "art-source/world-tree/gate-mobile.png",
+    "fallback": "public/art/world-tree/gate-mobile.webp",
+    "output": "public/art/world-tree/gate-mobile.avif",
+    "quality": 70,
+    "chromaSubsampling": "4:4:4",
+    "width": 780,
+    "height": 1385,
+    "bytes": 105548,
+    "sourceSha256": "45bb12b0cacf3cf0c7a97894bebe00cffbe454be99e91abe092bd2294fde1a84",
+    "sha256": "7968b7b79b07a97eb378a52f449f152dc26d1d4122cf1fb85ff308f8d72a2eb4"
+  },
+  {
+    "name": "shore",
+    "source": "art-source/world-tree/shore.png",
+    "fallback": "public/art/world-tree/shore.webp",
+    "output": "public/art/world-tree/shore.avif",
+    "quality": 70,
+    "chromaSubsampling": "4:4:4",
+    "width": 1280,
+    "height": 720,
+    "bytes": 66909,
+    "sourceSha256": "632aea9a6b992a8986207ab00af370bdd842e45e598e04625205483e217ae842",
+    "sha256": "4d2c0acdfb16548382cfb708a3acd5510b462b9006f121505c3dcaf430afe53a"
+  },
+  {
+    "name": "shore-portrait",
+    "source": "art-source/world-tree/shore.png",
+    "fallback": "public/art/world-tree/shore.webp",
+    "output": "public/art/world-tree/shore-portrait.avif",
+    "quality": 70,
+    "chromaSubsampling": "4:4:4",
+    "width": 406,
+    "height": 720,
+    "sourceRect": {
+      "left": 437,
+      "top": 0,
+      "width": 406,
+      "height": 720,
+      "referenceWidth": 1280,
+      "referenceHeight": 720,
+      "maxAspect": "9/16"
+    },
+    "bytes": 21565,
+    "sourceSha256": "632aea9a6b992a8986207ab00af370bdd842e45e598e04625205483e217ae842",
+    "sha256": "1c409ed7053c2c01add462000d0118997f88a4a1db8511f0673963660aa60cbe"
+  },
+  {
+    "name": "cloud-bank-v2",
+    "source": "art-source/world-tree/cloud-bank-v2.png",
+    "fallback": "public/art/world-tree/motion/cloud-bank-v2.webp",
+    "output": "public/art/world-tree/cloud-bank-v2.avif",
+    "quality": 75,
+    "chromaSubsampling": "4:4:4",
+    "width": 1280,
+    "height": 217,
+    "bytes": 57141,
+    "sourceSha256": "621b2172c148706fa264377196408fa0826455d94ffdb2dbfc29dc6b4ee13080",
+    "sha256": "649921c9f196884e72f3274673aee317ad8977a99000b4d43e50ed2b6c70860b"
+  }
+]

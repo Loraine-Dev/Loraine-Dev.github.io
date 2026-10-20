@@ -69,8 +69,7 @@ try {
               .querySelector(".godray-field")
               .getAnimations({ subtree: true }),
           ].filter((a) => a.playState === "running").length,
-      ),
-      10,
+      ), 8,
       "Candidate replaces six independent light timelines with two scattering poses",
     );
     assert(

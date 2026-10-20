@@ -51,10 +51,22 @@ export async function createWorldScene({
   own(() => signal.removeEventListener("abort", dispose));
   try {
     const loader = new TextureLoader();
+    await Promise.all(
+      [".shore-art img", ".gate-art img"].map(async (selector) => {
+        try {
+          await document.querySelector<HTMLImageElement>(selector)?.decode();
+        } catch {
+          /* Existing static fallback remains visible. */
+        }
+      }),
+    );
     const urls = [
-      art.assets.shore,
-      mobile ? art.assets.mobileGate : art.assets.gate,
+      document.querySelector<HTMLImageElement>(".shore-art img")?.currentSrc ||
+        art.assets.shore,
+      document.querySelector<HTMLImageElement>(".gate-art img")?.currentSrc ||
+        (mobile ? art.assets.mobileGate : art.assets.gate),
     ];
+    host.dataset.shoreSource = urls[0];
     const textures = await Promise.all(
       urls.map(async (url) => {
         const t = await loader.loadAsync(url);

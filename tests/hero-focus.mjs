@@ -17,7 +17,7 @@ try {
   );
   await p.evaluate(() => scrollTo(0, innerHeight * 0.8));
   await p.waitForTimeout(900);
-  await p.locator(".github").focus();
+  await p.locator(".world-header .desktop-nav a:last-child").focus();
   await p.keyboard.press("Tab");
   assert.notEqual(
     await p.locator(":focus").getAttribute("class"),
