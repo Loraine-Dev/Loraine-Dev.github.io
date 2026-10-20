@@ -29,6 +29,8 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   const overrides = new Map<string, boolean>();
   let playbackRate = 1;
   let comparisonStatic = false;
+  let ambientLightSuppressed =
+    import.meta.env.DEV && params.get("artStudy") === "godrays";
   let studyEnabled = false;
   let studyTime: number | undefined;
   const originalLight = new Map<
@@ -127,7 +129,11 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   function state() {
     let running = 0;
     for (const record of records) {
-      const play = motionEnabled(record.enabled, {
+      const suppressed =
+        ambientLightSuppressed &&
+        (record.name === "treeLight" || record.name === "waterLight");
+      record.layer.hidden = suppressed;
+      const play = motionEnabled(record.enabled && !suppressed, {
         reduced: reduced.matches,
         paused: paused || comparisonStatic,
         hidden: document.hidden,
@@ -142,6 +148,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
     root.dataset.comparison = comparisonStatic ? "static" : "dynamic";
     root.dataset.running = String(running);
     root.dataset.paused = String(paused);
+    root.dataset.ambientLightSuppressed = String(ambientLightSuppressed);
   }
   function rebuild() {
     if (import.meta.env.DEV && originalLight.size) restoreLight();
@@ -331,6 +338,11 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   rebuild();
   return {
     available: config.enabled && !saveData,
+    setAmbientLightSuppressed(value: boolean) {
+      if (!import.meta.env.DEV) return;
+      ambientLightSuppressed = value;
+      state();
+    },
     setLightStudy(value: boolean) {
       if (!import.meta.env.DEV || value === studyEnabled) return;
       if (originalLight.size) restoreLight();
@@ -358,6 +370,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
         enabled: config.enabled,
         paused,
         comparisonStatic,
+        ambientLightSuppressed,
         studyEnabled,
         armed,
         active,

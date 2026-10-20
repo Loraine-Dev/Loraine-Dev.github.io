@@ -14,7 +14,9 @@
   "game": {
     "name": "奇妙拍档",
     "genre": "原创节奏游戏",
-    "status": "开发中",
-    "platforms": "手机与 PC"
+    "status": "策划中",
+    "statusEnglish": "In Planning",
+    "phase": "策划与研究中，尚未正式进入游戏开发",
+    "platforms": "计划平台：手机与 PC"
   }
 }

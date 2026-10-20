@@ -10,6 +10,17 @@ const environment = createEnvironment(
 );
 if (
   import.meta.env.DEV &&
+  new URLSearchParams(location.search).get("artStudy") === "godrays"
+) {
+  void import("./dev/godray-study").then(({ mountGodrayStudy }) =>
+    mountGodrayStudy(
+      environment,
+      document.querySelector<HTMLElement>(".world-layer")!,
+    ),
+  );
+}
+if (
+  import.meta.env.DEV &&
   new URLSearchParams(location.search).get("artStudy") === "light"
 ) {
   void import("./dev/art-study").then(({ mountArtStudy }) =>
