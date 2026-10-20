@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>MILOQEN · 完整官网验收</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100svh;
+        background: #10141c;
+        color: #d9dee7;
+        font:
+          12px Arial,
+          "Microsoft YaHei",
+          sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        padding: 20px;
+      }
+      header {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      a {
+        color: #cbb58f;
+        text-decoration: none;
+      }
+      .frame {
+        overflow: hidden;
+        width: calc(var(--w) * var(--s));
+        height: calc(var(--h) * var(--s));
+        box-shadow: 0 20px 80px #0007;
+      }
+      iframe {
+        width: var(--w);
+        height: var(--h);
+        border: 0;
+        transform: scale(var(--s));
+        transform-origin: top left;
+      }
+      p {
+        color: #9aabb7;
+        margin: 0;
+        font-size: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <span id="label"></span><a id="other"></a
+      ><a href="http://127.0.0.1:4177/" target="_blank" rel="noopener"
+        >打开原页 ↗</a
+      >
+    </header>
+    <div class="frame">
+      <iframe title="MILOQEN 完整官网" src="http://127.0.0.1:4177/"></iframe>
+    </div>
+    <p>完整构建预览 · 可使用站内导航逐页验收 · 尚未部署</p>
+    <script>
+      const mobile =
+          new URLSearchParams(location.search).get("device") === "mobile",
+        w = mobile ? 390 : 1440,
+        h = mobile ? 844 : 900;
+      document.getElementById("label").textContent = mobile
+        ? "手机 · 390 × 844"
+        : "桌面 · 1440 × 900";
+      const other = document.getElementById("other");
+      other.textContent = mobile ? "桌面预览" : "手机预览";
+      other.href = "?device=" + (mobile ? "desktop" : "mobile");
+      function fit() {
+        const s = document.documentElement.style;
+        s.setProperty("--w", w + "px");
+        s.setProperty("--h", h + "px");
+        s.setProperty(
+          "--s",
+          Math.max(
+            0.1,
+            Math.min(1, (innerWidth - 40) / w, (innerHeight - 110) / h),
+          ),
+        );
+      }
+      addEventListener("resize", fit);
+      fit();
+    </script>
+  </body>
+</html>

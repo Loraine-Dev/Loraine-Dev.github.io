@@ -289,10 +289,10 @@ try {
   await keyboard.keyboard.press("Tab");
   assert.equal(
     await keyboard.locator(":focus").getAttribute("href"),
-    "#beyond",
+    "#content",
   );
   await keyboard.keyboard.press("Enter");
-  assert.equal(await keyboard.locator(":focus").getAttribute("id"), "beyond");
+  assert.equal(await keyboard.locator(":focus").getAttribute("id"), "content");
   report.checks.push({
     keyboard: "skip link and focused destination",
     passed: true,

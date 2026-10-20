@@ -1,6 +1,6 @@
 {
   "name": "miloqen-living-imagination",
-  "version": "6.0.0-study.2",
+  "version": "6.0.0-review.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -21,7 +21,8 @@
     "assets:cloud": "node scripts/prepare-cloud-bank.cjs",
     "record:flow": "node scripts/record-visible-flow.mjs && node scripts/encode-visible-flow.mjs",
     "assets:godrays": "node scripts/prepare-godrays.cjs",
-    "test:godrays": "node tests/godray-study.mjs"
+    "test:godrays": "node tests/godray-study.mjs",
+    "test:site": "node --test tests/site-build.test.mjs tests/journal.test.mjs && node tests/site-browser.mjs"
   },
   "dependencies": {
     "three": "0.186.1"

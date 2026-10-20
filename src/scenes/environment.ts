@@ -29,8 +29,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   const overrides = new Map<string, boolean>();
   let playbackRate = 1;
   let comparisonStatic = false;
-  let ambientLightSuppressed =
-    import.meta.env.DEV && params.get("artStudy") === "godrays";
+  let ambientLightSuppressed = true;
   let studyEnabled = false;
   let studyTime: number | undefined;
   const originalLight = new Map<
@@ -174,7 +173,12 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
       const enabled =
         overrides.get(name) ??
         (selection ? selection.has(name) : effect.enabled);
-      if (!enabled) continue;
+      if (
+        !enabled ||
+        (ambientLightSuppressed &&
+          (name === "treeLight" || name === "waterLight"))
+      )
+        continue;
       const layer = document.createElement("div");
       layer.className = `environment-mask ${name}`;
       layer.dataset.effect = name;
@@ -338,8 +342,17 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   rebuild();
   return {
     available: config.enabled && !saveData,
+    motionState() {
+      return {
+        reduced: reduced.matches,
+        saveData,
+        paused,
+        hidden: document.hidden,
+        active,
+        comparisonStatic,
+      };
+    },
     setAmbientLightSuppressed(value: boolean) {
-      if (!import.meta.env.DEV) return;
       ambientLightSuppressed = value;
       state();
     },

@@ -19,7 +19,7 @@ for (const size of [
     () => document.querySelector("#world-canvas").dataset.state === "live",
   );
   const env = p.locator(".environment");
-  assert.equal(await env.getAttribute("data-running"), "4");
+  assert.equal(await env.getAttribute("data-running"), "2");
   await p.waitForTimeout(700);
   const frames = await p.locator("#world-canvas").getAttribute("data-frames");
   const times = await env.evaluate((e) =>
@@ -109,7 +109,7 @@ for (const size of [
 for (const effect of ["", "farFog", "midFog", "treeLight", "waterLight"]) {
   const p = await b.newPage();
   await p.goto(`${base}?effects=${effect}`, { waitUntil: "networkidle" });
-  assert.equal(await p.locator(".environment-mask").count(), effect ? 1 : 0);
+  assert.equal(await p.locator(".environment-mask").count(), effect.endsWith("Fog") ? 1 : 0);
   checks.push({ only: effect || "none", independentSwitch: true });
   await p.close();
 }

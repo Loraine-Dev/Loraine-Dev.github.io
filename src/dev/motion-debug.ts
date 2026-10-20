@@ -34,7 +34,9 @@ export function mountMotionDebug(controller: Controller) {
     string,
     { check: HTMLInputElement; text: HTMLElement; bar: HTMLProgressElement }
   >();
-  for (const module of controller.snapshot().modules) {
+  for (const module of controller
+    .snapshot()
+    .modules.filter((m) => m.name.endsWith("Fog"))) {
     const label = document.createElement("label"),
       check = document.createElement("input");
     check.type = "checkbox";
@@ -55,7 +57,8 @@ export function mountMotionDebug(controller: Controller) {
     rows.set(module.name, { check, text, bar });
   }
   const waterfall = document.createElement("p");
-  waterfall.textContent = "瀑布：静态 / 源图内烘焙，无独立水流素材";
+  waterfall.textContent =
+    "云谷光路：使用开发入口 ?artStudy=godrays 独立对照。旧树光/水光已由统一光路取代。瀑布保持静态。";
   field.append(waterfall);
   const pause = document.createElement("button");
   pause.type = "button";
@@ -136,7 +139,8 @@ export function mountMotionDebug(controller: Controller) {
       `环境：Web Animations API；GSAP：未使用\n镜头：${host?.dataset.state} / ${host?.dataset.renderStrategy || "等待初始化"}，绘制=${host?.dataset.frames || 0}（静置不必增加）`,
     );
     for (const module of s.modules) {
-      const row = rows.get(module.name)!;
+      const row = rows.get(module.name);
+      if (!row) continue;
       row.check.checked = module.enabled;
       const a = module.animations[module.animations.length - 1],
         move = module.animations[0];

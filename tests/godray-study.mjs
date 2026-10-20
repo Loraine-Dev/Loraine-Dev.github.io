@@ -113,7 +113,7 @@ try {
   }
   const prod = await browser.newPage();
   await prod.goto("http://127.0.0.1:4177/?artStudy=godrays");
-  assert.equal(await prod.locator(".godray-field").count(), 0);
+  assert.equal(await prod.locator(".godray-field img").count(), 2);
   assert.equal(await prod.locator("#godray-controls").count(), 0);
   const initialReduced = await browser.newContext({
     viewport: { width: 1440, height: 900 },

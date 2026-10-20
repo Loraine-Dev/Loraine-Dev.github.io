@@ -10,13 +10,5 @@
     "explore": "探索世界",
     "description": "在想象的另一侧，相遇。"
   },
-  "github": "https://github.com/Loraine-Dev",
-  "game": {
-    "name": "奇妙拍档",
-    "genre": "原创节奏游戏",
-    "status": "策划中",
-    "statusEnglish": "In Planning",
-    "phase": "策划与研究中，尚未正式进入游戏开发",
-    "platforms": "计划平台：手机与 PC"
-  }
+  "github": "https://github.com/Loraine-Dev"
 }

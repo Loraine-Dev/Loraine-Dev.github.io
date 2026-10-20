@@ -1,3 +1,5 @@
+import "./site-entry";
+import { mountGodrays } from "./scenes/godrays";
 import "./styles/site.css";
 import type { WorldController } from "./scenes/world-scene";
 import { createEnvironment } from "./scenes/environment";
@@ -8,17 +10,12 @@ const environment = createEnvironment(
   document.querySelector<HTMLElement>(".world-layer")!,
   stage,
 );
-if (
+mountGodrays(
+  environment,
+  document.querySelector<HTMLElement>(".world-layer")!,
   import.meta.env.DEV &&
-  new URLSearchParams(location.search).get("artStudy") === "godrays"
-) {
-  void import("./dev/godray-study").then(({ mountGodrayStudy }) =>
-    mountGodrayStudy(
-      environment,
-      document.querySelector<HTMLElement>(".world-layer")!,
-    ),
-  );
-}
+    new URLSearchParams(location.search).get("artStudy") === "godrays",
+);
 if (
   import.meta.env.DEV &&
   new URLSearchParams(location.search).get("artStudy") === "light"

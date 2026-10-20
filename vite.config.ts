@@ -1,9 +1,32 @@
+import { readdirSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 import { defineConfig } from "vite";
 import { execFileSync } from "node:child_process";
 import environment from "./src/data/environment.json" with { type: "json" };
 export default defineConfig({
   base: "./",
-  build: { target: "es2022", assetsDir: "assets", chunkSizeWarningLimit: 600 },
+  build: {
+    rollupOptions: {
+      input: [
+        "index.html",
+        "works/index.html",
+        "philosophy/index.html",
+        "about/index.html",
+        "journal/index.html",
+        "contact/index.html",
+        "404.html",
+        ...readdirSync("journal", { withFileTypes: true })
+          .filter(
+            (d) =>
+              d.isDirectory() && existsSync(`journal/${d.name}/index.html`),
+          )
+          .map((d) => `journal/${d.name}/index.html`),
+      ].map((p) => resolve(p)),
+    },
+    target: "es2022",
+    assetsDir: "assets",
+    chunkSizeWarningLimit: 600,
+  },
   server: { strictPort: true },
   plugins: [
     {

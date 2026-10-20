@@ -26,10 +26,10 @@ try {
       "D:/codex/work/miloqen-v6",
     ),
   );
-  await page.locator('input[data-module="treeLight"]').uncheck();
-  assert.equal(await page.locator(".treeLight").count(), 0);
-  await page.locator('input[data-module="treeLight"]').check();
-  assert.equal(await page.locator(".treeLight").count(), 1);
+  await page.locator('input[data-module="farFog"]').uncheck();
+  assert.equal(await page.locator(".farFog").count(), 0);
+  await page.locator('input[data-module="farFog"]').check();
+  assert.equal(await page.locator(".farFog").count(), 1);
   await page.getByLabel("临时调试速度", { exact: true }).selectOption("4");
   await page.waitForFunction(() =>
     document.querySelector("[data-status]").textContent.includes("4×"),
@@ -42,8 +42,7 @@ try {
   );
   await page.getByRole("button", { name: "暂停 / 恢复全部" }).click();
   assert.equal(
-    await page.locator(".environment").getAttribute("data-running"),
-    "4",
+    await page.locator(".environment").getAttribute("data-running"), "2",
   );
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.waitForFunction(() =>

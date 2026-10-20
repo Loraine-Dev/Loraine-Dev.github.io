@@ -25,8 +25,7 @@ try {
     "visible",
   );
   assert.equal(
-    await page.locator(".environment").getAttribute("data-running"),
-    "4",
+    await page.locator(".environment").getAttribute("data-running"), "2",
   );
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.waitForFunction(

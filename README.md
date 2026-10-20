@@ -1,65 +1,43 @@
-# MILOQEN「月汐之门」首页原型
+# 弥洛生 MILOQEN · 完整官网验收版
 
-当前待验收候选 A：`/?artStudy=godrays`，在已认可云雾之上验证云谷散射光；仅开发预览，不替换默认首页。桌面/手机、素材来源与实录见 [docs/godray-study-review.md](docs/godray-study-review.md)。完整六页路线见 [docs/site-roadmap.md](docs/site-roadmap.md)，等待首页确认后实施。《奇妙拍档》当前为策划与研究阶段，尚未正式进入游戏开发。
+保留《星门之外的世界树》主视觉的静态多页官网：Home、Works、Philosophy、About、Journal、Contact，含 404、SEO 和站点地图。当前只在本地验收，未发布。
 
-独立美术实验：`/?artStudy=light` 比较“云隙透光”的统一受光关系。仅开发模式，默认首页维持已认可版本。三个候选、实拍与实际收益边界见 [docs/light-study-review.md](docs/light-study-review.md)；没有并入正式版本或部署。
-
-当前验收版本：`v6-visible-flow.2`。新增独立透明云带的可辨认漂移/形变、两束局部斜光，以及仅开发预览显示的“静态 / 动态”切换。详见 [docs/visible-flow.md](docs/visible-flow.md)。上一轮像素检查不能代替实际观看验收；本轮未发布，原主视觉不变。
-
-本轮只制作首页，尚待用户美术验收，不部署正式站。
-
-当前版本已加入两层雾、局部叶冠光、水面反射及受控镜头，原主视觉未替换。开关、素材来源与录屏方法见 [docs/living-scene.md](docs/living-scene.md)，本轮验证见 [docs/living-verification.md](docs/living-verification.md)。旧阶段记录保留作历史参考。
-
-2026-10-20 静止故障修复：手机环境层改为无需交互自动启动，校准雾与树冠局部明暗的可见幅度；镜头仍按需初始化。诊断、实际像素对照和录屏说明见 [docs/idle-motion-fix.md](docs/idle-motion-fix.md)。尚待用户动态审美验收，未发布。
+《奇妙拍档》为策划与研究中的原创节奏游戏，尚未正式开发，计划平台手机与 PC。没有实机、角色、下载或发布日期。
 
 ## 运行
+
+需要 Node.js 24。
 
 ```sh
 npm ci
 npm run dev
-```
-
-- 桌面：http://127.0.0.1:4176/
-- 固定桌面视口验收：http://127.0.0.1:4176/review/desktop.html
-- 手机固定视口验收：http://127.0.0.1:4176/review/mobile.html
-- 手机真机模拟：浏览器开发者工具切换到手机尺寸，直接访问首页。
-
-```sh
 npm run build
 npm run preview -- --port 4177
 ```
 
-构建产物在 dist/，兼容静态托管。本轮不启用自动部署，且原型以 noindex 阻止索引。
+- 开发入口：http://127.0.0.1:4176/
+- 完整生产构建：http://127.0.0.1:4177/
+- 桌面验收：http://127.0.0.1:4176/review/complete.html?device=desktop
+- 手机验收：http://127.0.0.1:4176/review/complete.html?device=mobile
+- 开发专用光路 A/B：http://127.0.0.1:4176/?artStudy=godrays
 
-## 修改内容与场景
+## 维护与检查
 
-- 文案：src/data/site.json。改完后重新运行 npm run dev 或 npm run build。
-- 首页结构：src/page.html；只渲染一个首页艺术原型。
-- 色彩/字体/间距：src/styles/site.css 中 :root 与响应式部分。
-- 素材地址、层深、相机、质量和动画幅度：src/data/world.json。
-- 透视场景：src/scenes/world-scene.ts。
-- 相机数学：src/scenes/world-space.ts。
-- 生命周期、降级与按钮：src/entry.ts。
-
-调整层深或镜头距离后必须重新截图，因为边缘露底、文字位置、门体退出速度都会变化。此方案为受控 2.5D 镜头，不支持任意视角。
-
-## 素材维护
-
-源 PNG、提示词和来源在 art-source/world-tree/。替换源图后运行 `node scripts/prepare-world-assets.cjs` 生成 WebP 并更新清单。该命令需要开发依赖 sharp。需要保留前景/中景图透明 alpha，不能保存为 JPG。手机远景与门体为独立构图。
-
-静态替代由同一组美术层组合：无 JS、无 WebGL2、低内存或节省流量时仍可读且不强迫开场等待。减少动态效果时关闭相机、局部环境层和入场动画。暂停按钮停止环境持续运动，用户主动滚动仍可探索空间。
-
-手机与软件 GPU 首次探索/滚动后才初始化空间场景，避免静态首帧被 WebGL 编译阻塞。宽度小于 760px 或宽高比不超过 4:5 使用独立竖幅构图。review/ 下两页仅为本地验收工具，分别固定真实桌面和手机 iframe 视口并缩放展示。
-
-## 检查与验收
+完整中文说明：[维护手册](docs/维护手册.md)。品牌与文案在 src/data，作品为 works.json 数组，文章为 content/journal 的 Markdown。修改后运行构建，内页不加载场景代码。页面由 scripts/render.mjs 生成，勿手改生成 HTML。
 
 ```sh
 npm run test:unit
-npm run test:browser
+npm run test:site
+node tests/world-browser.mjs
+node scripts/audit-site.mjs
 ```
 
-浏览器截图和检查数据位于 artifacts/world-tree/。设计与路线比较见 docs/world-tree-design.md；实际测试结果单独记录在 docs/world-tree-verification.md。
+浏览器检查需要先在 4177 启动生产预览。报告和逐页截图输出 artifacts/complete-site；不把自动测试通过视为艺术验收通过。
 
-## 历史与发布
+## 发布边界
 
-工作分支 feature/miloqen-v6。9b1b8bd 保存被替代的雕塑探索，V4 在另一独立仓库和发布包中保留。远端 main 未修改。只有用户后续确认，才进入 PR/部署流程。
+仅手动触发的 GitHub Pages 工作流已准备，未运行。正式域名为用户根站点 https://loraine-dev.github.io/ 。验收与明确发布授权之前，不推送、不覆盖线上站点。
+
+当前阶段设计与实施：[完整官网计划](docs/complete-site-plan.md)。上轮原型路线和旧 README 保留在 docs 中作为历史记录，其“仅首页、等待实施”等表述已被本轮授权取代。
+
+本轮前回滚分支：codex/stable-before-complete-site-20261020（426c44e）。
