@@ -10,6 +10,14 @@ const environment = createEnvironment(
 );
 if (
   import.meta.env.DEV &&
+  new URLSearchParams(location.search).get("artStudy") === "light"
+) {
+  void import("./dev/art-study").then(({ mountArtStudy }) =>
+    mountArtStudy(environment),
+  );
+}
+if (
+  import.meta.env.DEV &&
   new URLSearchParams(location.search).get("debugMotion") === "1"
 ) {
   void import("./dev/motion-debug").then(({ mountMotionDebug }) =>

@@ -1,0 +1,31 @@
+{
+  "id": "cloud-break-1",
+  "duration": 32000,
+  "initialPhase": 0.22,
+  "curve": [
+    [0, 0.06],
+    [0.18, 0.08],
+    [0.42, 1],
+    [0.6, 0.92],
+    [0.9, 0.04],
+    [1, 0.06]
+  ],
+  "desktop": {
+    "treeLow": 0.06,
+    "treeHigh": 0.72,
+    "waterLow": 0.003,
+    "waterHigh": 0.24,
+    "reflectionX": 67.6,
+    "reflectionY": 73,
+    "angles": [-28, 18]
+  },
+  "mobile": {
+    "treeLow": 0.05,
+    "treeHigh": 0.66,
+    "waterLow": 0.003,
+    "waterHigh": 0.2,
+    "reflectionX": 60.5,
+    "reflectionY": 55.1,
+    "angles": [-23, 22]
+  }
+}

@@ -1,5 +1,7 @@
 # MILOQEN「月汐之门」首页原型
 
+独立美术实验：`/?artStudy=light` 比较“云隙透光”的统一受光关系。仅开发模式，默认首页维持已认可版本。三个候选、实拍与实际收益边界见 [docs/light-study-review.md](docs/light-study-review.md)；没有并入正式版本或部署。
+
 当前验收版本：`v6-visible-flow.2`。新增独立透明云带的可辨认漂移/形变、两束局部斜光，以及仅开发预览显示的“静态 / 动态”切换。详见 [docs/visible-flow.md](docs/visible-flow.md)。上一轮像素检查不能代替实际观看验收；本轮未发布，原主视觉不变。
 
 本轮只制作首页，尚待用户美术验收，不部署正式站。

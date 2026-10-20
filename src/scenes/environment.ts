@@ -6,6 +6,7 @@ import {
   maskPlacement,
 } from "./environment-space";
 import placements from "../data/environment-regions.json";
+import lightStudy from "../data/light-study.json";
 type Pose = { x: number; y: number; z: number };
 export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   const media = matchMedia("(max-width:759px), (max-aspect-ratio:4/5)");
@@ -28,12 +29,82 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   const overrides = new Map<string, boolean>();
   let playbackRate = 1;
   let comparisonStatic = false;
+  let studyEnabled = false;
+  let studyTime: number | undefined;
+  const originalLight = new Map<
+    Animation,
+    { frames: ComputedKeyframe[]; timing: OptionalEffectTiming; time: number }
+  >();
+  root.dataset.lightStudy = "off";
   const records: Array<{
     name: string;
     layer: HTMLElement;
     animations: Animation[];
     enabled: boolean;
   }> = [];
+  function restoreLight() {
+    const breath = records
+      .find((r) => r.name === "treeLight")
+      ?.animations.at(-1);
+    if (breath) studyTime = Number(breath.currentTime) || 0;
+    for (const [a, original] of originalLight) {
+      const effect = a.effect as KeyframeEffect;
+      effect.setKeyframes(original.frames);
+      effect.updateTiming(original.timing);
+      a.currentTime = original.time;
+    }
+    originalLight.clear();
+  }
+  function applyLightStudy() {
+    if (!import.meta.env.DEV || !studyEnabled) return;
+    const profile = media.matches ? lightStudy.mobile : lightStudy.desktop;
+    root.style.setProperty("--reflection-x", `${profile.reflectionX}%`);
+    root.style.setProperty("--reflection-y", `${profile.reflectionY}%`);
+    const sharedTime =
+      studyTime ?? lightStudy.duration * lightStudy.initialPhase;
+    for (const r of records.filter(
+      (r) => r.name === "treeLight" || r.name === "waterLight",
+    )) {
+      r.animations.forEach((a, index) => {
+        const effect = a.effect as KeyframeEffect;
+        originalLight.set(a, {
+          frames: effect.getKeyframes(),
+          timing: {
+            ...effect.getTiming(),
+            duration: Number(effect.getTiming().duration),
+          },
+          time: Number(a.currentTime) || 0,
+        });
+        if (index === r.animations.length - 1) {
+          const low =
+            r.name === "treeLight" ? profile.treeLow : profile.waterLow;
+          const high =
+            r.name === "treeLight" ? profile.treeHigh : profile.waterHigh;
+          effect.setKeyframes(
+            lightStudy.curve.map(([offset, energy]) => ({
+              offset,
+              opacity: low + (high - low) * energy,
+              easing: "ease-in-out",
+            })),
+          );
+        } else {
+          // Reuse existing timelines; stop the separate light wander, don't add another loop.
+          const transform =
+            index === 0
+              ? "translate3d(0,0,0)"
+              : `rotate(${profile.angles[index - 1]}deg)`;
+          effect.setKeyframes([{ transform }, { transform }]);
+        }
+        effect.updateTiming({
+          duration: lightStudy.duration,
+          iterations: Infinity,
+          direction: "normal",
+          easing: "linear",
+        });
+        a.currentTime = sharedTime;
+      });
+    }
+  }
   let paused = false,
     armed = !media.matches || config.mobileStart !== "interaction",
     active = true,
@@ -73,6 +144,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
     root.dataset.paused = String(paused);
   }
   function rebuild() {
+    if (import.meta.env.DEV && originalLight.size) restoreLight();
     const phases = new Map(
       records.map((r) => [
         r.name,
@@ -231,6 +303,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
       records.push({ name, layer, animations, enabled });
     }
     root.dataset.effects = records.map((r) => r.name).join(",");
+    applyLightStudy();
     state();
     sync();
   }
@@ -258,6 +331,14 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   rebuild();
   return {
     available: config.enabled && !saveData,
+    setLightStudy(value: boolean) {
+      if (!import.meta.env.DEV || value === studyEnabled) return;
+      if (originalLight.size) restoreLight();
+      studyEnabled = value;
+      root.dataset.lightStudy = value ? "on" : "off";
+      applyLightStudy();
+      state();
+    },
     setComparisonStatic(value: boolean) {
       comparisonStatic = value;
       state();
@@ -277,6 +358,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
         enabled: config.enabled,
         paused,
         comparisonStatic,
+        studyEnabled,
         armed,
         active,
         hidden: document.hidden,
