@@ -1,6 +1,9 @@
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
 import fs from "node:fs/promises";
+const config = JSON.parse(
+  await fs.readFile("src/data/environment.json", "utf8"),
+);
 const browser = await chromium.launch({
   args: ["--enable-unsafe-swiftshader"],
 });
@@ -16,7 +19,7 @@ try {
     document.querySelector("[data-resources]")?.textContent.includes("loaded"),
   );
   assert(
-    (await page.locator("#motion-debug").innerText()).includes("v6-idle-fix.1"),
+    (await page.locator("#motion-debug").innerText()).includes(config.revision),
   );
   assert(
     (await page.locator("#motion-debug").innerText()).includes(
@@ -65,7 +68,10 @@ try {
     );
   const brokenContext = await browser.newContext();
   const broken = await brokenContext.newPage();
-  await broken.route("**/motion/fog.webp", (route) => route.abort());
+  await broken.route(
+    `**/motion/${config.assets.fog.split("/").pop()}`,
+    (route) => route.abort(),
+  );
   await broken.goto("http://127.0.0.1:4176/?debugMotion=1", {
     waitUntil: "networkidle",
   });

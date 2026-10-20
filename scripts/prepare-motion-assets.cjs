@@ -36,10 +36,22 @@ async function main() {
             source[i * info.channels + 2] * 0.0722) /
           255;
         // Suppress dark rock/branches. Soft luminance gating protects painted silhouettes.
-        const protect = Math.max(
+        let protect = Math.max(
           0,
           Math.min(1, (lum - (name === "treeLight" ? 0.27 : 0.15)) / 0.25),
         );
+        if (name === "treeLight") {
+          // The old leaf-only gate put light exclusively on already silver-white pixels.
+          // Admit blue air between leaves so two localized shafts can actually be read.
+          const r = source[i * info.channels],
+            g = source[i * info.channels + 1],
+            b = source[i * info.channels + 2];
+          const blueAir =
+            b > r * 1.16 && b > g * 1.07
+              ? Math.max(0, Math.min(0.7, (lum - 0.08) / 0.24))
+              : 0;
+          protect = Math.max(protect, blueAir);
+        }
         pixels[i * 4] = pixels[i * 4 + 1] = pixels[i * 4 + 2] = 255;
         pixels[i * 4 + 3] = Math.round(shape[i * 4 + 3] * protect);
       }

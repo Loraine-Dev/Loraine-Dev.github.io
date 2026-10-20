@@ -1,5 +1,7 @@
 # MILOQEN「月汐之门」首页原型
 
+当前验收版本：`v6-visible-flow.2`。新增独立透明云带的可辨认漂移/形变、两束局部斜光，以及仅开发预览显示的“静态 / 动态”切换。详见 [docs/visible-flow.md](docs/visible-flow.md)。上一轮像素检查不能代替实际观看验收；本轮未发布，原主视觉不变。
+
 本轮只制作首页，尚待用户美术验收，不部署正式站。
 
 当前版本已加入两层雾、局部叶冠光、水面反射及受控镜头，原主视觉未替换。开关、素材来源与录屏方法见 [docs/living-scene.md](docs/living-scene.md)，本轮验证见 [docs/living-verification.md](docs/living-verification.md)。旧阶段记录保留作历史参考。

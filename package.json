@@ -16,7 +16,10 @@
     "assets:motion": "node scripts/prepare-motion-assets.cjs",
     "record:environment": "node scripts/record-environment.mjs",
     "test:idle": "node tests/idle-start.mjs && node tests/motion-debug.mjs",
-    "verify:idle": "node scripts/verify-idle-motion.mjs && node tests/idle-pixels.mjs"
+    "verify:idle": "node scripts/verify-idle-motion.mjs && node tests/idle-pixels.mjs",
+    "test:flow": "node tests/cloud-flow.mjs && node tests/motion-compare.mjs",
+    "assets:cloud": "node scripts/prepare-cloud-bank.cjs",
+    "record:flow": "node scripts/record-visible-flow.mjs && node scripts/encode-visible-flow.mjs"
   },
   "dependencies": {
     "three": "0.186.1"

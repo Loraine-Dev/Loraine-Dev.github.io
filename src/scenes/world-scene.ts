@@ -13,6 +13,7 @@ import art from "../data/world.json";
 import { cameraAt, fitLayer } from "./world-space";
 export interface WorldController {
   setPaused(value: boolean): void;
+  setStatic(value: boolean): void;
   dispose(): void;
 }
 interface Options {
@@ -145,6 +146,7 @@ export async function createWorldScene({
     let raf = 0,
       ready = false,
       paused = false,
+      comparisonStatic = false,
       active = true,
       lost = false,
       last = 0,
@@ -223,10 +225,11 @@ export async function createWorldScene({
         return;
       }
       last = now;
-      const still = paused || reduced.matches;
+      const still = paused || reduced.matches || comparisonStatic;
       const ambient = false;
       const pose = cameraAt(
         reduced.matches ||
+          comparisonStatic ||
           !art.camera.enabled ||
           new URLSearchParams(location.search).get("camera") === "off"
           ? 0
@@ -274,6 +277,7 @@ export async function createWorldScene({
           !fine.matches ||
           mobile ||
           paused ||
+          comparisonStatic ||
           reduced.matches ||
           !art.motion.pointerEnabled ||
           new URLSearchParams(location.search).get("pointer") === "off"
@@ -363,6 +367,12 @@ export async function createWorldScene({
     host.dataset.state = "live";
     host.classList.add("is-ready");
     return {
+      setStatic(value) {
+        comparisonStatic = value;
+        dirty = true;
+        stop();
+        wake();
+      },
       setPaused(value) {
         paused = value;
         dirty = true;

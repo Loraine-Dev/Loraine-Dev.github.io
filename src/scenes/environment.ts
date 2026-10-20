@@ -27,6 +27,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   root.dataset.revision = config.revision;
   const overrides = new Map<string, boolean>();
   let playbackRate = 1;
+  let comparisonStatic = false;
   const records: Array<{
     name: string;
     layer: HTMLElement;
@@ -57,7 +58,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
     for (const record of records) {
       const play = motionEnabled(record.enabled, {
         reduced: reduced.matches,
-        paused,
+        paused: paused || comparisonStatic,
         hidden: document.hidden,
         active,
         saveData,
@@ -65,7 +66,9 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
       for (const a of record.animations) play ? a.play() : a.pause();
       if (play) running++;
     }
-    root.style.visibility = reduced.matches || saveData ? "hidden" : "visible";
+    root.style.visibility =
+      reduced.matches || saveData || comparisonStatic ? "hidden" : "visible";
+    root.dataset.comparison = comparisonStatic ? "static" : "dynamic";
     root.dataset.running = String(running);
     root.dataset.paused = String(paused);
   }
@@ -120,7 +123,63 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
       layer.append(drift);
       root.append(layer);
       const fog = name.endsWith("Fog");
-      if (fog) drift.style.backgroundImage = `url("${config.assets.fog}")`;
+      const billows: Animation[] = [];
+      if (fog) {
+        // Work in the local mask bounds, not a texture stretched over the entire world.
+        Object.assign(drift.style, {
+          left: "-20%",
+          top: "-12%",
+          width: "140%",
+          height: "125%",
+        });
+        for (let index = 0; index < 2; index++) {
+          const cloud = document.createElement("div");
+          cloud.className = `cloud-billow cloud-billow-${index}`;
+          cloud.style.backgroundImage = `url("${config.assets.fog}")`;
+          drift.append(cloud);
+          const a = cloud.animate(
+            [
+              {
+                transform: `translate3d(${index ? 4 : -3}%,2%,0) scale(1,0.9) rotate(-1deg)`,
+              },
+              {
+                transform: `translate3d(${index ? -4 : 3}%,-3%,0) scale(${index ? 1.08 : 0.94},1.12) rotate(1.2deg)`,
+              },
+            ],
+            {
+              duration: index ? 19000 : 27000,
+              iterations: Infinity,
+              direction: "alternate",
+              easing: "ease-in-out",
+            },
+          );
+          a.currentTime = effect.duration * (index ? 0.63 : 0.21);
+          billows.push(a);
+        }
+      }
+      if (name === "treeLight") {
+        for (let index = 0; index < 2; index++) {
+          const shaft = document.createElement("div");
+          shaft.className = `canopy-shaft canopy-shaft-${index}`;
+          drift.append(shaft);
+          const mobile = media.matches;
+          const angle = index ? (mobile ? 22 : 18) : mobile ? -23 : -28;
+          const a = shaft.animate(
+            [
+              { transform: `rotate(${angle - 7}deg) scaleX(0.8)` },
+              { transform: `rotate(${angle + 7}deg) scaleX(1.15)` },
+            ],
+            {
+              duration: index ? 19000 : 14000,
+              iterations: Infinity,
+              direction: "alternate",
+              easing: "ease-in-out",
+            },
+          );
+          a.currentTime = index ? 10000 : 3500;
+          billows.push(a);
+        }
+      }
       const strength = media.matches ? config.mobileStrength : 1;
       const opacity = effect.opacity * strength;
       const move = drift.animate(
@@ -141,9 +200,17 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
       );
       const breath = layer.animate(
         [
-          { opacity: opacity * config.minimumOpacity },
+          {
+            opacity: fog
+              ? opacity
+              : opacity * (name === "treeLight" ? 0.55 : config.minimumOpacity),
+          },
           { opacity },
-          { opacity: opacity * config.minimumOpacity },
+          {
+            opacity: fog
+              ? opacity
+              : opacity * (name === "treeLight" ? 0.55 : config.minimumOpacity),
+          },
         ],
         {
           duration: effect.opacityDuration,
@@ -153,14 +220,15 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
       );
       move.currentTime = effect.duration * effect.phase;
       breath.currentTime = effect.duration * effect.phase;
+      const animations = [move, ...billows, breath];
       const previous = phases.get(name);
       if (previous) {
-        move.currentTime = previous[0];
-        breath.currentTime = previous[1];
+        animations.forEach((a, i) => {
+          if (previous[i] !== undefined) a.currentTime = previous[i];
+        });
       }
-      move.updatePlaybackRate(playbackRate);
-      breath.updatePlaybackRate(playbackRate);
-      records.push({ name, layer, animations: [move, breath], enabled });
+      animations.forEach((a) => a.updatePlaybackRate(playbackRate));
+      records.push({ name, layer, animations, enabled });
     }
     root.dataset.effects = records.map((r) => r.name).join(",");
     state();
@@ -190,6 +258,10 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   rebuild();
   return {
     available: config.enabled && !saveData,
+    setComparisonStatic(value: boolean) {
+      comparisonStatic = value;
+      state();
+    },
     setEffect(name: string, enabled: boolean) {
       overrides.set(name, enabled);
       rebuild();
@@ -204,6 +276,7 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
         revision: config.revision,
         enabled: config.enabled,
         paused,
+        comparisonStatic,
         armed,
         active,
         hidden: document.hidden,

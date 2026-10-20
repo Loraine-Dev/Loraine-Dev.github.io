@@ -21,6 +21,17 @@ const back = document.querySelector<HTMLAnchorElement>(".return")!;
 const copy = document.querySelector<HTMLElement>(".brand-copy")!;
 const reduce = matchMedia("(prefers-reduced-motion:reduce)");
 const mobile = matchMedia("(max-width:759px), (max-aspect-ratio:4/5)");
+let comparisonStatic = false;
+if (import.meta.env.DEV) {
+  void import("./dev/motion-compare").then(({ mountMotionCompare }) =>
+    mountMotionCompare((value) => {
+      comparisonStatic = value;
+      environment.setComparisonStatic(value);
+      instance?.setStatic(value);
+      updateProgress();
+    }),
+  );
+}
 let instance: WorldController | undefined,
   paused = false,
   generation = 0,
@@ -54,10 +65,16 @@ function updateProgress() {
         Math.max(1, experience.offsetHeight - stage.clientHeight),
     ),
   );
-  experience.style.setProperty("--progress", reduce.matches ? "0" : String(p));
+  experience.style.setProperty(
+    "--progress",
+    reduce.matches || comparisonStatic ? "0" : String(p),
+  );
   back.hidden = p < 0.8;
   copy.inert =
-    experience.dataset.mode === "live" && !reduce.matches && p >= 0.4;
+    experience.dataset.mode === "live" &&
+    !reduce.matches &&
+    !comparisonStatic &&
+    p >= 0.4;
 }
 addEventListener("scroll", updateProgress, { passive: true });
 addEventListener("resize", updateProgress, { passive: true });
@@ -132,6 +149,7 @@ async function start(force = false) {
       return;
     }
     instance = controller;
+    instance.setStatic(comparisonStatic);
     host.dataset.renderStrategy = "on-demand";
     instance.setPaused(paused);
     experience.dataset.mode = "live";
@@ -162,6 +180,13 @@ function activate() {
 }
 document.querySelector(".explore")?.addEventListener("click", activate);
 addEventListener("wheel", activate, { passive: true });
+addEventListener(
+  "pointermove",
+  () => {
+    if (!mobile.matches && matchMedia("(pointer:fine)").matches) activate();
+  },
+  { passive: true },
+);
 addEventListener("touchmove", activate, { passive: true });
 addEventListener("keydown", (event) => {
   if (["ArrowDown", "PageDown", " "].includes(event.key)) activate();

@@ -26,14 +26,14 @@
     },
     {
       "path": "public/art/world-tree/motion/desktop-treeLight.webp",
-      "bytes": 30798,
+      "bytes": 28816,
       "bounds": {
         "x": 0.4501953125,
         "y": 0.10243055555555555,
         "width": 0.46484375,
         "height": 0.2743055555555556
       },
-      "sha256": "209948ffa85ad300e4cb684be8bbfd37b28f1e70d378f9dd659f37cd43e031c7"
+      "sha256": "8cf764af77fd6607c0982e2ec4b46c88a908c0dced14b20dd220123c34594559"
     },
     {
       "path": "public/art/world-tree/motion/desktop-waterLight.webp",
@@ -48,36 +48,36 @@
     },
     {
       "path": "public/art/world-tree/motion/mobile-farFog.webp",
-      "bytes": 13628,
+      "bytes": 26462,
       "bounds": {
-        "x": 0.0185546875,
-        "y": 0.34249587685541505,
-        "width": 0.3271484375,
-        "height": 0.07751511819681144
+        "x": 0.0048828125,
+        "y": 0.32490379329301816,
+        "width": 0.4521484375,
+        "height": 0.10060472787245739
       },
-      "sha256": "78d30296713198a103232a2c5f1b53353bb326ffb6ba70e9cb3641e0fa45addf"
+      "sha256": "ff7267bf2971daac53f6ba9556bb9d453afae95640f10070376533b9d1a74e12"
     },
     {
       "path": "public/art/world-tree/motion/mobile-midFog.webp",
-      "bytes": 25598,
+      "bytes": 38994,
       "bounds": {
-        "x": 0.0322265625,
-        "y": 0.3925233644859813,
-        "width": 0.9306640625,
-        "height": 0.11929631665750412
+        "x": 0,
+        "y": 0.38537658053875756,
+        "width": 0.9833984375,
+        "height": 0.13358988455195162
       },
-      "sha256": "45b426c63d55824eafcc8e201672b9623c8f8495855584990474a6985786a5ee"
+      "sha256": "84b72185ef12dd535bdf51318debe173c3a4075b63af48ba351da092cbb8da69"
     },
     {
       "path": "public/art/world-tree/motion/mobile-treeLight.webp",
-      "bytes": 61962,
+      "bytes": 64616,
       "bounds": {
         "x": 0.2705078125,
-        "y": 0.1605277625068719,
+        "y": 0.1583287520615723,
         "width": 0.6513671875,
-        "height": 0.16327652556349642
+        "height": 0.16547553600879605
       },
-      "sha256": "ca63d5b4946e92b64c514dc5afee87957141110ffb458f707d8da113537324c6"
+      "sha256": "0e29b811e24792c8f4ed746d2b150953ce40cfd3ebae75138bfa472d5f81b007"
     },
     {
       "path": "public/art/world-tree/motion/mobile-waterLight.webp",

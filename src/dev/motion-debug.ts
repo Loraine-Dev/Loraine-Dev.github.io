@@ -116,6 +116,7 @@ export function mountMotionDebug(controller: Controller) {
       !s.enabled && "总开关关闭",
       !s.armed && "等待交互",
       s.paused && "手动暂停",
+      s.comparisonStatic && "静态对照",
       s.reduced && "减少动态",
       s.hidden && "页面后台",
       !s.active && "场景离屏",
