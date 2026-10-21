@@ -71,12 +71,12 @@ async function main() {
           Math.max(0, Math.min(1, (0.86 - lum) * 6));
         raw[i * 3 + 1] = Math.round(255 * envelope * leaf);
       }
-    const target = `public/art/world-tree/living/${device}-regions.png`;
+    const target = `public/art/world-tree/living/${device}-regions-lossless.webp`;
     await sharp(raw, {
       raw: { width: info.width, height: info.height, channels: 3 },
     })
       .blur(2.5)
-      .png({ palette: false, compressionLevel: 9 })
+      .webp({ lossless: true, effort: 6 })
       .toFile(target);
     records.push({
       device,

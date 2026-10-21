@@ -1,13 +1,4 @@
-:root {
-  --ink: #070b12;
-  --silver: #f0e8d8;
-  --muted: #b6b8bc;
-  --gold: #d0b78d;
-  --gutter: clamp(26px, 5vw, 96px);
-  --progress: 0;
-  font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-  color-scheme: dark;
-}
+@import "./tokens.css";
 * {
   box-sizing: border-box;
 }

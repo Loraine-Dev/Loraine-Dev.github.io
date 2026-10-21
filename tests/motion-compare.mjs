@@ -6,7 +6,7 @@ try {
     viewport: { width: 1440, height: 900 },
   });
   await page.goto("http://127.0.0.1:4176/", { waitUntil: "networkidle" });
-  await page.getByRole("button", { name: "静态", exact: true }).click();
+  await page.getByRole("button", { name: "全部关闭", exact: true }).click();
   assert.equal(
     await page
       .locator(".environment")
@@ -17,7 +17,7 @@ try {
     await page.locator(".environment").getAttribute("data-running"),
     "0",
   );
-  await page.getByRole("button", { name: "动态", exact: true }).click();
+  await page.getByRole("button", { name: "正常动态", exact: true }).click();
   assert.equal(
     await page
       .locator(".environment")
@@ -25,7 +25,8 @@ try {
     "visible",
   );
   assert.equal(
-    await page.locator(".environment").getAttribute("data-running"), "2",
+    await page.locator(".environment").getAttribute("data-running"),
+    "2",
   );
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.waitForFunction(

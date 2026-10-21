@@ -8,6 +8,31 @@ export function mountLivingScene(
   controller: ReturnType<typeof createEnvironment>,
   world: HTMLElement,
 ) {
+  let mode: Mode = "all";
+  let material: { setMode(value: Mode): void } | undefined;
+  const start = () => {
+    void initializeLivingScene(controller, world).then((value) => {
+      material = value;
+      material.setMode(mode);
+    });
+  };
+  // The static painting and CSS atmosphere render first. Do not synchronously
+  // compile a second graphics context inside the document's initial task.
+  if (document.readyState === "complete") setTimeout(start, 0);
+  else addEventListener("load", start, { once: true });
+  return {
+    setMode(value: Mode) {
+      mode = value;
+      material?.setMode(value);
+    },
+  };
+}
+const yieldToBrowser = () =>
+  new Promise<void>((resolve) => setTimeout(resolve, 0));
+async function initializeLivingScene(
+  controller: ReturnType<typeof createEnvironment>,
+  world: HTMLElement,
+) {
   const canvas = document.createElement("canvas");
   canvas.className = "living-scene";
   canvas.ariaHidden = "true";
@@ -29,6 +54,14 @@ export function mountLivingScene(
     canvas.dataset.state = "no-webgl";
     return { setMode: (_mode: Mode) => {} };
   }
+  await yieldToBrowser();
+  const rendererInfo = gl.getExtension("WEBGL_debug_renderer_info");
+  const software = rendererInfo
+    ? /swiftshader|llvmpipe|software|microsoft basic render/i.test(
+        String(gl.getParameter(rendererInfo.UNMASKED_RENDERER_WEBGL)),
+      )
+    : false;
+  canvas.dataset.quality = software ? "software" : "hardware";
   const vertex = `attribute vec2 position;varying vec2 uv;void main(){uv=position*.5+.5;gl_Position=vec4(position,0.,1.);}`;
   const fragment = `precision highp float;
  varying vec2 uv;uniform sampler2D painting;uniform sampler2D regions;uniform sampler2D rayA;uniform sampler2D rayB;
@@ -102,6 +135,7 @@ export function mountLivingScene(
     canvas.remove();
     return { setMode: (_mode: Mode) => {} };
   }
+  await yieldToBrowser();
   gl.useProgram(program);
   const buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
@@ -113,7 +147,12 @@ export function mountLivingScene(
   const loc = gl.getAttribLocation(program, "position");
   gl.enableVertexAttribArray(loc);
   gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  const uniform = (name: string) => gl.getUniformLocation(program, name);
+  const locations = new Map<string, WebGLUniformLocation | null>();
+  const uniform = (name: string) => {
+    if (!locations.has(name))
+      locations.set(name, gl.getUniformLocation(program, name));
+    return locations.get(name)!;
+  };
   const media = matchMedia("(max-width:759px), (max-aspect-ratio:4/5)");
   let mode: Mode = "all",
     ready = false,
@@ -175,14 +214,19 @@ export function mountLivingScene(
       s.saveData ||
       s.comparisonStatic ||
       mode === "off" ||
+      mode === "clouds" ||
       !ready ||
       lost
     ) {
+      canvas.dataset.running = "false";
       last = 0;
       draw();
       return;
     }
-    const fps = (media.matches ? settings.mobile : settings.desktop).fps;
+    canvas.dataset.running = "true";
+    const fps = software
+      ? settings.softwareFps
+      : (media.matches ? settings.mobile : settings.desktop).fps;
     if (!last || now - last >= 1000 / fps) {
       if (last) time += (now - last) / 1000;
       last = now;
@@ -207,7 +251,7 @@ export function mountLivingScene(
     try {
       const paths = [
         `./art/world-tree/world-${device}.webp`,
-        `./art/world-tree/living/${device}-regions.png`,
+        `./art/world-tree/living/${device}-regions-lossless.webp`,
         ...placements[device].poses,
       ];
       const images = await Promise.all(
@@ -222,7 +266,8 @@ export function mountLivingScene(
       textures.forEach((t) => gl!.deleteTexture(t));
       textures = [];
       gl!.useProgram(program);
-      images.forEach((image, i) => {
+      for (const [i, image] of images.entries()) {
+        if (n !== ticket) return;
         const tex = gl!.createTexture()!;
         textures.push(tex);
         gl!.activeTexture(gl!.TEXTURE0 + i);
@@ -249,7 +294,11 @@ export function mountLivingScene(
           image,
         );
         gl!.uniform1i(uniform(["painting", "regions", "rayA", "rayB"][i]), i);
-      });
+        // Keep uploads as separate browser tasks, without delaying the art or
+        // starting animation before all registered textures are ready.
+        await yieldToBrowser();
+      }
+      if (n !== ticket) return;
       const w = (media.matches ? settings.mobile : settings.desktop).width;
       canvas.width = w;
       canvas.height = Math.round(

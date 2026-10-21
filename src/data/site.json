@@ -10,5 +10,9 @@
     "explore": "探索世界",
     "description": "在想象的另一侧，相遇。"
   },
-  "github": "https://github.com/Loraine-Dev"
+  "github": "https://github.com/Loraine-Dev",
+  "taptap": {
+    "url": null,
+    "confirmed": false
+  }
 }

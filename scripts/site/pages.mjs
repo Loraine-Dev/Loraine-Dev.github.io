@@ -1,3 +1,4 @@
+import { tapTapChannel } from "./channels.mjs";
 import { escape as e } from "./markdown.mjs";
 import { label, arrowLink, scoreArt } from "./components.mjs";
 const lines = (s) => e(s).replace(/\n/g, "<br>");
@@ -16,6 +17,6 @@ export function innerContent(route, data, works, copy, posts) {
   if (route === "journal")
     return `<section class="page-intro journal-intro">${label("04", "JOURNAL", "创作记录")}<h1>${lines(copy.journal.title)}</h1><p class="intro-note">${e(copy.journal.intro)}</p></section>${posts.length ? `<div class="journal-list">${posts.map((p) => `<article><time datetime="${p.date}">${p.date}</time><div><h2><a href="./${p.slug}/">${e(p.title)}</a></h2><p>${e(p.summary)}</p></div><span aria-hidden="true">↗</span></article>`).join("")}</div>` : `<section class="journal-empty"><span class="empty-index" aria-hidden="true">—</span><div><p class="eyebrow">THE FIRST PAGE IS STILL OPEN</p><h2>${e(copy.journal.emptyTitle)}</h2><p>${e(copy.journal.emptyText)}</p></div><span class="empty-dot" aria-hidden="true"></span></section>`}${next("../works/", "先认识正在策划的作品", "IN THE MEANTIME")}`;
   if (route === "contact")
-    return `<section class="page-intro contact-intro">${label("05", "CONTACT", "联系")}<h1>${lines(copy.contact.title)}</h1><p class="intro-note">${e(copy.contact.intro)}</p></section><section class="contact-destination"><p class="eyebrow">OFFICIAL GITHUB</p><a class="contact-link" href="${data.github}" target="_blank" rel="noopener noreferrer">Loraine-Dev <span aria-hidden="true">↗</span><span class="sr-only">（新窗口）</span></a><p>${e(copy.contact.note)}</p></section><p class="contact-signature">MILOQEN<br><span>让想象拥有生命。</span></p>`;
+    return `<section class="page-intro contact-intro">${label("05", "CONTACT", "联系")}<h1>${lines(copy.contact.title)}</h1><p class="intro-note">${e(copy.contact.intro)}</p></section><section class="contact-destination"><p class="eyebrow">OFFICIAL GITHUB</p><a class="contact-link" href="${data.github}" target="_blank" rel="noopener noreferrer">Loraine-Dev <span aria-hidden="true">↗</span><span class="sr-only">（新窗口）</span></a><p>${e(copy.contact.note)}</p></section>${tapTapChannel(data)}<p class="contact-signature">MILOQEN<br><span>让想象拥有生命。</span></p>`;
   return `<section class="page-intro not-found">${label("404", "BEYOND THIS PATH", "未抵达的地方")}<h1>这条小径，<br>还没有通向远方。</h1><p class="intro-note">页面可能已经移动，或地址输入有误。</p>${arrowLink("/", "回到初见")}${arrowLink("/works/", "查看计划作品")}</section>`;
 }

@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 import { mkdir, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
-const out = "artifacts/final-quality";
+const out = process.env.REVIEW_OUT || "artifacts/final-quality";
 await mkdir(out, { recursive: true });
 const browser = await chromium.launch({
   args: ["--enable-unsafe-swiftshader"],
@@ -82,6 +82,8 @@ try {
       `${out}/tour-${device}.webm`,
       "-c:v",
       "libx264",
+      "-threads",
+      "1",
       "-crf",
       "18",
       "-preset",

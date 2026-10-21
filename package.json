@@ -1,6 +1,6 @@
 {
   "name": "miloqen-living-imagination",
-  "version": "6.0.0-review.2",
+  "version": "1.0.0-rc.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -21,11 +21,18 @@
     "assets:cloud": "node scripts/prepare-cloud-bank.cjs",
     "record:flow": "node scripts/record-visible-flow.mjs && node scripts/encode-visible-flow.mjs",
     "assets:godrays": "node scripts/prepare-godrays.cjs",
-    "test:godrays": "node tests/godray-study.mjs",
-    "test:site": "node --test tests/site-build.test.mjs tests/journal.test.mjs && node tests/site-browser.mjs",
+    "test:godrays": "node tests/living-scene-browser.mjs",
+    "test:site": "node --test tests/site-build.test.mjs tests/journal.test.mjs tests/channels.test.mjs && node tests/site-browser.mjs",
     "assets:optimized": "node scripts/prepare-optimized-art.mjs",
     "verify:art": "node scripts/verify-art-quality.mjs",
-    "test:loading": "node --test tests/optimized-art.test.mjs && node tests/art-loading-browser.mjs"
+    "test:loading": "node --test tests/optimized-art.test.mjs && node tests/art-loading-browser.mjs",
+    "test:living": "node tests/living-scene-browser.mjs",
+    "legacy:test:godrays": "node tests/godray-study.mjs",
+    "assets:living": "node scripts/prepare-living-masks.cjs",
+    "test:masks": "node --test tests/living-mask.test.mjs",
+    "check": "npm run build && npm run test:unit && npm run test:masks && npm run test:site && npm run test:loading && npm run test:living",
+    "test:release": "node scripts/verify-release.mjs",
+    "review:v1": "node scripts/prepare-v1-review.mjs"
   },
   "dependencies": {
     "three": "0.186.1"

@@ -62,7 +62,9 @@ try {
       if (route)
         assert(
           !requests.some((u) =>
-            /world-scene|environment|godrays\/|motion\/|cloud-bank/.test(u),
+            /world-scene|environment|godrays\/|motion\/|living\/|cloud-bank/.test(
+              u,
+            ),
           ),
           "inner page must not load scene " + route,
         );
@@ -107,39 +109,30 @@ try {
         }
       }
       if (route === "") {
+        const material = page.locator(".living-scene");
+        await page.locator('.living-scene[data-state="ready"]').waitFor();
         await page.waitForFunction(
           () =>
-            document.querySelector(".godray-field")?.dataset.ready === "true",
+            document.querySelector(".living-scene")?.dataset.running === "true",
         );
-        assert.equal(
-          await page.locator(".godray-field").getAttribute("data-running"),
-          "true",
-        );
-        const before = await page
-          .locator(".godray-field")
-          .evaluate((e) => e.getAnimations({ subtree: true })[0].currentTime);
+        const before = Number(await material.getAttribute("data-time"));
         await page.waitForTimeout(350);
-        assert(
-          await page
-            .locator(".godray-field")
-            .evaluate(
-              (e, t) => e.getAnimations({ subtree: true })[0].currentTime > t,
-              before,
-            ),
-        );
+        assert(Number(await material.getAttribute("data-time")) > before);
         await page.getByRole("button", { name: "暂停动态" }).click();
-        await page.waitForFunction(() =>
-          [
-            ...document
-              .querySelector(".godray-field")
-              .getAnimations({ subtree: true }),
-          ].every((a) => a.playState === "paused" && !a.pending),
+        await page.waitForFunction(
+          () =>
+            document.querySelector(".living-scene")?.dataset.running ===
+            "false",
         );
+        const stopped = await material.getAttribute("data-time");
+        await page.waitForTimeout(250);
+        assert.equal(await material.getAttribute("data-time"), stopped);
         await page.getByRole("button", { name: "继续动态" }).click();
         await page.locator("#content").scrollIntoViewIfNeeded();
         await page.waitForFunction(
           () =>
-            document.querySelector(".godray-field").dataset.running === "false",
+            document.querySelector(".living-scene")?.dataset.running ===
+            "false",
         );
       }
       report.pages.push({
@@ -155,10 +148,15 @@ try {
   const rp = await reduced.newPage();
   await rp.goto(base, { waitUntil: "networkidle" });
   assert.equal(
-    await rp.locator(".godray-field").getAttribute("data-ready"),
+    await rp.locator(".living-scene").getAttribute("data-state"),
     "policy",
   );
-  assert.equal(await rp.locator(".godray-field img").count(), 0);
+  assert.equal(
+    await rp
+      .locator(".living-scene")
+      .evaluate((e) => getComputedStyle(e).visibility),
+    "hidden",
+  );
   report.checks.push("reduced motion: static image, no ray asset request");
   await reduced.close();
   const low = await browser.newContext();
@@ -168,7 +166,7 @@ try {
   const lp = await low.newPage();
   await lp.goto(base, { waitUntil: "networkidle" });
   assert.equal(
-    await lp.locator(".godray-field").getAttribute("data-ready"),
+    await lp.locator(".living-scene").getAttribute("data-state"),
     "policy",
   );
   report.checks.push("low-memory: static fallback");

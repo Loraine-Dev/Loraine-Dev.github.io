@@ -1,14 +1,3 @@
-:root {
-  --paper: #eae5db;
-  --paper-ink: #202b31;
-  --accent: #9ac7ca;
-  --hairline: #d0b78d38;
-  --serif: "Noto Serif CJK SC", "Songti SC", SimSun, serif;
-  --sans: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
-  --content: 1280px;
-  --section-space: clamp(80px, 10vw, 160px);
-  --body-size: clamp(15px, 1.2vw, 18px);
-}
 [hidden] {
   display: none !important;
 }
