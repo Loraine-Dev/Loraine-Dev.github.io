@@ -1,6 +1,6 @@
 # MILOQEN 上线前安全验收
 
-审计日期：2026-10-22。范围：本地 V1.0 源码、可达 Git 历史、生产构建、现有 GitHub API 可读配置和公开网址。结论：完成可回滚的代码加固，**仍有发布阻断项，不建议现在发布**。没有修改账号、仓库权限、分支保护或发布开关，没有部署。没有读取/保存/打印令牌或密钥值。
+审计日期：2026-10-22。修复提交：`3d1ec5c`（`codex/miloqen-security-audit`）。范围：本地 V1.0 源码、可达 Git 历史、生产构建、现有 GitHub API 可读配置和公开网址。结论：完成可回滚的代码加固，**仍有发布阻断项，不建议现在发布**。没有修改账号、仓库权限、分支保护或发布开关，没有部署。没有读取/保存/打印令牌或密钥值。
 
 | 审计项 | 状态 | 具体证据与边界 |
 |---|---|---|
@@ -8,7 +8,7 @@
 | 2. 仓库与分支保护 | **存在风险** | main protection 返回404“Branch not protected”，rulesets=[]。公开仓库支持分支保护，并非套餐不支持。尚未改变远程规则；不能宣称已强制 PR/审核/CI 或禁止强推。 |
 | 3. GitHub Actions | **已验证安全**（本轮检查范围；配置待审核合并） | 默认 contents:read；仓库默认 workflow 权限read，自动批准PR=false；部署独占pages/id-token写权限，needs:check、main且非PR、发布变量true三重限制。官方 Actions 固定完整SHA；checkout不保留凭据，部署任务不checkout、不执行站点代码。没有pull_request_target或向PR传secret。upload-pages-artifact固定版本内部的upload-artifact同样为完整SHA。仓库级allowed_actions=all、sha_pinning_required=false，属于尚未强制的全仓库策略。 |
 | 4. 网站与依赖 | **已验证安全**（本地已审范围）；线上V1.0 **尚未验证** | npm audit总计217依赖、已知漏洞0；锁文件registry/integrity检查通过。Markdown转义原始HTML、不执行MDX；官方外链增加URL白名单与属性安全，所有现有新窗口链接noopener noreferrer。生产脚本/字体/图片均本地，无第三方运行脚本。7个HTML有构建期CSP；14组浏览器检查正常加载、素材运行，内联脚本和外部连接攻击探针被阻断；56组调试参数访问无开发UI。公开HTTPS返回404、HTTP301到HTTPS，TLS有效；GitHub错误页的CSP不属于本网站。 |
-| 5. 恢复与备份 | **已验证安全**（本地恢复演练）；独立介质备份 **尚未验证** | 审计前c9ce1df已标记本地稳定分支；f225703/8c4e474祖先和素材恢复检查通过。本轮补丁将在临时工作树用普通revert恢复上一树并记录结果，不重写远程历史。另生成仓库外Git bundle并verify；未声称已复制到独立介质。 |
+| 5. 恢复与备份 | **已验证安全**（本地恢复演练）；独立介质备份 **尚未验证** | 审计前c9ce1df已标记稳定分支和远程tag `audit-baseline-20261022`；f225703/8c4e474祖先和素材恢复检查通过。已在临时工作树用普通revert生成新提交，核实恢复后的完整Git树与c9ce1df完全一致，未重写远程历史。已生成仓库外Git bundle并verify；未声称已复制到独立介质。 |
 | 6. 长期维护 | **已验证安全**（本地规则/检查）；远程启用 **尚未验证** | AGENTS明确安全门禁、最小权限、禁止凭据输出/强推/自批自合并；新增test:security、浏览器CSP检查、PR依赖审计、每周只读依赖审计与Dependabot配置。GitHub Dependabot alerts API返回403“disabled”，security updates=disabled；Secret scanning和push protection=enabled，当前open alert数0。新周计划和Dependabot配置须合并默认分支后才生效。 |
 
 ## 具体发现与修复
@@ -25,8 +25,8 @@
 - 红灯：补丁前新测试复现缺少CSP、未固定Actions、GitHub危险配置未拒绝；原Markdown转义测试通过。
 - `npm run check`、`npm run test:security`、`npm run test:browser:ci`通过：24组路由/尺寸、素材生命周期/降级、图片选择、56组生产调试隔离、14组CSP/尺寸，正常访问无CSP错误。恶意探针的拦截日志属预期。
 - `npm audit --json`：info/low/moderate/high/critical均0；只代表审计数据库当时的已知漏洞。
-- 有限凭据签名扫描：当前200个已跟踪文本文件和25个可达历史提交无匹配；新增文件提交前再扫描。没有记录任何匹配正文。该扫描不覆盖所有秘密格式、不可达对象、账号历史日志或外部备份。
-- `npm run test:rollback`通过；本轮实际revert、bundle校验与GitHub CI结果以交付时日志和PR检查为准。
+- 有限凭据签名扫描：修复前200个已跟踪文本文件和25个可达历史提交无匹配；新增文件暂存后206个文本文件再次扫描通过。没有记录任何匹配正文。该扫描不覆盖所有秘密格式、不可达对象、账号历史日志或外部备份。
+- `npm run test:rollback`通过；本轮实际revert恢复c9ce1df整树比较通过。`D:/codex/output/miloqen-security-20261022.bundle`（34,181,457字节）已生成，`git bundle verify`通过；是同机仓库外备份，不能抵御整机丢失。GitHub CI结果以PR/提交检查为准，本地通过不能冒充远程通过。
 - 真实手机发热/耗电尚未验证；本任务没有美术重做、素材替换或动画参数调整。
 
 ## 发布阻断与待批准动作
