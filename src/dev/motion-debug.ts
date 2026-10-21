@@ -1,6 +1,7 @@
 import type { createEnvironment } from "../scenes/environment";
 type Controller = ReturnType<typeof createEnvironment>;
 export function mountMotionDebug(controller: Controller) {
+  if (!import.meta.env.DEV) return;
   const panel = document.createElement("details");
   panel.id = "motion-debug";
   panel.open = true;

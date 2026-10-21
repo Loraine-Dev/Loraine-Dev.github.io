@@ -43,6 +43,7 @@ index.html、内页 HTML、public/sitemap.xml 等由 npm run build 生成，不�
 - npm run check：构建、几何/遮罩/内容/维护演练、部署路径检查。
 - npm run test:browser:ci：自动启动隔离端口，检查六页×四尺寸、菜单/键盘/404、首页材质/暂停/降级和图片选源；退出时停止服务。
 - 正常首页没有调试控件。开发环境 ?motionMode=all|off|water|rays|clouds 打开单项验收；生产不接受这组调试开关。
+- 调试组件必须同时有入口和组件自身的构建环境守卫；禁止仅靠CSS隐藏。effects/camera/pointer等测试参数仅开发环境生效。release扫描所有产物HTML/JS/CSS中的调试组件标记；production-ui浏览器检查生产参数隔离，保持此检查纳入CI。
 - 保留 f225703、8c4e474 可追溯祖先和稳定分支。回滚通过新分支+revert/恢复已确认快照的 PR，不 reset/force main。
 - 源图变更后必须重新配准桌面/手机水域、遮挡、光源和边界。不要只扩大 Shader 参数或位移。
 - Worker/WebGL 不支持时保留原画和轻量云雾，不重新启用旧全画幅材质。后台、离屏暂停，减少动态/低内存/省流回退。

@@ -3,6 +3,7 @@ type Mode = "all" | "off" | "rays" | "water" | "tree" | "clouds";
 export function mountMotionCompare(
   select: (still: boolean, mode: Mode) => void,
 ) {
+  if (!import.meta.env.DEV) return;
   const group = document.createElement("div");
   group.id = "motion-compare";
   group.setAttribute("role", "group");

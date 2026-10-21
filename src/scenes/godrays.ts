@@ -34,7 +34,7 @@ export function mountGodrays(
   const style = document.createElement("style");
   style.textContent = `.godray-field{position:absolute;pointer-events:none;mix-blend-mode:screen;isolation:isolate}.godray-field img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}#godray-controls{position:fixed;z-index:901;left:18px;bottom:18px;padding:10px 12px;border:1px solid #c3b29477;background:#08121aeb;color:#e5e3db;border-radius:3px;font:12px/1.5 Arial,"Microsoft YaHei",sans-serif}#godray-controls p{margin:0 0 7px}#godray-controls button{border:0;background:#28323b;color:#bdcbd1;padding:7px 12px;border-radius:2px;margin-right:4px}#godray-controls button[aria-pressed=true]{background:#d8c49c;color:#0a141d}#godray-controls small{display:block;color:#a7b6bf;margin-top:7px;font-size:10px}body:has(#godray-controls) #motion-compare{display:none}`;
   document.head.append(style);
-  if (debug) document.body.append(controls);
+  if (import.meta.env.DEV && debug) document.body.append(controls);
   let enabled = !(
       import.meta.env.DEV &&
       new URLSearchParams(location.search).get("study") === "off"

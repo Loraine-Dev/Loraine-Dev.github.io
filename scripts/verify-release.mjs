@@ -13,6 +13,16 @@ async function walk(dir) {
 }
 const files = await walk(root),
   html = files.filter((p) => p.endsWith(".html"));
+// Audit the emitted application, not just the HTML or CSS visibility.
+for (const path of files.filter((p) => /\.(?:html|js|css)$/.test(p))) {
+  const text = await readFile(path, "utf8");
+  assert(
+    !/motion-compare|motion-debug|godray-controls|art-study|动画诊断|仅开发模式/.test(
+      text,
+    ),
+    `Developer UI shipped in ${relative(root, path)}`,
+  );
+}
 let checked = 0;
 async function target(ref, from) {
   if (/^(https?:|mailto:|data:|#|javascript:)/i.test(ref)) return;

@@ -18,9 +18,10 @@ export function createEnvironment(world: HTMLElement, stage: HTMLElement) {
   const saveData =
     !!nav.connection?.saveData || !!(nav.deviceMemory && nav.deviceMemory <= 2);
   const params = new URLSearchParams(location.search);
-  const selection = params.has("effects")
-    ? new Set((params.get("effects") || "").split(","))
-    : null;
+  const selection =
+    import.meta.env.DEV && params.has("effects")
+      ? new Set((params.get("effects") || "").split(","))
+      : null;
   const root = document.createElement("div");
   root.className = "environment";
   root.setAttribute("aria-hidden", "true");

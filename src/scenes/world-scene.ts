@@ -243,7 +243,8 @@ export async function createWorldScene({
         reduced.matches ||
           comparisonStatic ||
           !art.camera.enabled ||
-          new URLSearchParams(location.search).get("camera") === "off"
+          (import.meta.env.DEV &&
+            new URLSearchParams(location.search).get("camera") === "off")
           ? 0
           : progress,
         art.camera.startZ,
@@ -292,7 +293,8 @@ export async function createWorldScene({
           comparisonStatic ||
           reduced.matches ||
           !art.motion.pointerEnabled ||
-          new URLSearchParams(location.search).get("pointer") === "off"
+          (import.meta.env.DEV &&
+            new URLSearchParams(location.search).get("pointer") === "off")
         )
           return;
         px = event.clientX / innerWidth - 0.5;

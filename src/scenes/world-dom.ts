@@ -91,7 +91,8 @@ export async function createWorldDOM({
       reduced.matches ||
       comparisonStatic ||
       !art.camera.enabled ||
-      new URLSearchParams(location.search).get("camera") === "off";
+      (import.meta.env.DEV &&
+        new URLSearchParams(location.search).get("camera") === "off");
     const pose = cameraAt(
       still ? 0 : progress,
       art.camera.startZ,

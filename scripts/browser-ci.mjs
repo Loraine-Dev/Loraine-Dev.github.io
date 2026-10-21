@@ -90,6 +90,7 @@ try {
   await run("tests/site-browser.mjs", env);
   await run("tests/integrated-materials.mjs", env);
   await run("tests/art-loading-browser.mjs", env);
+  await run("tests/production-ui.mjs", env);
 } finally {
   for (const child of servers) child.kill();
 }

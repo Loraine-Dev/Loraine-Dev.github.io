@@ -2,6 +2,7 @@ import type { createEnvironment } from "../scenes/environment";
 export function mountArtStudy(
   controller: ReturnType<typeof createEnvironment>,
 ) {
+  if (!import.meta.env.DEV) return;
   const group = document.createElement("aside");
   group.id = "art-study";
   group.setAttribute("aria-label", "云隙透光美术对照");
