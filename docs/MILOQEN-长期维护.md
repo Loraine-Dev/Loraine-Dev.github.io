@@ -83,11 +83,13 @@ origin 必须为 https://github.com/Loraine-Dev/Loraine-Dev.github.io.git。标�
 
 ## 安全检查与恢复
 
+2026-10-22 所有者批准后的当前状态：main 已启用 PR 必需、Build and test（绑定 GitHub Actions app 15368）成功且分支最新、讨论解决、管理员受限、禁止强推删除；不要求其他审核人批准。Dependabot alerts/security updates 已开启；仓库自动合并关闭。原整站 PR #1 已关闭留档，安全 PR #2 已调整为 main 的完整 V1.0 审核入口，包含原整站和3d1ec5c安全补丁；没有合并 main。早期报告“暂未开启”的描述只代表当时快照。首次发布变量仍为 false。
+
 每次修改执行 `npm run check`、`npm run test:security` 和 `npm audit --audit-level=low`；脚本、样式或策略变化再执行 `npm run test:browser:ci`。签名扫描只报文件/数量，不输出匹配内容；可用 `node scripts/security-scan.mjs --history` 对本机可达历史做有限格式扫描，不能代替 GitHub Secret scanning 或证明从未泄露。新依赖审查来源、用途、维护情况和锁文件，不使用 audit fix --force。
 
 生产 CSP 在 Vite 构建期插入所有 HTML，禁止第三方脚本、内联脚本、eval、外部网络连接、嵌入对象和表单提交；保留现有相机、云雾需要的内联样式。开发服务器不添加此策略，避免破坏 HMR 与诊断。meta CSP 不提供 frame-ancestors、X-Frame-Options、Permissions-Policy 等响应头；仓库中的 `_headers`/普通 HTML meta 不能替 GitHub Pages 任意配置这些头。需要完整响应头防护时另行审批代理或托管变更。
 
-Dependabot 配置每周依赖与 Actions 更新 PR；Scheduled dependency audit 工作流需先合并到默认分支才会按计划运行。本轮没有开启远程 Dependabot 告警/安全更新开关，也没有修改账号、main 保护或首次发布规则；配置文件存在不代表远程设置已启用。Actions 固定官方 SHA，部署任务不 checkout 源码；只有部署任务拥有 pages/id-token 写权限。检查任务不能批准/合并 PR。
+Dependabot 配置每周依赖与 Actions 更新 PR；Scheduled dependency audit 工作流需先合并到默认分支才会按计划运行。远程 alerts/security updates 已通过独立 GET 验证开启；当前 main 尚无站点依赖清单，不能把“暂时无告警”当作新站依赖已完成持续扫描。Actions 固定官方 SHA，部署任务不 checkout 源码；只有部署任务拥有 pages/id-token 写权限。检查任务不能批准/合并 PR。
 
 发现误发布时：先请求关闭发布变量（这是远程发布设置变更，需要授权），在开发分支用 `git revert <错误提交>`；合并提交用 `git revert -m 1 <合并提交>`，核实父提交后操作。执行完整检查和本地预览，由用户批准回滚 PR，再正常合并并发布。没有 force push。失败构建不替换已部署产物；资源缺失由发布路径检查拦截，确认缺失素材已在 Git 中后再构建。Actions 产物只保留14天，Git 中源文件和历史是长期恢复依据，不能把短期产物当备份。
 
