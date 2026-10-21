@@ -1,5 +1,5 @@
 import type { createEnvironment } from "./environment";
-import placements from "../data/godray-assets.json";
+import settings from "../data/living-scene.json";
 type Mode = "all" | "off" | "rays" | "water" | "tree" | "clouds";
 type Material = { setMode(value: Mode): void };
 export async function mountWorkerMaterial(
@@ -131,7 +131,7 @@ export async function mountWorkerMaterial(
     const sources = [
       `./art/world-tree/world-${device}.webp`,
       `./art/world-tree/living/${device}-regions-lossless.webp`,
-      ...placements[device].poses,
+      settings.opticalField,
     ];
     worker.postMessage({
       type: "sources",

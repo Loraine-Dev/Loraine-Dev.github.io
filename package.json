@@ -28,8 +28,8 @@
     "test:loading": "node --test tests/optimized-art.test.mjs && node tests/art-loading-browser.mjs",
     "test:living": "node tests/living-scene-browser.mjs",
     "legacy:test:godrays": "node tests/godray-study.mjs",
-    "assets:living": "node scripts/prepare-living-masks.cjs",
-    "test:masks": "node --test tests/living-mask.test.mjs",
+    "assets:living": "node scripts/prepare-material-response.cjs",
+    "test:masks": "node --test tests/living-mask.test.mjs tests/material-regions.test.mjs",
     "check": "npm run build && npm run test:unit && npm run test:masks && npm run test:site && npm run test:loading && npm run test:living",
     "test:release": "node scripts/verify-release.mjs",
     "review:v1": "node scripts/prepare-v1-review.mjs"

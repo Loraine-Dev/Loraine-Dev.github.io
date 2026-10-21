@@ -1,6 +1,5 @@
 import type { createEnvironment } from "./environment";
 import settings from "../data/living-scene.json";
-import placements from "../data/godray-assets.json";
 import { vertex, fragment } from "./living-shaders";
 type Mode = "all" | "off" | "rays" | "water" | "tree" | "clouds";
 const yieldToBrowser = () =>
@@ -96,8 +95,7 @@ export async function initializeLivingScene(
       on = mode !== "off" && !s.reduced && !s.saveData && !s.comparisonStatic;
     canvas.style.visibility = on ? "visible" : "hidden";
     if (!on) return;
-    const profile = media.matches ? settings.mobile : settings.desktop,
-      p = media.matches ? placements.mobile : placements.desktop;
+    const profile = media.matches ? settings.mobile : settings.desktop;
     gl!.useProgram(program);
     gl!.uniform1f(uniform("time"), time);
     gl!.uniform2f(
@@ -105,13 +103,8 @@ export async function initializeLivingScene(
       media.matches ? 780 : 1536,
       media.matches ? 1386 : 864,
     );
-    gl!.uniform4f(
-      uniform("bounds"),
-      p.bounds.x,
-      p.bounds.y,
-      p.bounds.width,
-      p.bounds.height,
-    );
+    gl!.uniform2f(uniform("lightSource"), profile.source[0], profile.source[1]);
+    gl!.uniform1f(uniform("waterHorizon"), profile.waterHorizon);
     gl!.uniform3f(
       uniform("enabled"),
       +(mode === "all" || mode === "rays"),
@@ -180,7 +173,7 @@ export async function initializeLivingScene(
       const paths = [
         `./art/world-tree/world-${device}.webp`,
         `./art/world-tree/living/${device}-regions-lossless.webp`,
-        ...placements[device].poses,
+        settings.opticalField,
       ];
       const images = await Promise.all(
         paths.map(async (src) => {
@@ -221,7 +214,7 @@ export async function initializeLivingScene(
           gl!.UNSIGNED_BYTE,
           image,
         );
-        gl!.uniform1i(uniform(["painting", "regions", "rayA", "rayB"][i]), i);
+        gl!.uniform1i(uniform(["painting", "regions", "optics"][i]), i);
         // Keep uploads as separate browser tasks, without delaying the art or
         // starting animation before all registered textures are ready.
         await yieldToBrowser();

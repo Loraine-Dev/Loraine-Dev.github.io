@@ -1,6 +1,5 @@
 import { vertex, fragment } from "./living-shaders";
 import settings from "../data/living-scene.json";
-import placements from "../data/godray-assets.json";
 type Mode = "all" | "off" | "rays" | "water" | "tree" | "clouds";
 type Device = "desktop" | "mobile";
 const channel = self as unknown as {
@@ -98,7 +97,7 @@ function upload(bitmaps: ImageBitmap[], next: Device, ticket: number) {
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
-    gl.uniform1i(uniform(["painting", "regions", "rayA", "rayB"][i]), i);
+    gl.uniform1i(uniform(["painting", "regions", "optics"][i]), i);
   }
   const width = settings[device].width;
   canvas.width = width;
@@ -122,8 +121,7 @@ function stop() {
 }
 function draw() {
   if (!ready) return;
-  const p = placements[device].bounds,
-    profile = settings[device];
+  const profile = settings[device];
   gl.useProgram(program);
   gl.uniform1f(uniform("time"), time);
   gl.uniform2f(
@@ -131,7 +129,8 @@ function draw() {
     device === "mobile" ? 780 : 1536,
     device === "mobile" ? 1386 : 864,
   );
-  gl.uniform4f(uniform("bounds"), p.x, p.y, p.width, p.height);
+  gl.uniform2f(uniform("lightSource"), profile.source[0], profile.source[1]);
+  gl.uniform1f(uniform("waterHorizon"), profile.waterHorizon);
   gl.uniform3f(
     uniform("enabled"),
     +(mode === "all" || mode === "rays"),
