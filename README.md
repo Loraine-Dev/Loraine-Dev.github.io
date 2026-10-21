@@ -14,6 +14,8 @@
 - npm run review:v1：生成完整验收入口，位于 /review/v1.html?device=desktop 或 mobile，以及 /review/v1-gallery.html。
 - 首页六模式：/review/living.html?device=desktop 或 mobile；仅开发环境有分项开关。
 
+首次在新机器执行浏览器测试前，运行 npx playwright install chromium firefox；构建本身不需要测试浏览器。
+
 ## 维护
 
 [中文维护手册](docs/维护手册.md) · [V1.0 整合记录](docs/V1.0整合记录.md) · [局部动态原理与限制](docs/首页动态整改-20261021.md)。历史文档保留，不代表当前候选的性能或艺术结论。
