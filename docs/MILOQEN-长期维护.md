@@ -53,14 +53,14 @@
 
 只有一个 `.github/workflows/pages.yml`：开发分支/PR 自动构建、测试并上传可下载静态产物。main 同样先检查；仅仓库变量 `MILOQEN_PAGES_APPROVED == true` 且事件来自 main 才上传 Pages 产物和部署。PR、开发分支、标签以及未批准状态均不部署。
 
-首次发布须你明确确认具体版本后，才进行以下操作：
+当前仓库已实际切换 Pages 来源为 GitHub Actions，MILOQEN_PAGES_APPROVED=false。旧 main 根目录 legacy 自动构建链路已停用，避免绕过首次发布门控。首次发布须你明确确认具体版本后，才进行以下操作：
 
 1. 确认 PR 的实际 GitHub CI 成功，最终画面与内容已审核。
-2. GitHub 仓库 Settings → Pages，将构建来源设置为 GitHub Actions；保留既有保护规则。
+2. 核实 GitHub 仓库 Settings → Pages 的构建来源仍为 GitHub Actions；保留既有保护规则。
 3. 设置仓库 Actions 变量 MILOQEN_PAGES_APPROVED=true；建议 github-pages 环境仅允许 main，并按需要设置审核人。
 4. 你确认合并 PR。main 上的同一构建产物经过检查后由官方 Pages Actions 发布；随后检查正式 URL。若 main 已先合并，确认后从 main 手动运行同一工作流。
 
-本轮不执行以上首次发布步骤，不自动修改分支保护。之后日常更新为“Codex 修改→CI→你确认合并→自动发布”。构建失败、测试失败或门控关闭不会发布。不需要手动上传 ZIP。
+本轮只完成安全的构建来源配置，未开启发布变量、未合并或部署，也未修改分支保护。之后日常更新为“Codex 修改→CI→你确认合并→自动发布”。构建失败、测试失败或门控关闭不会发布。不需要手动上传 ZIP。首次 PR 合并使用 Merge commit 保留既有祖先历史；不要 squash 后删除唯一历史引用。
 
 官方流程依据：[GitHub Pages 自定义工作流](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
 
