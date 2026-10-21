@@ -209,8 +209,12 @@ try {
   await live(page);
   assert.equal(
     await page.locator("#world-canvas canvas").count(),
-    1,
-    "breakpoint has one scene",
+    0,
+    "mobile camera must not allocate another GL canvas",
+  );
+  assert.equal(
+    await page.locator("#world-canvas").getAttribute("data-renderer"),
+    "dom",
   );
   await page.reload({ waitUntil: "networkidle" });
   await live(page);

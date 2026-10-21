@@ -15,6 +15,11 @@ try {
     await page.goto("http://127.0.0.1:4176/?motionMode=all");
     const canvas = page.locator(".living-scene");
     await page.locator(".living-scene[data-state=ready]").waitFor();
+    assert.equal(
+      await canvas.getAttribute("data-renderer"),
+      "worker",
+      "supported Chromium must use the worker, not silently fall back",
+    );
     for (const [label, mode, clouds] of [
       ["全部关闭", "off", false],
       ["仅丁达尔光", "rays", false],
@@ -52,6 +57,18 @@ try {
   await page.goto("http://127.0.0.1:4177/");
   assert.equal(await page.locator("#motion-compare").count(), 0);
   await page.close();
+  const fallback = await browser.newPage();
+  await fallback.addInitScript(() =>
+    Object.defineProperty(window, "Worker", { value: undefined }),
+  );
+  await fallback.goto("http://127.0.0.1:4177/");
+  await fallback.locator(".living-scene[data-state=ready]").waitFor();
+  assert.notEqual(
+    await fallback.locator(".living-scene").getAttribute("data-renderer"),
+    "worker",
+  );
+  assert(await fallback.locator("h1").isVisible());
+  await fallback.close();
   console.log(
     "PASS desktop/mobile six-mode isolation, pause, reduced motion and production control exclusion. Visual acceptance remains user-owned.",
   );

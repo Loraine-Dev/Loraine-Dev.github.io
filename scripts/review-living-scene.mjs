@@ -35,7 +35,8 @@ try {
       state: c.dataset.state,
       time: c.dataset.time,
       mode: c.dataset.mode,
-      canvas: [c.width, c.height],
+      canvas: c.dataset.renderSize || [c.width, c.height],
+      renderer: c.dataset.renderer || "main-thread-fallback",
     }));
     await page.mouse.wheel(0, 420);
     await page.waitForTimeout(2500);

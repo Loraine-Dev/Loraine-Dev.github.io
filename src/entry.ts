@@ -128,28 +128,34 @@ async function start(force = false) {
     host.dataset.renderStrategy = "interaction";
     return;
   }
-  const probe = document.createElement("canvas");
-  const gl = probe.getContext("webgl2");
-  if (!gl) {
-    poster();
-    host.dataset.reason = "no-webgl2";
-    return;
-  }
-  const debug = gl.getExtension("WEBGL_debug_renderer_info");
-  const software = debug
-    ? /swiftshader|llvmpipe|software|microsoft basic render/i.test(
-        String(gl.getParameter(debug.UNMASKED_RENDERER_WEBGL)),
-      )
-    : false;
-  gl.getExtension("WEBGL_lose_context")?.loseContext();
-  if ((software || mobile.matches) && !activated && !reduce.matches) {
-    deferred = true;
-    host.dataset.reason = software ? "software-gpu" : "mobile-interaction";
-    host.dataset.renderStrategy = "interaction";
-    return;
+  let software = false;
+  if (!mobile.matches) {
+    const probe = document.createElement("canvas"),
+      gl = probe.getContext("webgl2");
+    if (!gl) {
+      poster();
+      host.dataset.reason = "no-webgl2";
+      return;
+    }
+    const debug = gl.getExtension("WEBGL_debug_renderer_info");
+    software = debug
+      ? /swiftshader|llvmpipe|software|microsoft basic render/i.test(
+          String(gl.getParameter(debug.UNMASKED_RENDERER_WEBGL)),
+        )
+      : false;
+    gl.getExtension("WEBGL_lose_context")?.loseContext();
+    if (software && !activated && !reduce.matches) {
+      deferred = true;
+      host.dataset.reason = "software-gpu";
+      host.dataset.renderStrategy = "interaction";
+      return;
+    }
   }
   try {
-    const { createWorldScene } = await import("./scenes/world-scene");
+    const createWorldScene = mobile.matches
+      ? (await import("./scenes/world-dom")).createWorldDOM
+      : (await import("./scenes/world-scene")).createWorldScene;
+    if (!mobile.matches) host.dataset.renderer = "webgl";
     if (ticket !== generation || signal.aborted) return;
     const controller = await createWorldScene({
       host,
@@ -167,7 +173,9 @@ async function start(force = false) {
     }
     instance = controller;
     instance.setStatic(comparisonStatic);
-    host.dataset.renderStrategy = "on-demand";
+    host.dataset.renderStrategy = mobile.matches
+      ? "on-demand-css"
+      : "on-demand";
     instance.setPaused(paused);
     experience.dataset.mode = "live";
     toggle.hidden = false;

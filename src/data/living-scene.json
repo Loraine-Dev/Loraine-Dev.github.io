@@ -2,16 +2,16 @@
   "desktop": {
     "width": 1536,
     "fps": 18,
-    "waterPixels": 1.6,
-    "treeGain": 0.4,
+    "waterPixels": 2.1,
+    "treeGain": 0.6,
     "rayGain": 2.2,
     "source": [0.696, 0.432]
   },
   "mobile": {
     "width": 780,
     "fps": 15,
-    "waterPixels": 1.8,
-    "treeGain": 0.44,
+    "waterPixels": 2.2,
+    "treeGain": 0.62,
     "rayGain": 2.2,
     "source": [0.606, 0.316]
   },
