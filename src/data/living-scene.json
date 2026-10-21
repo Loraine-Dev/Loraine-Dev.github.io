@@ -1,0 +1,21 @@
+{
+  "desktop": {
+    "width": 1536,
+    "fps": 18,
+    "waterPixels": 1.6,
+    "treeGain": 0.4,
+    "rayGain": 2.2,
+    "source": [0.696, 0.432]
+  },
+  "mobile": {
+    "width": 780,
+    "fps": 15,
+    "waterPixels": 1.8,
+    "treeGain": 0.44,
+    "rayGain": 2.2,
+    "source": [0.606, 0.316]
+  },
+  "lightSeconds": 16,
+  "waterSeconds": 7.3,
+  "maskSource": "Original world WebP; manually bounded water polygons and luminance-qualified foliage. No independent waterfall or leaf animation assets."
+}

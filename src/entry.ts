@@ -1,5 +1,5 @@
 import "./site-entry";
-import { mountGodrays } from "./scenes/godrays";
+import { mountLivingScene } from "./scenes/living-scene";
 import "./styles/site.css";
 import type { WorldController } from "./scenes/world-scene";
 import { createEnvironment } from "./scenes/environment";
@@ -10,11 +10,9 @@ const environment = createEnvironment(
   document.querySelector<HTMLElement>(".world-layer")!,
   stage,
 );
-mountGodrays(
+const livingScene = mountLivingScene(
   environment,
   document.querySelector<HTMLElement>(".world-layer")!,
-  import.meta.env.DEV &&
-    new URLSearchParams(location.search).get("artStudy") === "godrays",
 );
 if (
   import.meta.env.DEV &&
@@ -40,9 +38,12 @@ const mobile = matchMedia("(max-width:759px), (max-aspect-ratio:4/5)");
 let comparisonStatic = false;
 if (import.meta.env.DEV) {
   void import("./dev/motion-compare").then(({ mountMotionCompare }) =>
-    mountMotionCompare((value) => {
+    mountMotionCompare((value, mode) => {
       comparisonStatic = value;
       environment.setComparisonStatic(value);
+      environment.setEffect("farFog", mode === "all" || mode === "clouds");
+      environment.setEffect("midFog", mode === "all" || mode === "clouds");
+      livingScene.setMode(mode);
       instance?.setStatic(value);
       updateProgress();
     }),
