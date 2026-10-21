@@ -50,3 +50,13 @@ index.html、内页 HTML、public/sitemap.xml 等由 npm run build 生成，不�
 - 没有真机则明确“真机性能、耗电、发热尚未验证”。部署前确认 CI 在 GitHub 实际成功；本地通过不等于线上执行通过。
 
 当前维护手册：docs/MILOQEN-长期维护.md。历史报告保留，不作为当前性能数字或发布状态。
+
+## 安全维护要求
+
+- 所有变更经开发分支、PR、必要测试、人类确认合并；自动化不得批准或合并自己的高风险修改。main/账号权限/保护规则变动及首次发布单独征得确认。
+- 禁止读取、输出、复制或提交令牌、私钥、恢复码；只记录认证是否有效及最小权限元数据。不为审计扩大授权范围。
+- GitHub Actions 固定官方完整提交 SHA；checkout 设置 persist-credentials:false；普通检查仅 contents:read，pages/id-token 写权限只给通过检查且发布门禁开启的部署任务。禁止 pull_request_target 执行不可信 PR 代码、传入 secrets、自动批准 PR 或合并。
+- npm run check、npm run test:security、npm audit --audit-level=low；界面/脚本/策略变动还须 npm run test:browser:ci。发现漏洞须评估并修复，不能为了绿灯静默忽略；审计服务故障如实报告。
+- Markdown 不执行 HTML/MDX；新内容必须转义；外链验证协议、主机与官方确认状态。浏览器脚本和素材使用本地资源；不为方便加入 unsafe-eval 或放宽 script-src。
+- 生产 CSP 是构建期 meta 策略，不是服务器响应头；不要伪称 frame-ancestors、X-Frame-Options 或 Permissions-Policy 已通过此方式启用。保持开发 HMR 不受生产策略影响。
+- Dependabot 更新仅创建 PR，禁止自动合并；合并前重新测试。历史快照和回滚使用新提交/PR，不强推、不改写 main 历史。

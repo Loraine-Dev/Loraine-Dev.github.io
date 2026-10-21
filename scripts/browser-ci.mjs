@@ -91,6 +91,7 @@ try {
   await run("tests/integrated-materials.mjs", env);
   await run("tests/art-loading-browser.mjs", env);
   await run("tests/production-ui.mjs", env);
+  await run("tests/security-browser.mjs", env);
 } finally {
   for (const child of servers) child.kill();
 }

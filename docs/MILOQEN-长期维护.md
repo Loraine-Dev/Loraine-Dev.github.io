@@ -54,7 +54,7 @@
 
 `tests/production-ui.mjs` 在桌面/手机对7个路由、普通与3组调试参数执行56项生产访问检查，并验证减少动态及开发工具仍可在开发环境使用。发布检查同时扫描所有产物 HTML、JS、CSS，避免开发组件代码进入构建，而非仅检查是否可见。该检查已经纳入浏览器CI。
 
-只有一个 `.github/workflows/pages.yml`：开发分支/PR 自动构建、测试并上传可下载静态产物。main 同样先检查；仅仓库变量 `MILOQEN_PAGES_APPROVED == true` 且事件来自 main 才上传 Pages 产物和部署。PR、开发分支、标签以及未批准状态均不部署。
+只有 `.github/workflows/pages.yml` 负责网站部署：开发分支/PR 自动构建、测试并上传可下载静态产物。main 同样先检查；仅仓库变量 `MILOQEN_PAGES_APPROVED == true` 且事件来自 main 才上传 Pages 产物和部署。PR、开发分支、标签以及未批准状态均不部署。另有只读的 dependency-security.yml 每周检查依赖，不部署网站。
 
 当前仓库已实际切换 Pages 来源为 GitHub Actions，MILOQEN_PAGES_APPROVED=false。旧 main 根目录 legacy 自动构建链路已停用，避免绕过首次发布门控。首次发布须你明确确认具体版本后，才进行以下操作：
 
@@ -80,5 +80,17 @@ origin 必须为 https://github.com/Loraine-Dev/Loraine-Dev.github.io.git。标�
 线上回滚采用新的回滚分支，`git revert` 撤销对应整合提交或通过受审核 PR 恢复确认过的文件，测试通过后由你合并并自动发布。不 force push main，不删除历史。可先把 MILOQEN_PAGES_APPROVED 设为 false 暂停后续发布。
 
 ## 已知边界
+
+## 安全检查与恢复
+
+每次修改执行 `npm run check`、`npm run test:security` 和 `npm audit --audit-level=low`；脚本、样式或策略变化再执行 `npm run test:browser:ci`。签名扫描只报文件/数量，不输出匹配内容；可用 `node scripts/security-scan.mjs --history` 对本机可达历史做有限格式扫描，不能代替 GitHub Secret scanning 或证明从未泄露。新依赖审查来源、用途、维护情况和锁文件，不使用 audit fix --force。
+
+生产 CSP 在 Vite 构建期插入所有 HTML，禁止第三方脚本、内联脚本、eval、外部网络连接、嵌入对象和表单提交；保留现有相机、云雾需要的内联样式。开发服务器不添加此策略，避免破坏 HMR 与诊断。meta CSP 不提供 frame-ancestors、X-Frame-Options、Permissions-Policy 等响应头；仓库中的 `_headers`/普通 HTML meta 不能替 GitHub Pages 任意配置这些头。需要完整响应头防护时另行审批代理或托管变更。
+
+Dependabot 配置每周依赖与 Actions 更新 PR；Scheduled dependency audit 工作流需先合并到默认分支才会按计划运行。本轮没有开启远程 Dependabot 告警/安全更新开关，也没有修改账号、main 保护或首次发布规则；配置文件存在不代表远程设置已启用。Actions 固定官方 SHA，部署任务不 checkout 源码；只有部署任务拥有 pages/id-token 写权限。检查任务不能批准/合并 PR。
+
+发现误发布时：先请求关闭发布变量（这是远程发布设置变更，需要授权），在开发分支用 `git revert <错误提交>`；合并提交用 `git revert -m 1 <合并提交>`，核实父提交后操作。执行完整检查和本地预览，由用户批准回滚 PR，再正常合并并发布。没有 force push。失败构建不替换已部署产物；资源缺失由发布路径检查拦截，确认缺失素材已在 Git 中后再构建。Actions 产物只保留14天，Git 中源文件和历史是长期恢复依据，不能把短期产物当备份。
+
+离线备份可用 `git bundle create <仓库外安全路径>/miloqen.bundle --all`，然后 `git bundle verify <路径>`；包含公共源码与历史，不含忽略的素材工作文件、账号恢复码或私钥。复制到独立介质由所有者管理。账号安全每季度在 GitHub Settings 手动确认 2FA、恢复方式、PAT、SSH keys 与 Authorized OAuth Apps；不向 Codex 粘贴任何值。撤销或缩减权限前确认现有自动化不会被误伤。
 
 自动化技术检查不等于艺术验收。自然度、边界和视觉收益需看正常速度预览。没有物理三维反射/云厚度；没有实体手机时，实际帧率、功耗、温升必须记为尚未验证。GitHub CI 与部署状态以远程实际结果为准，本地工作流校验不能冒充线上成功。
