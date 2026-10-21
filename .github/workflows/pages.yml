@@ -30,6 +30,7 @@ jobs:
           name: site-preview-${{ github.sha }}
           path: dist
           retention-days: 14
+          include-hidden-files: true
       - name: Package approved main build for Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.MILOQEN_PAGES_APPROVED == 'true'
         uses: actions/upload-pages-artifact@v4
