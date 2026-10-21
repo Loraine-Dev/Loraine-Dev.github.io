@@ -18,7 +18,7 @@ export function navigation(base, active, home = false) {
   return `<header class="${home ? "world-header" : "site-header"}"><a class="small-brand" href="${base}" aria-label="MILOQEN 弥洛生 首页"><img src="${base}images/mark.svg" width="26" height="26" alt=""><span>MILOQEN</span></a><nav class="desktop-nav" aria-label="主导航">${links}</nav><details class="mobile-menu"><summary aria-label="打开网站导航">导航 <span aria-hidden="true">＋</span></summary><nav aria-label="移动导航">${links}</nav></details></header>`;
 }
 export function footer(base, data) {
-  return `<footer class="site-footer"><div class="footer-brand"><img src="${base}images/mark.svg" width="40" height="40" alt=""><p>${e(data.brand.name)} <span>MILOQEN</span></p></div><p class="footer-motto">让想象拥有生命。</p><div class="footer-bottom"><span>原创游戏 · 互动想象</span><a href="${data.github}" target="_blank" rel="noopener noreferrer">GITHUB ↗<span class="sr-only">（新窗口）</span></a><a href="${base}#top">回到初见 ↑</a></div></footer>`;
+  return `<footer class="site-footer"><div class="footer-brand"><img src="${base}images/mark.svg" width="40" height="40" alt=""><p>${e(data.brand.name)} <span>${e(data.brand.english)}</span></p></div><p class="footer-motto">${e(data.brand.tagline)}</p><div class="footer-bottom"><span>原创游戏 · 互动想象</span><a href="${data.github}" target="_blank" rel="noopener noreferrer">GITHUB ↗<span class="sr-only">（新窗口）</span></a><a href="${base}#top">回到初见 ↑</a></div></footer>`;
 }
 export function meta(title, description, route = "") {
   const url = `https://loraine-dev.github.io/${route}`;

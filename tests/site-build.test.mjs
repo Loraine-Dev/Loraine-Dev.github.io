@@ -17,12 +17,20 @@ test("all six content routes have canonical, title, main and shared navigation",
     assert.doesNotMatch(html, /noindex,nofollow/);
   }
 });
-test("works is honest and journal contains no invented posts", async () => {
+test("works is honest and journal reflects published content files", async () => {
   const html = await readFile("works/index.html", "utf8");
   assert.match(html, /In Planning/);
   assert.match(html, /尚未正式进入游戏开发/);
   assert.doesNotMatch(html, /下载游戏|立即试玩|已获奖/);
-  assert.match(await readFile("journal/index.html", "utf8"), /尚无公开记录/);
+  const { loadJournal } = await import("../scripts/site/journal.mjs");
+  const posts = await loadJournal("content/journal");
+  const journal = await readFile("journal/index.html", "utf8");
+  if (posts.length === 0) assert.match(journal, /尚无公开记录/);
+  else {
+    assert.doesNotMatch(journal, /class="journal-empty"/);
+    for (const post of posts)
+      assert(journal.includes(`href="./${post.slug}/"`));
+  }
 });
 test("markdown escapes raw HTML and blocks unsafe link schemes", async () => {
   const { renderMarkdown } = await import("../scripts/site/markdown.mjs");

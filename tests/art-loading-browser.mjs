@@ -1,5 +1,6 @@
 import { chromium } from "playwright";
 import assert from "node:assert/strict";
+const base=process.env.SITE_URL || 'http://127.0.0.1:4177/';
 const browser = await chromium.launch({
   args: ["--enable-unsafe-swiftshader"],
 });
@@ -12,7 +13,7 @@ try {
     const page = await browser.newPage({ viewport });
     const urls = [];
     page.on("request", (r) => urls.push(r.url()));
-    await page.goto("http://127.0.0.1:4177/", { waitUntil: "networkidle" });
+    await page.goto(base, { waitUntil: "networkidle" });
     assert.match(
       await page.locator(".world-art img").evaluate((i) => i.currentSrc),
       /\.webp$/,

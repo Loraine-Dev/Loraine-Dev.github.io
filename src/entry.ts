@@ -1,5 +1,5 @@
 import "./site-entry";
-import { mountLivingScene } from "./scenes/living-scene";
+import { mountLocalMaterials } from "./scenes/materials/controller";
 import "./styles/site.css";
 import type { WorldController } from "./scenes/world-scene";
 import { createEnvironment } from "./scenes/environment";
@@ -10,7 +10,7 @@ const environment = createEnvironment(
   document.querySelector<HTMLElement>(".world-layer")!,
   stage,
 );
-const livingScene = mountLivingScene(
+const livingScene = mountLocalMaterials(
   environment,
   document.querySelector<HTMLElement>(".world-layer")!,
 );
@@ -36,13 +36,22 @@ const copy = document.querySelector<HTMLElement>(".brand-copy")!;
 const reduce = matchMedia("(prefers-reduced-motion:reduce)");
 const mobile = matchMedia("(max-width:759px), (max-aspect-ratio:4/5)");
 let comparisonStatic = false;
-if (import.meta.env.DEV) {
+if (
+  import.meta.env.DEV &&
+  /(?:motionMode|motionCompare)=/.test(location.search)
+) {
   void import("./dev/motion-compare").then(({ mountMotionCompare }) =>
     mountMotionCompare((value, mode) => {
       comparisonStatic = value;
       environment.setComparisonStatic(value);
-      environment.setEffect("farFog", mode === "all" || mode === "clouds");
-      environment.setEffect("midFog", mode === "all" || mode === "clouds");
+      // Keep the real cloud trajectories available to the light sampler even
+      // when isolated review hides the visible cloud composite.
+      environment.setEffect("farFog", mode !== "off");
+      environment.setEffect("midFog", mode !== "off");
+      const cloudRoot = document.querySelector<HTMLElement>(".environment")!;
+      cloudRoot.dataset.cloudsVisible = String(
+        mode === "all" || mode === "clouds",
+      );
       livingScene.setMode(mode);
       instance?.setStatic(value);
       updateProgress();

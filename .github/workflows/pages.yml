@@ -1,45 +1,58 @@
-name: Publish reviewed website
-# No push trigger. Run only after the owner approves the exact commit.
+name: Website checks and reviewed Pages deployment
 on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
-    inputs:
-      confirmation:
-        description: '输入 MILOQEN-PUBLISH，确认已完成本次视觉与功能验收'
-        required: true
-        type: string
 permissions:
   contents: read
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: website-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 jobs:
-  build:
-    if: inputs.confirmation == 'MILOQEN-PUBLISH'
+  check:
+    name: Build and test
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: "24"
           cache: npm
       - run: npm ci
-      - run: npm run build
-      - run: npm run test:unit
-      - run: node --test tests/site-build.test.mjs
-      - run: npm run test:release
-      - uses: actions/upload-pages-artifact@v3
+      - run: npx playwright install --with-deps chromium
+      - run: npm run check
+      - run: npm run test:browser:ci
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-preview-${{ github.sha }}
+          path: dist
+          retention-days: 14
+      - name: Package approved main build for Pages
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.MILOQEN_PAGES_APPROVED == 'true'
+        uses: actions/upload-pages-artifact@v4
         with:
           path: dist
   deploy:
-    needs: build
+    name: Deploy reviewed main
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && vars.MILOQEN_PAGES_APPROVED == 'true'
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pages: write
       id-token: write
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy approved build
+      - uses: actions/checkout@v6
+      - uses: actions/configure-pages@v5
+      - name: Deploy tested artifact
         id: deployment
         uses: actions/deploy-pages@v4

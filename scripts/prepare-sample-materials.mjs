@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import {readFile,writeFile,mkdir,stat} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-const config=JSON.parse(await readFile('samples/assets.json','utf8'));
+const config=JSON.parse(await readFile('src/data/materials.json','utf8'));
 const polygons=JSON.parse(await readFile('src/data/living-regions.json','utf8'));
 const clamp=x=>Math.max(0,Math.min(1,x));
 const smooth=(a,b,x)=>{const t=clamp((x-a)/(b-a));return t*t*(3-2*t)};

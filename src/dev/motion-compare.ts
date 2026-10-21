@@ -15,7 +15,6 @@ export function mountMotionCompare(
     ["all", "正常动态"],
     ["rays", "仅丁达尔光"],
     ["water", "仅水面"],
-    ["tree", "仅世界树"],
     ["clouds", "仅云雾"],
   ];
   const buttons = options.map(([mode, label]) => {

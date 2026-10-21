@@ -109,11 +109,11 @@ try {
         }
       }
       if (route === "") {
-        const material = page.locator(".living-scene");
-        await page.locator('.living-scene[data-state="ready"]').waitFor();
+        const material = page.locator(".local-material[data-effect=water]");
+        await page.locator('.local-material[data-effect=water][data-state="ready"]').waitFor();
         await page.waitForFunction(
           () =>
-            document.querySelector(".living-scene")?.dataset.running === "true",
+            document.querySelector(".local-material[data-effect=water]")?.dataset.running === "true",
         );
         const before = Number(await material.getAttribute("data-time"));
         await page.waitForTimeout(350);
@@ -121,7 +121,7 @@ try {
         await page.getByRole("button", { name: "暂停动态" }).click();
         await page.waitForFunction(
           () =>
-            document.querySelector(".living-scene")?.dataset.running ===
+            document.querySelector(".local-material[data-effect=water]")?.dataset.running ===
             "false",
         );
         const stopped = await material.getAttribute("data-time");
@@ -131,7 +131,7 @@ try {
         await page.locator("#content").scrollIntoViewIfNeeded();
         await page.waitForFunction(
           () =>
-            document.querySelector(".living-scene")?.dataset.running ===
+            document.querySelector(".local-material[data-effect=water]")?.dataset.running ===
             "false",
         );
       }
@@ -148,12 +148,12 @@ try {
   const rp = await reduced.newPage();
   await rp.goto(base, { waitUntil: "networkidle" });
   assert.equal(
-    await rp.locator(".living-scene").getAttribute("data-state"),
+    await rp.locator(".local-material[data-effect=water]").getAttribute("data-state"),
     "policy",
   );
   assert.equal(
     await rp
-      .locator(".living-scene")
+      .locator(".local-material[data-effect=water]")
       .evaluate((e) => getComputedStyle(e).visibility),
     "hidden",
   );
@@ -166,7 +166,7 @@ try {
   const lp = await low.newPage();
   await lp.goto(base, { waitUntil: "networkidle" });
   assert.equal(
-    await lp.locator(".living-scene").getAttribute("data-state"),
+    await lp.locator(".local-material[data-effect=water]").getAttribute("data-state"),
     "policy",
   );
   report.checks.push("low-memory: static fallback");
