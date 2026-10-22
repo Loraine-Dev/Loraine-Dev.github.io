@@ -28,7 +28,52 @@ jobs:
       - run: npm run check
       - run: npm run test:security
       - run: npm run test:maintenance
-      - run: npm audit --audit-level=low
+      - name: Check official npm registry connectivity
+        shell: bash
+        run: |
+          node -e "for (const k of ['HTTP_PROXY','HTTPS_PROXY','ALL_PROXY','NPM_CONFIG_PROXY','NPM_CONFIG_HTTPS_PROXY']) console.log(k+' configured: '+Boolean(process.env[k])); require('node:dns').lookup('registry.npmjs.org',{all:true},(e,a)=>{console.log('Registry DNS: '+(e?e.code:a.length+' addresses'));});"
+          if curl --fail --silent --show-error --connect-timeout 10 --max-time 20 https://registry.npmjs.org/-/ping > /dev/null; then
+            echo 'Official registry TLS/ping reachable; this does not certify the audit API.'
+          else
+            echo 'Registry connectivity probe failed; the mandatory audit below still decides the result.'
+          fi
+      - name: Audit dependencies with bounded retries
+        shell: bash
+        run: |
+          set -euo pipefail
+          report="$RUNNER_TEMP/npm-audit-result.json"
+          for attempt in 1 2 3; do
+            echo "Mandatory npm audit attempt $attempt/3"
+            npm_status=0
+            timeout --signal=TERM --kill-after=5s 90s npm audit --audit-level=low --registry=https://registry.npmjs.org/ --fetch-timeout=60000 --fetch-retries=0 --json > "$report" || npm_status=$?
+            result=0
+            node -e '
+              const fs = require("node:fs");
+              let r;
+              try { r = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); } catch { process.exit(2); }
+              const v = r.metadata?.vulnerabilities;
+              const levels = ["info", "low", "moderate", "high", "critical"];
+              if (r.error || r.auditReportVersion !== 2 || !r.vulnerabilities || !v || ![...levels, "total"].every(k => Number.isSafeInteger(v[k]) && v[k] >= 0) || levels.reduce((n,k) => n + v[k], 0) !== v.total) process.exit(2);
+              console.log("Valid npm audit report: " + v.total + " vulnerabilities");
+              process.exit(v.total > 0 ? 1 : 0);
+            ' "$report" || result=$?
+            if [ "$result" -eq 1 ]; then
+              echo '::error::Audit found vulnerabilities; deployment is blocked.'
+              exit 1
+            fi
+            if [ "$result" -eq 0 ] && [ "$npm_status" -eq 0 ]; then
+              echo 'Mandatory audit passed with a valid zero-vulnerability report.'
+              exit 0
+            fi
+            echo "Audit unavailable or invalid (npm exit $npm_status, report validation $result)."
+            if [ "$attempt" -lt 3 ]; then
+              delay=$((10 * (2 * attempt - 1)))
+              echo "Retrying in $delay seconds."
+              sleep "$delay"
+            fi
+          done
+          echo '::error::No successful valid audit after 3 attempts; deployment remains blocked.'
+          exit 1
       - run: npm run test:browser:ci
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
