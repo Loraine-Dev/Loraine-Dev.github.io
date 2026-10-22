@@ -1,5 +1,7 @@
 # MILOQEN V1.0 长期维护手册
 
+每周自动巡检、告警、暂停恢复及Codex处理Issue的当前说明见 [每周维护手册](./MILOQEN-每周维护.md)。新周计划替代原dependency-security.yml独立周计划；在默认分支合并前只算待启用，不依赖本地电脑。
+
 ## 启动与日常修改
 
 使用 Node.js 24、npm 锁文件；新电脑先 `npm ci` 和 `npx playwright install chromium`。`npm run dev` 为 http://127.0.0.1:4176/；`npm run build` 生成 dist；`npm run preview -- --port 4177` 为生产构建预览。

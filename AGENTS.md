@@ -53,6 +53,13 @@ index.html、内页 HTML、public/sitemap.xml 等由 npm run build 生成，不�
 
 ## 安全维护要求
 
+- V1.0页面/美术基线冻结为2e89c5f；每周维护只更改scripts/maintenance、工作流、测试和维护文档。非P0/P1艺术增强进入后续PR，不能夹带重构。
+- 每周巡检为.github/workflows/weekly-maintenance.yml，cron 0 1 * * 1（周一北京时间09:00）。必须存在于默认分支才会定时运行；GitHub可延迟/丢弃，公开仓库60天无活动可能禁用。未合并不得声称已启用。
+- 检查任务只读，报告任务仅issues:write，不得增加contents/pages/id-token写权限。报告在Actions Summary/weekly-evidence及固定机器人Issue；同一指纹不重复通知，恢复只记录一次。禁止输出凭据、上传原始敏感日志或读取私钥。
+- 新维护代码运行npm run test:maintenance及既有check/security/browser检查；截图比较只是明显回归筛查，不能宣称艺术/真机通过。性能至少3次样本，中位数同时超过相对及绝对阈值才告警；环境改变重建基线须明确说明。
+- 公网未首次发布时标待上线，不将404当正常；Dependabot/管理员设置API无权限则明确尚未验证，不索取新令牌或扩权。Codex无已验证云端执行通道时只采用GitHub Issue→用户下次打开Codex修复PR，不假称自动修复。
+- 维护暂停通过仓库变量MILOQEN_MAINTENANCE_PAUSED=true；恢复设false，改变此维护开关需用户要求。与首次发布变量独立，不自动改变任何账号/分支保护/发布设置。
+
 - 所有变更经开发分支、PR、必要测试、人类确认合并；自动化不得批准或合并自己的高风险修改。main/账号权限/保护规则变动及首次发布单独征得确认。
 - 禁止读取、输出、复制或提交令牌、私钥、恢复码；只记录认证是否有效及最小权限元数据。不为审计扩大授权范围。
 - GitHub Actions 固定官方完整提交 SHA；checkout 设置 persist-credentials:false；普通检查仅 contents:read，pages/id-token 写权限只给通过检查且发布门禁开启的部署任务。禁止 pull_request_target 执行不可信 PR 代码、传入 secrets、自动批准 PR 或合并。

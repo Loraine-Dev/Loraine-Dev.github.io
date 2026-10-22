@@ -27,6 +27,7 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run check
       - run: npm run test:security
+      - run: npm run test:maintenance
       - run: npm audit --audit-level=low
       - run: npm run test:browser:ci
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -60,3 +61,8 @@ jobs:
       - name: Deploy tested artifact
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+      - name: Verify deployed public pages without changing publication rules
+        run: |
+          for path in / /works/ /philosophy/ /about/ /journal/ /contact/; do
+            curl --fail --silent --show-error --retry 3 --retry-delay 5 "https://loraine-dev.github.io$path" > /dev/null || exit 1
+          done

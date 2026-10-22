@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "test:maintenance": "node --test tests/maintenance.test.mjs",
     "test:security": "node --test tests/security.test.mjs && node scripts/security-scan.mjs",
     "dev": "node scripts/render.mjs && vite --host 127.0.0.1 --port 4176",
     "build": "node scripts/render.mjs && tsc --noEmit && vite build",
