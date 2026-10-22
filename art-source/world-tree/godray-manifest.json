@@ -1,0 +1,62 @@
+{
+  "generator": "scripts/prepare-godrays.cjs",
+  "source": "Original analytical scattering field, manually placed source and terrain occlusion; seeded density baked once. No third-party assets, no real-time physical volume claim.",
+  "assets": [
+    {
+      "output": "public/art/world-tree/godrays/desktop-0.webp",
+      "source": "art-source/world-tree/world-desktop.png",
+      "sourceSha256": "4e2bbeff9a765e98fdd6a484fd729866a0d000979327825a7f78308de5a9601e",
+      "sha256": "46d2ae7ffffab80a9246c76c4628ac4eb06466c66e1abf97520cfeeb2f64ba42",
+      "bytes": 22708,
+      "bounds": {
+        "x": 0.0791015625,
+        "y": 0.4340277777777778,
+        "width": 0.583984375,
+        "height": 0.2604166666666667
+      },
+      "pose": -1.8
+    },
+    {
+      "output": "public/art/world-tree/godrays/desktop-1.webp",
+      "source": "art-source/world-tree/world-desktop.png",
+      "sourceSha256": "4e2bbeff9a765e98fdd6a484fd729866a0d000979327825a7f78308de5a9601e",
+      "sha256": "cf12cff52ca22cf8fc5c925f0f5f7040e0de24a2d55049e20c6935c31c77c68e",
+      "bytes": 27646,
+      "bounds": {
+        "x": 0.0791015625,
+        "y": 0.4340277777777778,
+        "width": 0.583984375,
+        "height": 0.2604166666666667
+      },
+      "pose": 1.8
+    },
+    {
+      "output": "public/art/world-tree/godrays/mobile-0.webp",
+      "source": "art-source/world-tree/world-mobile.png",
+      "sourceSha256": "097a34636868605b5f0f4f111e7c04de00e45db8b452f18a1b6293d90fd8c276",
+      "sha256": "fb0da8aace2d046df53aae2b4280b7c97153d9545164768b89c664f83f0d8e66",
+      "bytes": 10544,
+      "bounds": {
+        "x": 0.03993055555555555,
+        "y": 0.318359375,
+        "width": 0.5416666666666666,
+        "height": 0.1640625
+      },
+      "pose": -2
+    },
+    {
+      "output": "public/art/world-tree/godrays/mobile-1.webp",
+      "source": "art-source/world-tree/world-mobile.png",
+      "sourceSha256": "097a34636868605b5f0f4f111e7c04de00e45db8b452f18a1b6293d90fd8c276",
+      "sha256": "a3797319fa425be887935e242d1e3a6ed131aeadd170671c98508091a9b99740",
+      "bytes": 11540,
+      "bounds": {
+        "x": 0.03993055555555555,
+        "y": 0.318359375,
+        "width": 0.5416666666666666,
+        "height": 0.1640625
+      },
+      "pose": 2
+    }
+  ]
+}

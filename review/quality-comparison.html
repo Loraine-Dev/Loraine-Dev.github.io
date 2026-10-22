@@ -1,0 +1,698 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MILOQEN · 优化前后实际对照</title><meta name="robots" content="noindex"><style>body{margin:0;padding:clamp(20px,4vw,60px);background:#10151d;color:#e9e6df;font:14px/1.9 Arial,'Microsoft YaHei',sans-serif}h1,h2{font-weight:400}a{color:#d0b78d}nav{display:flex;gap:25px;flex-wrap:wrap}table{border-collapse:collapse;width:100%;max-width:1000px;margin:35px 0}td,th{text-align:left;padding:14px;border-bottom:1px solid #acb6bf40}p{max-width:70em;color:#b9c6cf}.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:30px 0 70px}.pair img{width:100%;display:block}.phone img{max-width:390px;margin:auto}.pair figure{margin:0}.pair figcaption{margin:10px 0}details{margin:30px 0}pre{overflow:auto;background:#080e16;padding:20px;font-size:12px}@media(max-width:700px){.pair{grid-template-columns:1fr}td,th{padding:10px 4px;font-size:12px}}</style></head><body><h1>MILOQEN · 优化前后实际对照</h1><nav><a href="./quality.html?device=desktop">桌面实时预览</a><a href="./quality.html?device=tablet">平板实时预览</a><a href="./quality.html?device=mobile">手机实时预览</a><a href="./quality-gallery.html">六页图集与录像</a></nav><p>基线：f4f6f8e。右侧为当前混合编码候选。相同视口、相同镜头、相同动画相位；这里的截图为画质比较而暂停动态，实时预览与导览录像正常运行。技术数据不能代表艺术验收通过。</p><table><thead><tr><th>指标</th><th>优化前</th><th>采用方案</th></tr></thead><tbody><tr><td>LCP 三轮</td><td>4.210 / 4.216 / 4.293 s</td><td>3.684 / 3.764 / 3.759 s</td></tr><tr><td>LCP 中位数</td><td>4.216 s</td><td>3.759 s · 2.5 s 目标未达</td></tr><tr><td>首屏图片传输</td><td>646.2 KiB</td><td>437.5 KiB</td></tr><tr><td>性能分三轮</td><td>73 / 82 / 81</td><td>79 / 83 / 86</td></tr><tr><td>Speed Index 三轮</td><td>2.053 / 1.199 / 1.131 s</td><td>8.843 / 1.238 / 1.128 s</td></tr></tbody></table><p>保留了第一轮冷启动异常：AVIF 与纯 WebP 实验中都出现过较长首帧等待，原因尚未完全隔离，不能把它隐去或说成已解决。以下为本机移动模拟，不代表实体手机或线上用户指标。没有降低主景分辨率或关闭既有可见动态。</p><h2>桌面 · 相同构图</h2><div class="pair "><figure><a href="../artifacts/final-quality/comparison/1440-before.png" target="_blank"><img src="../artifacts/final-quality/comparison/1440-before.png" alt="桌面优化前真实截图" loading="lazy"></a><figcaption>优化前 · 点击查看原尺寸</figcaption></figure><figure><a href="../artifacts/final-quality/comparison/1440-after.png" target="_blank"><img src="../artifacts/final-quality/comparison/1440-after.png" alt="桌面优化后真实截图" loading="lazy"></a><figcaption>优化后 · 点击查看原尺寸</figcaption></figure></div><h2>平板 · 相同构图</h2><div class="pair "><figure><a href="../artifacts/final-quality/comparison/768-before.png" target="_blank"><img src="../artifacts/final-quality/comparison/768-before.png" alt="平板优化前真实截图" loading="lazy"></a><figcaption>优化前 · 点击查看原尺寸</figcaption></figure><figure><a href="../artifacts/final-quality/comparison/768-after.png" target="_blank"><img src="../artifacts/final-quality/comparison/768-after.png" alt="平板优化后真实截图" loading="lazy"></a><figcaption>优化后 · 点击查看原尺寸</figcaption></figure></div><h2>手机 · 相同构图</h2><div class="pair phone"><figure><a href="../artifacts/final-quality/comparison/390-before.png" target="_blank"><img src="../artifacts/final-quality/comparison/390-before.png" alt="手机优化前真实截图" loading="lazy"></a><figcaption>优化前 · 点击查看原尺寸</figcaption></figure><figure><a href="../artifacts/final-quality/comparison/390-after.png" target="_blank"><img src="../artifacts/final-quality/comparison/390-after.png" alt="手机优化后真实截图" loading="lazy"></a><figcaption>优化后 · 点击查看原尺寸</figcaption></figure></div><details><summary>查看三轮完整数据摘要</summary><pre>{
+  "chosenProfile": "hybrid",
+  "targetLCP": 2500,
+  "targetReached": false,
+  "before": [
+    {
+      "run": 1,
+      "url": "http://127.0.0.1:4177/",
+      "version": "13.5.0",
+      "categories": {
+        "performance": 73,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1546.0100499999999,
+        "largest-contentful-paint": 4210.0201,
+        "total-blocking-time": 481.00000000000045,
+        "cumulative-layout-shift": 0.0006300301808702134,
+        "speed-index": 2052.708768220365
+      },
+      "lcp": {
+        "type": "list",
+        "items": [
+          {
+            "type": "checklist",
+            "items": {
+              "priorityHinted": {
+                "label": "fetchpriority=high should be applied to the image preload request",
+                "value": false
+              },
+              "requestDiscoverable": {
+                "label": "Request is discoverable in initial document",
+                "value": true
+              },
+              "eagerlyLoaded": {
+                "label": "LCP resources should not use loading=lazy",
+                "value": true
+              }
+            }
+          },
+          {
+            "type": "node",
+            "lhId": "page-5-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV",
+            "selector": "div.static-scene > div.world-layer > div.environment > div.environment-mask",
+            "boundingRect": {
+              "top": 315,
+              "bottom": 427,
+              "left": -31,
+              "right": 435,
+              "width": 467,
+              "height": 113
+            },
+            "snippet": "&lt;div class=\"environment-mask midFog\" data-effect=\"midFog\" style=\"inset: 38.5377% auto auto 0%; width: 98.3398%; height: 13.359%;\">",
+            "nodeLabel": "div.static-scene > div.world-layer > div.environment > div.environment-mask"
+          }
+        ]
+      },
+      "breakdown": {
+        "type": "list",
+        "items": [
+          {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 25.354
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "label": "Resource load delay",
+                "duration": 36.543
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "label": "Resource load duration",
+                "duration": 130.239
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 910.249
+              }
+            ]
+          },
+          {
+            "type": "node",
+            "lhId": "page-5-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV",
+            "selector": "div.static-scene > div.world-layer > div.environment > div.environment-mask",
+            "boundingRect": {
+              "top": 315,
+              "bottom": 427,
+              "left": -31,
+              "right": 435,
+              "width": 467,
+              "height": 113
+            },
+            "snippet": "&lt;div class=\"environment-mask midFog\" data-effect=\"midFog\" style=\"inset: 38.5377% auto auto 0%; width: 98.3398%; height: 13.359%;\">",
+            "nodeLabel": "div.static-scene > div.world-layer > div.environment > div.environment-mask"
+          }
+        ]
+      }
+    },
+    {
+      "run": 2,
+      "url": "http://127.0.0.1:4177/",
+      "version": "13.5.0",
+      "categories": {
+        "performance": 82,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1168.08285,
+        "largest-contentful-paint": 4216.1657,
+        "total-blocking-time": 214,
+        "cumulative-layout-shift": 0.0006300301808702134,
+        "speed-index": 1198.8901353492163
+      },
+      "lcp": {
+        "type": "list",
+        "items": [
+          {
+            "type": "checklist",
+            "items": {
+              "priorityHinted": {
+                "label": "fetchpriority=high should be applied to the image preload request",
+                "value": false
+              },
+              "requestDiscoverable": {
+                "label": "Request is discoverable in initial document",
+                "value": true
+              },
+              "eagerlyLoaded": {
+                "label": "LCP resources should not use loading=lazy",
+                "value": true
+              }
+            }
+          },
+          {
+            "type": "node",
+            "lhId": "page-5-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV",
+            "selector": "div.static-scene > div.world-layer > div.environment > div.environment-mask",
+            "boundingRect": {
+              "top": 315,
+              "bottom": 427,
+              "left": -31,
+              "right": 435,
+              "width": 467,
+              "height": 113
+            },
+            "snippet": "&lt;div class=\"environment-mask midFog\" data-effect=\"midFog\" style=\"inset: 38.5377% auto auto 0%; width: 98.3398%; height: 13.359%;\">",
+            "nodeLabel": "div.static-scene > div.world-layer > div.environment > div.environment-mask"
+          }
+        ]
+      },
+      "breakdown": {
+        "type": "list",
+        "items": [
+          {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 11.973999996185302
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "label": "Resource load delay",
+                "duration": 22.334000003814698
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "label": "Resource load duration",
+                "duration": 44.238
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 442.947
+              }
+            ]
+          },
+          {
+            "type": "node",
+            "lhId": "page-5-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV",
+            "selector": "div.static-scene > div.world-layer > div.environment > div.environment-mask",
+            "boundingRect": {
+              "top": 315,
+              "bottom": 427,
+              "left": -31,
+              "right": 435,
+              "width": 467,
+              "height": 113
+            },
+            "snippet": "&lt;div class=\"environment-mask midFog\" data-effect=\"midFog\" style=\"inset: 38.5377% auto auto 0%; width: 98.3398%; height: 13.359%;\">",
+            "nodeLabel": "div.static-scene > div.world-layer > div.environment > div.environment-mask"
+          }
+        ]
+      }
+    },
+    {
+      "run": 3,
+      "url": "http://127.0.0.1:4177/",
+      "version": "13.5.0",
+      "categories": {
+        "performance": 81,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1130.952,
+        "largest-contentful-paint": 4292.9039999999995,
+        "total-blocking-time": 252,
+        "cumulative-layout-shift": 0.0006300301808702134,
+        "speed-index": 1130.952
+      },
+      "lcp": {
+        "type": "list",
+        "items": [
+          {
+            "type": "checklist",
+            "items": {
+              "priorityHinted": {
+                "label": "fetchpriority=high should be applied to the image preload request",
+                "value": false
+              },
+              "requestDiscoverable": {
+                "label": "Request is discoverable in initial document",
+                "value": true
+              },
+              "eagerlyLoaded": {
+                "label": "LCP resources should not use loading=lazy",
+                "value": true
+              }
+            }
+          },
+          {
+            "type": "node",
+            "lhId": "page-5-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV",
+            "selector": "div.static-scene > div.world-layer > div.environment > div.environment-mask",
+            "boundingRect": {
+              "top": 315,
+              "bottom": 427,
+              "left": -31,
+              "right": 435,
+              "width": 467,
+              "height": 113
+            },
+            "snippet": "&lt;div class=\"environment-mask midFog\" data-effect=\"midFog\" style=\"inset: 38.5377% auto auto 0%; width: 98.3398%; height: 13.359%;\">",
+            "nodeLabel": "div.static-scene > div.world-layer > div.environment > div.environment-mask"
+          }
+        ]
+      },
+      "breakdown": {
+        "type": "list",
+        "items": [
+          {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 10.321000003814698
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "label": "Resource load delay",
+                "duration": 23.163999996185304
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "label": "Resource load duration",
+                "duration": 53.175
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 403.329
+              }
+            ]
+          },
+          {
+            "type": "node",
+            "lhId": "page-5-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV",
+            "selector": "div.static-scene > div.world-layer > div.environment > div.environment-mask",
+            "boundingRect": {
+              "top": 315,
+              "bottom": 427,
+              "left": -31,
+              "right": 435,
+              "width": 467,
+              "height": 113
+            },
+            "snippet": "&lt;div class=\"environment-mask midFog\" data-effect=\"midFog\" style=\"inset: 38.5377% auto auto 0%; width: 98.3398%; height: 13.359%;\">",
+            "nodeLabel": "div.static-scene > div.world-layer > div.environment > div.environment-mask"
+          }
+        ]
+      }
+    }
+  ],
+  "after": [
+    {
+      "run": 1,
+      "url": "http://127.0.0.1:4177/",
+      "version": "13.5.0",
+      "categories": {
+        "performance": 79,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1549.1,
+        "largest-contentful-paint": 3684.1000000000004,
+        "total-blocking-time": 150.54999999999995,
+        "cumulative-layout-shift": 0,
+        "speed-index": 8843.253177071305
+      },
+      "lcp": {
+        "type": "list",
+        "items": [
+          {
+            "type": "checklist",
+            "items": {
+              "priorityHinted": {
+                "label": "fetchpriority=high applied",
+                "value": true
+              },
+              "requestDiscoverable": {
+                "label": "Request is discoverable in initial document",
+                "value": true
+              },
+              "eagerlyLoaded": {
+                "label": "LCP resources should not use loading=lazy",
+                "value": true
+              }
+            }
+          },
+          {
+            "type": "node",
+            "lhId": "page-3-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV,0,DIV,0,DIV",
+            "selector": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow",
+            "boundingRect": {
+              "top": 281,
+              "bottom": 443,
+              "left": -207,
+              "right": 263,
+              "width": 470,
+              "height": 162
+            },
+            "snippet": "&lt;div class=\"cloud-billow cloud-billow-0\" style=\"\">",
+            "nodeLabel": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow"
+          }
+        ]
+      },
+      "breakdown": {
+        "type": "list",
+        "items": [
+          {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 20.128
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "label": "Resource load delay",
+                "duration": 32.249
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "label": "Resource load duration",
+                "duration": 45.689
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 5707.699
+              }
+            ]
+          },
+          {
+            "type": "node",
+            "lhId": "page-3-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV,0,DIV,0,DIV",
+            "selector": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow",
+            "boundingRect": {
+              "top": 281,
+              "bottom": 443,
+              "left": -207,
+              "right": 263,
+              "width": 470,
+              "height": 162
+            },
+            "snippet": "&lt;div class=\"cloud-billow cloud-billow-0\" style=\"\">",
+            "nodeLabel": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow"
+          }
+        ]
+      }
+    },
+    {
+      "run": 2,
+      "url": "http://127.0.0.1:4177/",
+      "version": "13.5.0",
+      "categories": {
+        "performance": 83,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1204.8930500000001,
+        "largest-contentful-paint": 3763.7861000000003,
+        "total-blocking-time": 294,
+        "cumulative-layout-shift": 0.0006300301808702134,
+        "speed-index": 1237.7637783237928
+      },
+      "lcp": {
+        "type": "list",
+        "items": [
+          {
+            "type": "checklist",
+            "items": {
+              "priorityHinted": {
+                "label": "fetchpriority=high applied",
+                "value": true
+              },
+              "requestDiscoverable": {
+                "label": "Request is discoverable in initial document",
+                "value": true
+              },
+              "eagerlyLoaded": {
+                "label": "LCP resources should not use loading=lazy",
+                "value": true
+              }
+            }
+          },
+          {
+            "type": "node",
+            "lhId": "page-3-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV,0,DIV,0,DIV",
+            "selector": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow",
+            "boundingRect": {
+              "top": 294,
+              "bottom": 441,
+              "left": -159,
+              "right": 318,
+              "width": 477,
+              "height": 148
+            },
+            "snippet": "&lt;div class=\"cloud-billow cloud-billow-0\" style=\"\">",
+            "nodeLabel": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow"
+          }
+        ]
+      },
+      "breakdown": {
+        "type": "list",
+        "items": [
+          {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 6.566000007629395
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "label": "Resource load delay",
+                "duration": 26.371999992370604
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "label": "Resource load duration",
+                "duration": 32.022
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 449.051
+              }
+            ]
+          },
+          {
+            "type": "node",
+            "lhId": "page-3-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV,0,DIV,0,DIV",
+            "selector": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow",
+            "boundingRect": {
+              "top": 294,
+              "bottom": 441,
+              "left": -159,
+              "right": 318,
+              "width": 477,
+              "height": 148
+            },
+            "snippet": "&lt;div class=\"cloud-billow cloud-billow-0\" style=\"\">",
+            "nodeLabel": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow"
+          }
+        ]
+      }
+    },
+    {
+      "run": 3,
+      "url": "http://127.0.0.1:4177/",
+      "version": "13.5.0",
+      "categories": {
+        "performance": 86,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "metrics": {
+        "first-contentful-paint": 1127.508,
+        "largest-contentful-paint": 3759.016,
+        "total-blocking-time": 180.99999999999977,
+        "cumulative-layout-shift": 0.0006300301808702134,
+        "speed-index": 1127.508
+      },
+      "lcp": {
+        "type": "list",
+        "items": [
+          {
+            "type": "checklist",
+            "items": {
+              "priorityHinted": {
+                "label": "fetchpriority=high applied",
+                "value": true
+              },
+              "requestDiscoverable": {
+                "label": "Request is discoverable in initial document",
+                "value": true
+              },
+              "eagerlyLoaded": {
+                "label": "LCP resources should not use loading=lazy",
+                "value": true
+              }
+            }
+          },
+          {
+            "type": "node",
+            "lhId": "page-3-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV,0,DIV,0,DIV",
+            "selector": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow",
+            "boundingRect": {
+              "top": 295,
+              "bottom": 442,
+              "left": -150,
+              "right": 329,
+              "width": 479,
+              "height": 147
+            },
+            "snippet": "&lt;div class=\"cloud-billow cloud-billow-0\" style=\"\">",
+            "nodeLabel": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow"
+          }
+        ]
+      },
+      "breakdown": {
+        "type": "list",
+        "items": [
+          {
+            "type": "table",
+            "headings": [
+              {
+                "key": "label",
+                "valueType": "text",
+                "label": "Subpart"
+              },
+              {
+                "key": "duration",
+                "valueType": "ms",
+                "label": "Duration"
+              }
+            ],
+            "items": [
+              {
+                "subpart": "timeToFirstByte",
+                "label": "Time to first byte",
+                "duration": 14.435000007629395
+              },
+              {
+                "subpart": "resourceLoadDelay",
+                "label": "Resource load delay",
+                "duration": 20.597999992370607
+              },
+              {
+                "subpart": "resourceLoadDuration",
+                "label": "Resource load duration",
+                "duration": 21.614
+              },
+              {
+                "subpart": "elementRenderDelay",
+                "label": "Element render delay",
+                "duration": 420.113
+              }
+            ]
+          },
+          {
+            "type": "node",
+            "lhId": "page-3-DIV",
+            "path": "1,HTML,1,BODY,1,MAIN,0,SECTION,0,DIV,0,DIV,0,DIV,1,DIV,1,DIV,0,DIV,0,DIV",
+            "selector": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow",
+            "boundingRect": {
+              "top": 295,
+              "bottom": 442,
+              "left": -150,
+              "right": 329,
+              "width": 479,
+              "height": 147
+            },
+            "snippet": "&lt;div class=\"cloud-billow cloud-billow-0\" style=\"\">",
+            "nodeLabel": "div.environment > div.environment-mask > div.environment-drift > div.cloud-billow"
+          }
+        ]
+      }
+    }
+  ],
+  "medianLCP": {
+    "before": 4216.1657,
+    "after": 3759.016
+  },
+  "note": "The cold-start Speed Index outlier is retained, not excluded. Mobile laboratory emulation, not field results."
+}</pre></details></body></html>

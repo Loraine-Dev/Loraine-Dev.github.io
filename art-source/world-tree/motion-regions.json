@@ -1,0 +1,15 @@
+{
+  "source": "Analytical soft masks authored for the unchanged world paintings; not extracted moving image cutouts. Coordinates normalized to 1000x1000, top-left origin.",
+  "desktop": {
+    "farFog": { "blur": 14, "ellipses": [[338,548,123,35],[459,563,59,24]] },
+    "midFog": { "blur": 10, "ellipses": [[369,619,118,38],[512,642,48,31],[883,649,78,36]] },
+    "treeLight": { "blur": 3, "ellipses": [[577,292,112,57],[723,209,111,86],[814,290,86,67]] },
+    "waterLight": { "blur": 12, "ellipses": [[676,730,63,44]] }
+  },
+  "mobile": {
+    "farFog": { "blur": 9, "ellipses": [[195,375,165,26],[357,382,75,18]] },
+    "midFog": { "blur": 8, "ellipses": [[155,442,135,35],[332,464,64,23],[871,470,89,28]] },
+    "treeLight": { "blur": 2, "ellipses": [[415,259,132,47],[646,216,110,49],[810,268,99,47]] },
+    "waterLight": { "blur": 9, "ellipses": [[605,551,64,34]] }
+  }
+}

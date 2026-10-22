@@ -1,0 +1,162 @@
+{
+  "records": [
+    {
+      "device": "desktop",
+      "kind": "water",
+      "rect": {
+        "left": 320,
+        "top": 480,
+        "width": 1216,
+        "height": 384
+      },
+      "sourceSha256": "cd258e1de4f7e5d13d820c8c923153b4457ee8796ac21753762976d2237ec234",
+      "generatedPath": "art-source/material-samples/desktop-water-generated.png",
+      "generatedSha256": "bc1f0bea2b9b87656f25aced2e11088af0add09c76973a5b6521e8401661a40c",
+      "validPixels": 114535,
+      "reconstructionMaxByteError": 0,
+      "method": "Generated clean-water texture; signed original-minus-base reflection passes, no second baked reflection below opaque interior.",
+      "control": "R distance / G density or roughness / B flow or visibility / A precise inset region",
+      "files": [
+        {
+          "name": "base.webp",
+          "bytes": 483176
+        },
+        {
+          "name": "reflection-positive.webp",
+          "bytes": 508712
+        },
+        {
+          "name": "reflection-negative.webp",
+          "bytes": 275800
+        },
+        {
+          "name": "control.webp",
+          "bytes": 6204
+        },
+        {
+          "name": "original.webp",
+          "bytes": 483654
+        }
+      ]
+    },
+    {
+      "device": "desktop",
+      "kind": "light",
+      "rect": {
+        "left": 200,
+        "top": 300,
+        "width": 920,
+        "height": 324
+      },
+      "sourceSha256": "cd258e1de4f7e5d13d820c8c923153b4457ee8796ac21753762976d2237ec234",
+      "generatedPath": "art-source/material-samples/desktop-light-generated.png",
+      "generatedSha256": "0200614a3c37de7a2166538bb1a14c8458bade145341dde1d5d803ce6c6eeee5",
+      "validPixels": 85508,
+      "reconstructionMaxByteError": 0,
+      "method": "Registered source-colour air-light decomposition; neutral AI candidate supplies low-frequency repair guidance only. Original geometry retained.",
+      "control": "R distance / G density or roughness / B flow or visibility / A precise inset region",
+      "files": [
+        {
+          "name": "base.webp",
+          "bytes": 282794
+        },
+        {
+          "name": "reflection-positive.webp",
+          "bytes": 35524
+        },
+        {
+          "name": "reflection-negative.webp",
+          "bytes": 54
+        },
+        {
+          "name": "control.webp",
+          "bytes": 75290
+        },
+        {
+          "name": "original.webp",
+          "bytes": 273468
+        }
+      ]
+    },
+    {
+      "device": "mobile",
+      "kind": "water",
+      "rect": {
+        "left": 0,
+        "top": 600,
+        "width": 780,
+        "height": 600
+      },
+      "sourceSha256": "d96ba46b9568e51156c6fdf11ac725c38a09f8cfffc3fea2a7f851e2de44fece",
+      "generatedPath": "art-source/material-samples/mobile-water-generated.png",
+      "generatedSha256": "7c4bf154f2d26ecb159143b7c71482a5688ce209230fd917efa900666f92f832",
+      "validPixels": 200555,
+      "reconstructionMaxByteError": 0,
+      "method": "Generated clean-water texture; signed original-minus-base reflection passes, no second baked reflection below opaque interior.",
+      "control": "R distance / G density or roughness / B flow or visibility / A precise inset region",
+      "files": [
+        {
+          "name": "base.webp",
+          "bytes": 461078
+        },
+        {
+          "name": "reflection-positive.webp",
+          "bytes": 489982
+        },
+        {
+          "name": "reflection-negative.webp",
+          "bytes": 186194
+        },
+        {
+          "name": "control.webp",
+          "bytes": 3130
+        },
+        {
+          "name": "original.webp",
+          "bytes": 389070
+        }
+      ]
+    },
+    {
+      "device": "mobile",
+      "kind": "light",
+      "rect": {
+        "left": 0,
+        "top": 408,
+        "width": 624,
+        "height": 312
+      },
+      "sourceSha256": "d96ba46b9568e51156c6fdf11ac725c38a09f8cfffc3fea2a7f851e2de44fece",
+      "generatedPath": "art-source/material-samples/mobile-light-generated.png",
+      "generatedSha256": "e5a7902d3bf827e67588e056b4a8b8fadbc25fc977792b2896ca03a769dabab0",
+      "validPixels": 32546,
+      "reconstructionMaxByteError": 0,
+      "method": "Registered source-colour air-light decomposition; neutral AI candidate supplies low-frequency repair guidance only. Original geometry retained.",
+      "control": "R distance / G density or roughness / B flow or visibility / A precise inset region",
+      "files": [
+        {
+          "name": "base.webp",
+          "bytes": 231826
+        },
+        {
+          "name": "reflection-positive.webp",
+          "bytes": 20692
+        },
+        {
+          "name": "reflection-negative.webp",
+          "bytes": 48
+        },
+        {
+          "name": "control.webp",
+          "bytes": 34220
+        },
+        {
+          "name": "original.webp",
+          "bytes": 229430
+        }
+      ]
+    }
+  ],
+  "tool": "Built-in image_gen; original generated PNG retained. Technical processing via scripts/prepare-sample-materials.mjs.",
+  "limitations": "AI outputs are NOT pixel-perfect geometry plates. Only water inside inset masks, and low-frequency air colour repair, are used. Original foreground is composited above both samples. No physical 3D reflection/volume claim."
+}

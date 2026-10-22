@@ -1,0 +1,22 @@
+/* Shared brand, typography, spacing and editorial tokens. */
+:root {
+  --ink: #070b12;
+  --silver: #f0e8d8;
+  --muted: #b6b8bc;
+  --gold: #d0b78d;
+  --gutter: clamp(26px, 5vw, 96px);
+  --progress: 0;
+  font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  color-scheme: dark;
+}
+:root {
+  --paper: #eae5db;
+  --paper-ink: #202b31;
+  --accent: #9ac7ca;
+  --hairline: #d0b78d38;
+  --serif: "Noto Serif CJK SC", "Songti SC", SimSun, serif;
+  --sans: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  --content: 1280px;
+  --section-space: clamp(80px, 10vw, 160px);
+  --body-size: clamp(15px, 1.2vw, 18px);
+}

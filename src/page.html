@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#070b12" />
+    <title>弥洛生 MILOQEN — 让想象拥有生命。</title>
+    <meta
+      name="description"
+      content="弥洛生 MILOQEN，原创游戏与互动想象。越过月汐之门，探索一个正在生长的世界。"
+    />
+    <meta name="robots" content="noindex,nofollow" />
+    <link rel="icon" href="./images/mark.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      as="image"
+      href="./art/world-tree/world-desktop.webp"
+      media="(min-width:760px) and (min-aspect-ratio:4/5)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./art/world-tree/world-mobile.webp"
+      media="(max-width:759px), (max-aspect-ratio:4/5)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./art/world-tree/cloud-bank-v2.avif"
+      type="image/avif"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./art/world-tree/motion/desktop-midFog.webp"
+      crossorigin="anonymous"
+      fetchpriority="high"
+      media="(min-width:760px) and (min-aspect-ratio:4/5)"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="./art/world-tree/motion/mobile-midFog.webp"
+      crossorigin="anonymous"
+      fetchpriority="high"
+      media="(max-width:759px), (max-aspect-ratio:4/5)"
+    />
+    <script type="module" src="/src/entry.ts"></script>
+  </head>
+  <body>
+    <a class="skip" href="#beyond">跳至世界探索</a>
+    <main class="world-experience" id="top" data-mode="static">
+      <div class="world-stage">
+        <div class="static-scene" aria-hidden="true">
+          <div class="world-layer">
+            <picture class="world-art"
+              ><source
+                srcset="./art/world-tree/world-mobile.webp"
+                media="(max-width:759px), (max-aspect-ratio:4/5)" />
+              <img
+                src="./art/world-tree/world-desktop.webp"
+                width="1672"
+                height="941"
+                alt=""
+                fetchpriority="high"
+            /></picture>
+          </div>
+          <picture class="shore-art"
+            ><source
+              type="image/avif"
+              srcset="./art/world-tree/shore-portrait.avif"
+              media="(max-aspect-ratio:9/16)" />
+            <source type="image/avif" srcset="./art/world-tree/shore.avif" />
+            <img
+              src="./art/world-tree/shore.webp"
+              width="1672"
+              height="941"
+              alt="" /></picture
+          ><picture class="gate-art"
+            ><source
+              type="image/avif"
+              srcset="./art/world-tree/gate-mobile.avif"
+              media="(max-width:759px), (max-aspect-ratio:4/5)" />
+            <source type="image/avif" srcset="./art/world-tree/gate.avif" />
+            <source
+              srcset="./art/world-tree/gate-mobile.webp"
+              media="(max-width:759px), (max-aspect-ratio:4/5)" />
+            <img
+              src="./art/world-tree/gate.webp"
+              width="1672"
+              height="941"
+              alt=""
+          /></picture>
+        </div>
+        <div id="world-canvas" aria-hidden="true" data-state="poster"></div>
+        <div class="reading-shade" aria-hidden="true"></div>
+        <header class="world-header">
+          <a class="small-brand" href="#top" aria-label="MILOQEN 弥洛生 首页"
+            ><img src="./images/mark.svg" width="26" height="26" alt="" /><span
+              >{{brand.english}}</span
+            ></a
+          ><a
+            class="github"
+            href="{{github}}"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="官方 GitHub（新窗口）"
+            >GITHUB <span>↗</span></a
+          >
+        </header>
+        <section class="brand-copy" aria-labelledby="hero-title">
+          <p class="overline">{{hero.eyebrow}}</p>
+          <h1 id="hero-title">{{brand.name}}</h1>
+          <p class="english-name" lang="en">{{brand.english}}</p>
+          <div class="brand-rule" aria-hidden="true"><span>✦</span></div>
+          <p class="tagline">{{brand.tagline}}</p>
+          <a class="explore" href="#content"
+            ><span>{{hero.explore}}</span
+            ><span class="explore-arrow" aria-hidden="true">↓</span></a
+          >
+        </section>
+        <div class="world-note" aria-hidden="true">
+          <span>BEYOND THE GATE</span><span>A LIVING WORLD</span>
+        </div>
+        <div class="beyond-copy" aria-hidden="true">
+          <p>想象的另一侧。</p>
+          <span>LET IMAGINATION LIVE.</span>
+        </div>
+        <div class="world-bottom">
+          <span class="scene-caption"
+            >月汐之门 <span> / </span> ORIGINAL WORLD STUDY</span
+          ><button id="motion-toggle" type="button" aria-pressed="false" hidden>
+            暂停动态 <span aria-hidden="true">Ⅱ</span></button
+          ><a href="#top" class="return" hidden>返回初见 ↑</a>
+        </div>
+        <div class="progress" aria-hidden="true"><span></span></div>
+      </div>
+      <div class="beyond-anchor" id="beyond" tabindex="-1">
+        <span class="sr-only">月汐之门的远景。向上滚动可返回初见。</span>
+      </div>
+    </main>
+  </body>
+</html>

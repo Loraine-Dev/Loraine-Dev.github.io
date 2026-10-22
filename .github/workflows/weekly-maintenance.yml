@@ -1,0 +1,109 @@
+name: Weekly MILOQEN maintenance
+on:
+  schedule:
+    # 01:00 UTC = 周一北京时间09:00。GitHub可能延迟；默认分支合并后才启用。
+    - cron: "0 1 * * 1"
+  workflow_dispatch:
+    inputs:
+      trial:
+        description: "安全演练：隔离Issue模拟故障/重复/恢复，不修改网站"
+        type: boolean
+        default: false
+      accept_visual_baseline:
+        description: "仅人工确认新截图后接受视觉基线"
+        type: boolean
+        default: false
+  push:
+    branches: [codex/weekly-maintenance]
+permissions:
+  contents: read
+concurrency:
+  group: miloqen-weekly-maintenance
+  cancel-in-progress: false
+jobs:
+  inspect:
+    if: vars.MILOQEN_MAINTENANCE_PAUSED != 'true' && (github.ref == 'refs/heads/main' || (github.actor == 'Loraine-Dev' && github.ref == 'refs/heads/codex/weekly-maintenance'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      actions: read
+      pages: read
+      issues: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: mkdir -p artifacts/maintenance
+      - id: build
+        continue-on-error: true
+        run: npm run check
+      - id: security
+        continue-on-error: true
+        run: npm run test:security && npm run test:maintenance
+      - id: audit
+        continue-on-error: true
+        run: npm audit --json > artifacts/maintenance/audit.json
+      - id: browser
+        continue-on-error: true
+        run: npm run test:browser:ci
+      - name: Collect structured report, snapshots and performance
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PUBLICATION_APPROVED: ${{ vars.MILOQEN_PAGES_APPROVED }}
+          ACCEPT_VISUAL_BASELINE: ${{ inputs.accept_visual_baseline }}
+          RESULT_BUILD: ${{ steps.build.outcome }}
+          RESULT_SECURITY: ${{ steps.security.outcome }}
+          RESULT_BROWSER: ${{ steps.browser.outcome }}
+        run: node scripts/maintenance/collect.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: weekly-evidence
+          path: |
+            artifacts/maintenance/report.json
+            artifacts/maintenance/summary.md
+            artifacts/maintenance/*.png
+          retention-days: 90
+      - name: Mark actual risks as failed without deploying
+        run: node -e "if(JSON.parse(require('fs').readFileSync('artifacts/maintenance/report.json')).status==='alert')process.exit(1)"
+  report:
+    if: always() && needs.inspect.result != 'skipped'
+    needs: inspect
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      issues: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "24"
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        continue-on-error: true
+        with:
+          name: weekly-evidence
+          path: artifacts/maintenance
+      - name: Update deduplicated Chinese tracker; optional safe drill
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MAINTENANCE_TRIAL: ${{ github.event_name == 'push' || inputs.trial }}
+        run: node scripts/maintenance/report.mjs
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: maintenance-notification-proof
+          path: artifacts/maintenance/trial.json
+          if-no-files-found: ignore
+          retention-days: 90

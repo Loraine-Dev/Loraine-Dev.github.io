@@ -1,0 +1,10 @@
+node_modules/
+dist/
+artifacts/
+.codebase-memory/
+npm-cache/
+.env
+.env.*
+!.env.example
+*.pem
+*.key

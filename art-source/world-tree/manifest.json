@@ -1,0 +1,72 @@
+[
+  {
+    "name": "world-desktop",
+    "source": "art-source/world-tree/world-desktop.png",
+    "production": "public/art/world-tree/world-desktop.webp",
+    "width": 1672,
+    "height": 941,
+    "hasAlpha": false,
+    "transparentPixels": null,
+    "bytes": 203510,
+    "productionWidth": 1536,
+    "productionHeight": 864,
+    "sha256": "4e2bbeff9a765e98fdd6a484fd729866a0d000979327825a7f78308de5a9601e",
+    "origin": "Built-in imagegen; original generation for MILOQEN, user concept used as art-direction reference"
+  },
+  {
+    "name": "gate",
+    "source": "art-source/world-tree/gate.png",
+    "production": "public/art/world-tree/gate.webp",
+    "width": 1672,
+    "height": 941,
+    "hasAlpha": true,
+    "transparentPixels": 0.5315955997132238,
+    "bytes": 236184,
+    "productionWidth": 1536,
+    "productionHeight": 864,
+    "sha256": "0e7b8e4ef55290a82f09809b09e3629deb1d60bccd971de8e177128fbad88588",
+    "origin": "Built-in imagegen; original generation for MILOQEN, user concept used as art-direction reference"
+  },
+  {
+    "name": "gate-mobile",
+    "source": "art-source/world-tree/gate-mobile.png",
+    "production": "public/art/world-tree/gate-mobile.webp",
+    "width": 941,
+    "height": 1671,
+    "hasAlpha": true,
+    "transparentPixels": 0.6623401896832317,
+    "bytes": 172606,
+    "productionWidth": 780,
+    "productionHeight": 1385,
+    "sha256": "45bb12b0cacf3cf0c7a97894bebe00cffbe454be99e91abe092bd2294fde1a84",
+    "origin": "Built-in imagegen; original generation for MILOQEN, user concept used as art-direction reference"
+  },
+  {
+    "name": "shore",
+    "source": "art-source/world-tree/shore.png",
+    "production": "public/art/world-tree/shore.webp",
+    "width": 1672,
+    "height": 941,
+    "hasAlpha": true,
+    "transparentPixels": 0.748180953785294,
+    "bytes": 117440,
+    "productionWidth": 1280,
+    "productionHeight": 720,
+    "sha256": "632aea9a6b992a8986207ab00af370bdd842e45e598e04625205483e217ae842",
+    "origin": "Built-in imagegen; original generation for MILOQEN, user concept used as art-direction reference"
+  },
+  {
+    "name": "world-mobile",
+    "source": "art-source/world-tree/world-mobile.png",
+    "production": "public/art/world-tree/world-mobile.webp",
+    "width": 941,
+    "height": 1672,
+    "hasAlpha": false,
+    "transparentPixels": null,
+    "bytes": 173344,
+    "productionWidth": 780,
+    "productionHeight": 1386,
+    "sha256": "097a34636868605b5f0f4f111e7c04de00e45db8b452f18a1b6293d90fd8c276",
+    "origin": "Built-in imagegen; original generation for MILOQEN, user concept used as art-direction reference"
+  }
+]

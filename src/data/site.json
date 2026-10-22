@@ -1,0 +1,18 @@
+{
+  "brand": {
+    "name": "弥洛生",
+    "english": "MILOQEN",
+    "tagline": "让想象拥有生命。",
+    "concept": "BEYOND THE GATE — A LIVING WORLD"
+  },
+  "hero": {
+    "eyebrow": "INDEPENDENT GAME STUDIO",
+    "explore": "探索世界",
+    "description": "在想象的另一侧，相遇。"
+  },
+  "github": "https://github.com/Loraine-Dev",
+  "taptap": {
+    "url": null,
+    "confirmed": false
+  }
+}

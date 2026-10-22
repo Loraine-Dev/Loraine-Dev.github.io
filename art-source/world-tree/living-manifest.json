@@ -1,0 +1,87 @@
+{
+  "generator": "scripts/prepare-living-masks.cjs",
+  "records": [
+    {
+      "device": "desktop",
+      "source": "public/art/world-tree/world-desktop.webp",
+      "sourceSha256": "cd258e1de4f7e5d13d820c8c923153b4457ee8796ac21753762976d2237ec234",
+      "output": "public/art/world-tree/living/desktop-regions-lossless.webp",
+      "waterPolygon": [
+        [
+          0.2,
+          0.705
+        ],
+        [
+          0.88,
+          0.705
+        ],
+        [
+          0.9,
+          0.76
+        ],
+        [
+          0.78,
+          0.84
+        ],
+        [
+          0.51,
+          0.845
+        ],
+        [
+          0.4,
+          0.78
+        ],
+        [
+          0.2,
+          0.77
+        ]
+      ],
+      "channels": {
+        "red": "water refraction",
+        "green": "foliage local relighting"
+      },
+      "bytes": 28952
+    },
+    {
+      "device": "mobile",
+      "source": "public/art/world-tree/world-mobile.webp",
+      "sourceSha256": "d96ba46b9568e51156c6fdf11ac725c38a09f8cfffc3fea2a7f851e2de44fece",
+      "output": "public/art/world-tree/living/mobile-regions-lossless.webp",
+      "waterPolygon": [
+        [
+          0.4,
+          0.505
+        ],
+        [
+          0.91,
+          0.505
+        ],
+        [
+          0.94,
+          0.6
+        ],
+        [
+          0.86,
+          0.72
+        ],
+        [
+          0.54,
+          0.73
+        ],
+        [
+          0.4,
+          0.65
+        ],
+        [
+          0.48,
+          0.59
+        ]
+      ],
+      "channels": {
+        "red": "water refraction",
+        "green": "foliage local relighting"
+      },
+      "bytes": 28590
+    }
+  ]
+}

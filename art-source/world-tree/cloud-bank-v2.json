@@ -1,0 +1,9 @@
+{
+  "source": "art-source/world-tree/cloud-bank-v2.png",
+  "output": "public/art/world-tree/motion/cloud-bank-v2.webp",
+  "origin": "OpenAI imagegen, original transparent VFX cloud asset generated 2026-10-20. No third-party artwork. Main world painting unchanged.",
+  "prompt": "One isolated horizontal bank of moonlit mountain-valley clouds, transparent alpha, sculpted rolling billows and fine wispy edges; silver upper edges and slate-blue shadows, faint warm upper-right light. No landscape, objects, particles or text.",
+  "optimization": "Crop transparent margins and resize; preserve alpha and original colors. Rebuild with node scripts/prepare-cloud-bank.cjs.",
+  "sha256": "fac4a3c690b6c234419969578a13166879177dbebdafd3042d5e59ba0f97fd91",
+  "bytes": 107912
+}

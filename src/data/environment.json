@@ -1,0 +1,53 @@
+{
+  "enabled": true,
+  "mobileStart": "auto",
+  "revision": "v6-visible-flow.2",
+  "assets": {
+    "fog": "./art/world-tree/motion/cloud-bank-v2.webp",
+    "desktop": "./art/world-tree/motion/desktop-",
+    "mobile": "./art/world-tree/motion/mobile-",
+    "fogAvif": "./art/world-tree/cloud-bank-v2.avif"
+  },
+  "desktopAspect": 1.7777777778,
+  "mobileAspect": 0.5627705628,
+  "mobileStrength": 0.85,
+  "effects": {
+    "farFog": {
+      "enabled": true,
+      "duration": 28000,
+      "opacity": 0.95,
+      "travel": 56,
+      "rise": -4,
+      "phase": 0.3,
+      "opacityDuration": 38000
+    },
+    "midFog": {
+      "enabled": true,
+      "duration": 34000,
+      "opacity": 0.88,
+      "travel": -42,
+      "rise": -6,
+      "phase": 0.37,
+      "opacityDuration": 31000
+    },
+    "treeLight": {
+      "enabled": true,
+      "duration": 16000,
+      "opacity": 0.9,
+      "travel": 2.8,
+      "rise": -0.8,
+      "phase": 0.27,
+      "opacityDuration": 18000
+    },
+    "waterLight": {
+      "enabled": true,
+      "duration": 61000,
+      "opacity": 0.022,
+      "travel": 0.35,
+      "rise": 0,
+      "phase": 0.13,
+      "opacityDuration": 61000
+    }
+  },
+  "minimumOpacity": 0.32
+}

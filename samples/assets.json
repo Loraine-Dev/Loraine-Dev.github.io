@@ -1,0 +1,16 @@
+{
+  "desktop": {
+    "world": [1536, 864],
+    "source": [0.665, 0.438],
+    "water": {"left":320,"top":480,"width":1216,"height":384},
+    "light": {"left":200,"top":300,"width":920,"height":324}
+  },
+  "mobile": {
+    "world": [780, 1386],
+    "source": [0.57, 0.347],
+    "water": {"left":0,"top":600,"width":780,"height":600},
+    "light": {"left":0,"top":408,"width":624,"height":312}
+  },
+  "fps": {"desktop":20,"mobile":15,"software":8},
+  "note": "Independent samples only. Stable homepage has no imports of this directory."
+}

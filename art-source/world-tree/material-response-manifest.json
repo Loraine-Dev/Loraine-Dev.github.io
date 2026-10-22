@@ -1,0 +1,34 @@
+{
+  "generator": "scripts/prepare-material-response.cjs",
+  "regions": "src/data/living-regions.json",
+  "records": [
+    {
+      "device": "desktop",
+      "source": "public/art/world-tree/world-desktop.webp",
+      "sourceSha256": "cd258e1de4f7e5d13d820c8c923153b4457ee8796ac21753762976d2237ec234",
+      "output": "public/art/world-tree/living/desktop-regions-lossless.webp",
+      "channels": {
+        "red": "inset water response; stone excluded",
+        "green": "bounded luminance-qualified foliage; no contour displacement",
+        "blue": "air optical depth; buildings excluded"
+      }
+    },
+    {
+      "device": "mobile",
+      "source": "public/art/world-tree/world-mobile.webp",
+      "sourceSha256": "d96ba46b9568e51156c6fdf11ac725c38a09f8cfffc3fea2a7f851e2de44fece",
+      "output": "public/art/world-tree/living/mobile-regions-lossless.webp",
+      "channels": {
+        "red": "inset water response; stone excluded",
+        "green": "bounded luminance-qualified foliage; no contour displacement",
+        "blue": "air optical depth; buildings excluded"
+      }
+    }
+  ],
+  "field": {
+    "output": "public/art/world-tree/living/optical-field.webp",
+    "source": "Original periodic analytical cloud-transmission and wave-slope field. No third-party material.",
+    "channels": "R cloud transmission / G slope x / B slope y"
+  },
+  "limitations": "No separate foliage, waterfall, clean background, depth or surface-normal pass exists. Only masked image-space optical response is supported."
+}

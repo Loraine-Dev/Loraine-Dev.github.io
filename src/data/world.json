@@ -1,0 +1,35 @@
+{
+  "name": "月汐之门",
+  "english": "BEYOND THE GATE",
+  "assets": {
+    "desktop": "./art/world-tree/world-desktop.webp",
+    "mobile": "./art/world-tree/world-mobile.webp",
+    "gate": "./art/world-tree/gate.webp",
+    "shore": "./art/world-tree/shore.webp",
+    "mobileGate": "./art/world-tree/gate-mobile.webp"
+  },
+  "layers": {
+    "world": -28,
+    "shore": -11,
+    "gate": -2
+  },
+  "camera": {
+    "enabled": true,
+    "fov": 42,
+    "startZ": 6,
+    "travel": 4.1,
+    "mobileTravel": 2.9
+  },
+  "quality": {
+    "desktopDpr": 1.5,
+    "mobileDpr": 1.25,
+    "softwareDpr": 1,
+    "desktopFps": 30,
+    "mobileFps": 24,
+    "softwareFps": 12
+  },
+  "motion": {
+    "pointerEnabled": true,
+    "pointer": 0.07
+  }
+}

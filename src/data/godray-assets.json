@@ -1,0 +1,26 @@
+{
+  "desktop": {
+    "bounds": {
+      "x": 0.0791015625,
+      "y": 0.4340277777777778,
+      "width": 0.583984375,
+      "height": 0.2604166666666667
+    },
+    "poses": [
+      "./art/world-tree/godrays/desktop-0.webp",
+      "./art/world-tree/godrays/desktop-1.webp"
+    ]
+  },
+  "mobile": {
+    "bounds": {
+      "x": 0.03993055555555555,
+      "y": 0.318359375,
+      "width": 0.5416666666666666,
+      "height": 0.1640625
+    },
+    "poses": [
+      "./art/world-tree/godrays/mobile-0.webp",
+      "./art/world-tree/godrays/mobile-1.webp"
+    ]
+  }
+}
