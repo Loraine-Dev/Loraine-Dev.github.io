@@ -2,17 +2,19 @@
 
 ## 执行位置与时间
 
-GitHub-hosted runner每周一北京时间09:00（UTC01:00，`0 1 * * 1`）执行`Weekly MILOQEN maintenance`，不依赖本机开机。计划只能使用默认分支的工作流，当前开发分支未合并前为**待启用**。GitHub计划可能延迟、极端负载时丢弃；公开仓库60天无活动可能自动禁用。不是准点SLA。
+GitHub-hosted runner每周一北京时间09:00（UTC01:00，`0 1 * * 1`）执行`Weekly MILOQEN maintenance`，不依赖本机开机、Codex应用或任何对话保持打开。2026-10-22已核实工作流存在于默认分支main且active；新任务应重新读取实际状态。GitHub计划可能延迟、极端负载时丢弃；公开仓库60天无活动可能自动禁用。不是准点SLA。
 
-Actions → Weekly MILOQEN maintenance → Run workflow可以手动巡检；首次合并前若GitHub拒绝dispatch，保留实际失败证据，不绕过main保护。开发验证分支codex/weekly-maintenance由所有者push时会试运行相同检查并执行安全演练；这不表示周计划已经启用。正常PR的即时检查继续运行，发布成功后另有即时公网状态检查，不等下一周。
+Actions → Weekly MILOQEN maintenance → Run workflow可从main手动巡检，正常运行保持trial=false、accept_visual_baseline=false。原开发验证分支codex/weekly-maintenance保留启动演练入口，不是另一个每周计划。正常PR的即时检查继续运行，发布成功后另有即时公网状态检查，不等下一周。不要为自然语言维护额外创建依赖本机的定时任务。
 
-2026-10-22真实验证：开发分支workflow_dispatch已被GitHub接受，运行39705677233成功；默认分支文件GET仍404，故每周计划仍待启用。正常维护记录为Issue #3；隔离演练Issue #4已验证失败/重复/恢复/重复的评论数量与关闭状态。首轮分支运行39705634005发现现有暂停测试的在途Worker帧采样竞争并发出真实告警，随后手动运行通过且同一Issue记录恢复；测试只增加队列稳定同步，仍严格断言暂停后时间不增长，没有调整动画参数或放宽运动阈值。
+首次公网巡检为 [39719297243](https://github.com/Loraine-Dev/Loraine-Dev.github.io/actions/runs/39719297243)：构建、安全、npm审计0漏洞、浏览器、公网六页与视觉比较通过；因近7天有旧main失败运行而仍标alert。该旧运行是首次发布前npm服务503/超时，后续PR #12修复CI有限重试并已通过部署检查。不要删除失败记录或降低规则来消除历史告警，也不能把巡检alert直接等同于当前网站离线。Issue #3已有调查说明。
+
+历史演练保留：开发分支运行39705677233成功；Issue #4验证隔离的失败/重复/恢复/重复通知。首轮39705634005发现暂停测试的在途Worker帧竞争，后通过同步队列稳定修复，没有改变动画或放宽运动阈值。这些旧记录不替代下一次真实检查。
 
 ## 检查与报告
 
 检查复用`npm run check`、`test:security`、`test:maintenance`和`test:browser:ci`，另做npm audit、GitHub只读状态、六页公网资源/内链、主图和动画生命周期、桌面/手机静态截图、三次浏览器LCP采样、Firefox/WebKit基本访问。兼容性是Linux引擎，不能冒充实体Safari或手机。
 
-打开Actions运行的Summary可看中文报告；`weekly-evidence`保留结构化报告及截图90天。维护记录通过唯一机器人marker的“MILOQEN 每周维护记录”Issue长期追踪；相同故障只更新已有记录，新指纹或恢复才评论提及所有者。正常周次报告“本周检查正常”，没有创建新Issue。Issue即使恢复后关闭，下一次仍更新同一条。通知取决于你GitHub的关注/通知设置，不承诺直接发送到ChatGPT。
+打开 [Actions巡检入口](https://github.com/Loraine-Dev/Loraine-Dev.github.io/actions/workflows/weekly-maintenance.yml) 的运行Summary可看中文报告；`weekly-evidence`保留结构化报告及截图90天。[维护Issue #3](https://github.com/Loraine-Dev/Loraine-Dev.github.io/issues/3)通过唯一机器人marker长期追踪；相同故障只更新已有记录，新指纹或恢复才评论提及所有者。正常周次报告“本周检查正常”，没有创建新Issue。Issue即使恢复后关闭，下一次仍更新同一条，异常可重新打开；关闭不是定时任务停止。通知取决于你GitHub的关注/通知设置，不承诺直接发送到ChatGPT。
 
 截图在减少动态、字体就绪、固定视口下截取并降采样比较；上一份报告保留图像签名/环境/性能基线。首次或浏览器版本/OS变化标首次基线，不能报“已比较正常”。明显差异保留旧基线供人工检查；只有审核新截图后手动运行并勾选accept_visual_baseline才接受更新。性能比较至少3次样本中位数同时超过50%和500ms才标风险；单次波动不构成故障。是runner本地生产构建的加载变化，非移动网络Lighthouse或真机认证。
 
@@ -47,8 +49,10 @@ OpenAI官方说明：[本地项目定时任务](https://learn.chatgpt.com/docs/a
 
 发布失败：保留旧已部署站点；检查失败不发布。误发布/资源缺失：开发分支普通git revert（合并提交核实父节点再-m 1），完整检查和预览后由你合并回滚PR，正常重新发布；禁止reset/force main。维护任务本身没有发布权限，故不会因巡检故障覆盖网站。
 
-## 首次发布仍需批准
+## 发布状态与后续更新
 
-维护PR需完整CI与人工审核；候选网站及安全补丁均必须保留。2FA仍由你本人核实。发布顺序保持：批准具体版本→PR Ready→发布变量仍false时Merge commit合并→main检查成功→明确批准后设发布变量true→从main手动运行正式工作流→验证公网。单人审批人数0，不需要另一个人，也不绕过保护。
+首次发布已于2026-10-22获准并完成：v1.0.0 → 7ffe2f7，发布变量当时实际为true，Pages来源为GitHub Actions。以后仍需读取最新GitHub状态，不能因旧报告写着false而擅自切换。2FA仍由本人核实。
+
+后续维护：在正确项目中新建Codex对话，普通语言提出需求→读取AGENTS.md/维护手册/相关源码与最新GitHub状态→独立分支最小修改→必要测试、实际CI、预览→PR供用户审核→取得合并/发布授权→正常合并main→已有Pages流程通过检查后自动部署→公网验证。单人审批人数0，不需要另一个人，也不绕过保护。无需固定提示词、每天保持对话打开或手工上传ZIP。详见[长期维护手册](./MILOQEN-长期维护.md)。
 
 来源：[GitHub计划及手动触发限制](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows)、[Dependabot API权限](https://docs.github.com/en/rest/dependabot/alerts)。

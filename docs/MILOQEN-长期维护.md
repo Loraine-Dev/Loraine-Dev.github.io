@@ -1,6 +1,39 @@
 # MILOQEN V1.0 长期维护手册
 
-每周自动巡检、告警、暂停恢复及Codex处理Issue的当前说明见 [每周维护手册](./MILOQEN-每周维护.md)。新周计划替代原dependency-security.yml独立周计划；在默认分支合并前只算待启用，不依赖本地电脑。
+本手册与根目录 [AGENTS.md](../AGENTS.md) 共同承载跨对话上下文，不以旧聊天记录为前提。每周自动巡检、告警和暂停恢复见 [每周维护手册](./MILOQEN-每周维护.md)。历史审计/验收报告是当时快照，不是当前状态证明。
+
+## 项目背景与已发布基线
+
+弥洛生 / MILOQEN 是原创独立游戏品牌，宣言“让想象拥有生命。”。官网是 <https://loraine-dev.github.io/>，仓库为 <https://github.com/Loraine-Dev/Loraine-Dev.github.io>。《奇妙拍档》目前为策划与研究中的原创节奏游戏，尚未正式开发，计划手机与 PC。以后阶段变更只能依据用户确认的真实资料。
+
+2026-10-22 已正式发布 [v1.0.0](https://github.com/Loraine-Dev/Loraine-Dev.github.io/releases/tag/v1.0.0)，稳定提交 `7ffe2f7`。PR #5 合并提交 `619a89b` 保留完整官网，PR #12 仅改善 CI 审计网络可靠性，未改网站源码。首次成功部署为 [39718774906](https://github.com/Loraine-Dev/Loraine-Dev.github.io/actions/runs/39718774906)。当时 Pages 来源为 GitHub Actions，`MILOQEN_PAGES_APPROVED=true`；每周维护在 main 中 active。新任务必须重新读取 GitHub，不能把这些快照当作永远正确。
+
+### 新 Codex 对话如何开始
+
+在 Codex 中打开或添加仓库根文件夹，当前电脑路径为 `D:\codex\work\miloqen-v6`，建议项目名 MILOQEN。以后选中该项目，直接新建对话并正常描述需求即可，例如“看看官网有没有问题”“把这段介绍改一下”或“处理维护 Issue #3”。示例不是固定格式，不需要复制整份背景。不要只打开父级 `D:\codex` 或把素材输出目录当作项目。
+
+新电脑先克隆仓库，再打开克隆的根目录；路径可不同，不能硬编码旧电脑路径。GitHub CLI 若未登录，用 `gh auth login --hostname github.com --git-protocol https --web` 由本人完成网页授权，随后 `gh auth setup-git`。不要把令牌贴进聊天。
+
+Codex 启动时先读 AGENTS.md 与本手册，再根据任务读取相关源码；涉及当前状态/修改时核对工作区、origin、fetch 后 main、PR、CI、Pages 和维护记录。已有未提交修改先保留。简单问答不强制跑这些网络/构建步骤；网络不可用只标未知，不声称检查通过。发现缺少具体事实时只问缺项，不要求重述背景。
+
+官方依据：[OpenAI AGENTS.md 项目指令](https://learn.chatgpt.com/docs/agent-configuration/agents-md)。项目根目录会影响指令发现；若规则未加载，先核实工作目录与覆盖文件，再重开项目对话。中文手册由 AGENTS.md 明确要求读取，并非所有文档都会自动加入上下文。
+
+## 设计与技术地图
+
+保留《星门之外的世界树 / Beyond the Gate — A Living World》：星门框景、世界树焦点、前中后景与原画光源一致。原则是“艺术上大胆、设计上克制、技术上聪明”“更少运动，更大惊叹”。不靠粒子、强光或复杂3D制造完成感；改手机裁切、字体和留白时仍须保护主体与可读性。日常维护不擅自重做方向，重大美术变动先给可审查方案并取得确认。
+
+工程为 Node.js 24 + npm、Vite + TypeScript 静态多页；Three.js 负责首页必要空间层次，局部材质在 Worker 中渲染。没有服务端、数据库、真实表单、Astro 或 React。`scripts/render.mjs` 调用 `scripts/site/` 从数据与模板生成 HTML；内页使用共享样式/导航，但不重复首页世界树背景、不加载首页动画。
+
+| 内容区域 | 路由与目的 |
+|---|---|
+| Home | `/`，沉浸开场、创作理念与作品入口、余韵 |
+| Works | `/works/`，真实作品策划资料，支持增加数据项 |
+| Philosophy | `/philosophy/`，原创玩法、节奏、互动艺术与审美 |
+| About | `/about/`，品牌定位与当前阶段，不虚构法律身份或团队 |
+| Journal | `/journal/`，安全 Markdown 文章，无文章时诚实空状态 |
+| Contact | `/contact/`，仅已确认 GitHub 链接，无假表单 |
+
+`src/styles/tokens.css` 管字体、色彩、间距，`site.css`/`editorial.css` 管共享及内页布局；导航/页脚在 `scripts/site/components.mjs`。动态与内容入口见下文及 AGENTS.md 的修改入口表。404、robots、sitemap 由构建生成，用户站根路径为 `/`。
 
 ## 启动与日常修改
 
@@ -56,16 +89,20 @@
 
 `tests/production-ui.mjs` 在桌面/手机对7个路由、普通与3组调试参数执行56项生产访问检查，并验证减少动态及开发工具仍可在开发环境使用。发布检查同时扫描所有产物 HTML、JS、CSS，避免开发组件代码进入构建，而非仅检查是否可见。该检查已经纳入浏览器CI。
 
-只有 `.github/workflows/pages.yml` 负责网站部署：开发分支/PR 自动构建、测试并上传可下载静态产物。main 同样先检查；仅仓库变量 `MILOQEN_PAGES_APPROVED == true` 且事件来自 main 才上传 Pages 产物和部署。PR、开发分支、标签以及未批准状态均不部署。另有只读的 dependency-security.yml 每周检查依赖，不部署网站。
+只有 `.github/workflows/pages.yml` 负责网站部署：开发分支/PR 自动构建、测试并上传可下载静态产物。main 同样先检查；仅仓库变量 `MILOQEN_PAGES_APPROVED == true` 且事件来自 main 才上传 Pages 产物和部署。PR、开发分支、标签以及未批准状态均不部署。唯一例行巡检是 `weekly-maintenance.yml`；旧 `dependency-security.yml` 已移除，不另建重复计划。
 
-当前仓库已实际切换 Pages 来源为 GitHub Actions，MILOQEN_PAGES_APPROVED=false。旧 main 根目录 legacy 自动构建链路已停用，避免绕过首次发布门控。首次发布须你明确确认具体版本后，才进行以下操作：
+日常更新按以下顺序，Codex 自主完成前3步，合并/正式发布按当前用户授权执行：
 
-1. 确认 PR 的实际 GitHub CI 成功，最终画面与内容已审核。
-2. 核实 GitHub 仓库 Settings → Pages 的构建来源仍为 GitHub Actions；保留既有保护规则。
-3. 设置仓库 Actions 变量 MILOQEN_PAGES_APPROVED=true；建议 github-pages 环境仅允许 main，并按需要设置审核人。
-4. 你确认合并 PR。main 上的同一构建产物经过检查后由官方 Pages Actions 发布；随后检查正式 URL。若 main 已先合并，确认后从 main 手动运行同一工作流。
+1. 读取当前 main/工作区，在独立 `codex/*` 分支最小修改；正常保留远程历史及他人工作。
+2. 做相关测试和预览，检查 diff，提交并推送，创建 PR；读取真实远程 `Build and test`，不能只凭本地绿灯。
+3. 提供改动、验证、影响和 PR 给用户审核。内容/功能修改需用户确认合并；“修改页面”本身不等于批准正式发布。用户若已明确批准该 PR/本次限定改动保存到 main，不重复索要同一授权。
+4. 确认 main 保护、PR 最新与检查成功；经授权正常 Merge commit 合并，不用管理员绕过或自己批准高风险 PR。合并会触发现有 main 构建和自动部署，审核时须说明这一点。
+5. `MILOQEN_PAGES_APPROVED` 已在首次发布时开启，不需每次反复开关。不得为测试擅自变更；若为 false，取得发布授权后才恢复。人工重跑部署只能从经过审核的当前 main 执行，不能重跑旧提交导致旧站重新上线。
+6. 确认 `Deploy reviewed main` 成功，再逐页检查公网资源、控制台、调试隔离、内容及必要动态/回退，记录成功提交与运行链接。失败则保留旧已部署站点并报告，不跳过审计。
 
-本轮只完成安全的构建来源配置，未开启发布变量、未合并或部署，也未修改分支保护。之后日常更新为“Codex 修改→CI→你确认合并→自动发布”。构建失败、测试失败或门控关闭不会发布。不需要手动上传 ZIP。首次 PR 合并使用 Merge commit 保留既有祖先历史；不要 squash 后删除唯一历史引用。
+`pages.yml` 的 npm audit 固定官方 registry，最多3次，请求超时60秒、进程限90秒、间隔10/30秒。有效报告发现漏洞立即失败；必须有效报告为零漏洞且命令退出0才通过。外部服务持续失败仍阻断发布，不用 continue-on-error 或非官方审计替代。连通诊断只报告代理是否配置、DNS、TLS/ping，不打印代理值或凭据。
+
+文档-only 修改检查本地相对链接、过时状态和 diff；仍走完整远程 CI。代码、内容、素材、交互与安全策略按对应风险运行现有检查，不为每次维护增加重复测试。自动构建不代替用户的艺术与发布判断。
 
 官方流程依据：[GitHub Pages 自定义工作流](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
 
@@ -81,20 +118,20 @@ origin 必须为 https://github.com/Loraine-Dev/Loraine-Dev.github.io.git。标�
 
 线上回滚采用新的回滚分支，`git revert` 撤销对应整合提交或通过受审核 PR 恢复确认过的文件，测试通过后由你合并并自动发布。不 force push main，不删除历史。可先把 MILOQEN_PAGES_APPROVED 设为 false 暂停后续发布。
 
-## 已知边界
-
 ## 安全检查与恢复
 
-2026-10-22 所有者批准后的当前状态：main 已启用 PR 必需、Build and test（绑定 GitHub Actions app 15368）成功且分支最新、讨论解决、管理员受限、禁止强推删除；不要求其他审核人批准。Dependabot alerts/security updates 已开启；仓库自动合并关闭。原整站 PR #1 已关闭留档，安全 PR #2 已调整为 main 的完整 V1.0 审核入口，包含原整站和3d1ec5c安全补丁；没有合并 main。早期报告“暂未开启”的描述只代表当时快照。首次发布变量仍为 false。
+2026-10-22 发布后核实的保护基线：main 要求 PR、Build and test（绑定 GitHub Actions app 15368）成功且分支最新、讨论解决、管理员受限、禁止强推删除；单人维护不要求另一审核人。Dependabot alerts/security updates 开启，仓库自动合并关闭。PR #5 与 #12 已合并，V1.0 完整官网及3d1ec5c安全补丁均保留；早期 PR #1/#2 与历史报告不是最新发布入口。每次涉及安全或发布仍应实际读取配置；普通维护不能擅自修改这些权限。
 
 每次修改执行 `npm run check`、`npm run test:security` 和 `npm audit --audit-level=low`；脚本、样式或策略变化再执行 `npm run test:browser:ci`。签名扫描只报文件/数量，不输出匹配内容；可用 `node scripts/security-scan.mjs --history` 对本机可达历史做有限格式扫描，不能代替 GitHub Secret scanning 或证明从未泄露。新依赖审查来源、用途、维护情况和锁文件，不使用 audit fix --force。
 
 生产 CSP 在 Vite 构建期插入所有 HTML，禁止第三方脚本、内联脚本、eval、外部网络连接、嵌入对象和表单提交；保留现有相机、云雾需要的内联样式。开发服务器不添加此策略，避免破坏 HMR 与诊断。meta CSP 不提供 frame-ancestors、X-Frame-Options、Permissions-Policy 等响应头；仓库中的 `_headers`/普通 HTML meta 不能替 GitHub Pages 任意配置这些头。需要完整响应头防护时另行审批代理或托管变更。
 
-Dependabot 配置每周依赖与 Actions 更新 PR；Scheduled dependency audit 工作流需先合并到默认分支才会按计划运行。远程 alerts/security updates 已通过独立 GET 验证开启；当前 main 尚无站点依赖清单，不能把“暂时无告警”当作新站依赖已完成持续扫描。Actions 固定官方 SHA，部署任务不 checkout 源码；只有部署任务拥有 pages/id-token 写权限。检查任务不能批准/合并 PR。
+Dependabot 配置每周依赖与 Actions 更新 PR，仍需 CI 和人工合并，不自动批准。当前 main 已包含锁文件和每周巡检；无法读取告警 API 时记为尚未验证，不能以无输出冒充安全。Actions 固定官方 SHA，部署任务不 checkout 源码；只有部署任务拥有 pages/id-token 写权限。检查任务不能批准/合并 PR。
 
 发现误发布时：先请求关闭发布变量（这是远程发布设置变更，需要授权），在开发分支用 `git revert <错误提交>`；合并提交用 `git revert -m 1 <合并提交>`，核实父提交后操作。执行完整检查和本地预览，由用户批准回滚 PR，再正常合并并发布。没有 force push。失败构建不替换已部署产物；资源缺失由发布路径检查拦截，确认缺失素材已在 Git 中后再构建。Actions 产物只保留14天，Git 中源文件和历史是长期恢复依据，不能把短期产物当备份。
 
 离线备份可用 `git bundle create <仓库外安全路径>/miloqen.bundle --all`，然后 `git bundle verify <路径>`；包含公共源码与历史，不含忽略的素材工作文件、账号恢复码或私钥。复制到独立介质由所有者管理。账号安全每季度在 GitHub Settings 手动确认 2FA、恢复方式、PAT、SSH keys 与 Authorized OAuth Apps；不向 Codex 粘贴任何值。撤销或缩减权限前确认现有自动化不会被误伤。
+
+V1.0恢复优先从远程 `v1.0.0` 稳定标签建立分支；本机另有 `D:\codex\output\miloqen-v1.0.0-7ffe2f7.bundle` 与 SHA256 旁文件，已验证 bundle。新电脑不能依赖此绝对路径或忽略目录的录屏/日志；源码与素材须从 Git 恢复，预览与测试证据可重新生成。异机备份复制、账号2FA人工确认仍未验证，勿将本地文件存在当作异地灾备完成。
 
 自动化技术检查不等于艺术验收。自然度、边界和视觉收益需看正常速度预览。没有物理三维反射/云厚度；没有实体手机时，实际帧率、功耗、温升必须记为尚未验证。GitHub CI 与部署状态以远程实际结果为准，本地工作流校验不能冒充线上成功。
