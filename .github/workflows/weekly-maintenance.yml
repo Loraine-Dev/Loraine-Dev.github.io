@@ -46,7 +46,7 @@ jobs:
         run: npm run check
       - id: security
         continue-on-error: true
-        run: npm run test:security
+        run: npm run test:security && npm run test:maintenance
       - id: audit
         continue-on-error: true
         run: npm audit --json > artifacts/maintenance/audit.json

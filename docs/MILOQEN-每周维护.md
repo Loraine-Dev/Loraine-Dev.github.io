@@ -6,6 +6,8 @@ GitHub-hosted runner每周一北京时间09:00（UTC01:00，`0 1 * * 1`）执行
 
 Actions → Weekly MILOQEN maintenance → Run workflow可以手动巡检；首次合并前若GitHub拒绝dispatch，保留实际失败证据，不绕过main保护。开发验证分支codex/weekly-maintenance由所有者push时会试运行相同检查并执行安全演练；这不表示周计划已经启用。正常PR的即时检查继续运行，发布成功后另有即时公网状态检查，不等下一周。
 
+2026-10-22真实验证：开发分支workflow_dispatch已被GitHub接受，运行39705677233成功；默认分支文件GET仍404，故每周计划仍待启用。正常维护记录为Issue #3；隔离演练Issue #4已验证失败/重复/恢复/重复的评论数量与关闭状态。首轮分支运行39705634005发现现有暂停测试的在途Worker帧采样竞争并发出真实告警，随后手动运行通过且同一Issue记录恢复；测试只增加队列稳定同步，仍严格断言暂停后时间不增长，没有调整动画参数或放宽运动阈值。
+
 ## 检查与报告
 
 检查复用`npm run check`、`test:security`、`test:maintenance`和`test:browser:ci`，另做npm audit、GitHub只读状态、六页公网资源/内链、主图和动画生命周期、桌面/手机静态截图、三次浏览器LCP采样、Firefox/WebKit基本访问。兼容性是Linux引擎，不能冒充实体Safari或手机。

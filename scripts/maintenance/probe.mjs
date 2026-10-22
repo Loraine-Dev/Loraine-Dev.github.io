@@ -2,10 +2,16 @@ import { chromium, firefox, webkit } from "playwright";
 import sharp from "sharp";
 import { mkdir, writeFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
+import { createServer } from "node:net";
 import { median, visualDifference, performanceRegression } from "./model.mjs";
 export async function probe(previous = {}, accept = false) {
   const out = "artifacts/maintenance";
   await mkdir(out, { recursive: true });
+  await new Promise((resolve, reject) => {
+    const socket = createServer();
+    socket.once("error", reject);
+    socket.listen(4183, "127.0.0.1", () => socket.close(resolve));
+  });
   const server = spawn(
     process.execPath,
     [

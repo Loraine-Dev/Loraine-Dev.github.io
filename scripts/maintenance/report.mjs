@@ -18,7 +18,14 @@ function publish(report, title = "MILOQEN 每周维护记录", knownIssue) {
       { date: report.date, status: report.status, runUrl: report.runUrl },
     ].slice(-52),
   };
-  const text = body(report, state);
+  const text = body(report, state).replace(
+    "\n\n<!-- miloqen-state:",
+    "\n\n最近巡检：\n" +
+      state.history
+        .map((h) => `- ${h.date.slice(0, 10)} ${h.status} ${h.runUrl || ""}`)
+        .join("\n") +
+      "\n\n<!-- miloqen-state:",
+  );
   assert(text.length < 60000, "Report too large");
   let current = issue;
   if (!current) {
@@ -78,8 +85,7 @@ if (process.env.MAINTENANCE_TRIAL === "true") {
   });
   const existing = findTracker(title);
   const count = (issue) =>
-    api(`repos/${repo}/issues/${issue.number}/comments?per_page=100`).data
-      ?.length;
+    api(`repos/${repo}/issues/${issue.number}`).data?.comments;
   const initialCount = existing ? count(existing) : 0;
   const a = publish(bad, title, existing);
   assert(a.action.notify);

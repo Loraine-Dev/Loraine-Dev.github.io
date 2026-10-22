@@ -110,10 +110,13 @@ try {
       }
       if (route === "") {
         const material = page.locator(".local-material[data-effect=water]");
-        await page.locator('.local-material[data-effect=water][data-state="ready"]').waitFor();
+        await page
+          .locator('.local-material[data-effect=water][data-state="ready"]')
+          .waitFor();
         await page.waitForFunction(
           () =>
-            document.querySelector(".local-material[data-effect=water]")?.dataset.running === "true",
+            document.querySelector(".local-material[data-effect=water]")
+              ?.dataset.running === "true",
         );
         const before = Number(await material.getAttribute("data-time"));
         await page.waitForTimeout(350);
@@ -121,8 +124,26 @@ try {
         await page.getByRole("button", { name: "暂停动态" }).click();
         await page.waitForFunction(
           () =>
-            document.querySelector(".local-material[data-effect=water]")?.dataset.running ===
-            "false",
+            document.querySelector(".local-material[data-effect=water]")
+              ?.dataset.running === "false",
+        );
+        // The main-thread flag changes before an already queued Worker frame
+        // reaches the DOM. Wait for that queue to settle, then assert a strict
+        // stationary interval; continuously running frames cannot pass this.
+        await page.waitForFunction(
+          () => {
+            const value = document.querySelector(
+              ".local-material[data-effect=water]",
+            )?.dataset.time;
+            const last = window.__pauseObservation;
+            if (!last || last.value !== value) {
+              window.__pauseObservation = { value, since: performance.now() };
+              return false;
+            }
+            return performance.now() - last.since >= 400;
+          },
+          null,
+          { timeout: 5000, polling: 50 },
         );
         const stopped = await material.getAttribute("data-time");
         await page.waitForTimeout(250);
@@ -131,8 +152,8 @@ try {
         await page.locator("#content").scrollIntoViewIfNeeded();
         await page.waitForFunction(
           () =>
-            document.querySelector(".local-material[data-effect=water]")?.dataset.running ===
-            "false",
+            document.querySelector(".local-material[data-effect=water]")
+              ?.dataset.running === "false",
         );
       }
       report.pages.push({
@@ -148,7 +169,9 @@ try {
   const rp = await reduced.newPage();
   await rp.goto(base, { waitUntil: "networkidle" });
   assert.equal(
-    await rp.locator(".local-material[data-effect=water]").getAttribute("data-state"),
+    await rp
+      .locator(".local-material[data-effect=water]")
+      .getAttribute("data-state"),
     "policy",
   );
   assert.equal(
@@ -166,7 +189,9 @@ try {
   const lp = await low.newPage();
   await lp.goto(base, { waitUntil: "networkidle" });
   assert.equal(
-    await lp.locator(".local-material[data-effect=water]").getAttribute("data-state"),
+    await lp
+      .locator(".local-material[data-effect=water]")
+      .getAttribute("data-state"),
     "policy",
   );
   report.checks.push("low-memory: static fallback");
