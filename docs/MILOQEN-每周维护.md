@@ -12,6 +12,8 @@ Actions → Weekly MILOQEN maintenance → Run workflow可从main手动巡检，
 
 ## 检查与报告
 
+2026-10-26 修复分支的安全审查见[安全维护记录](./MILOQEN-安全维护-2026-10-26.md)。本轮维护修改通过审核合并后，审计仅在有效报告且命令成功时通过；审计不可用明确告警。七天失败记录保留，但区分同工作流后续成功覆盖的历史、巡检自身告警历史和未恢复失败；本轮实际漏洞/构建/公网故障仍独立告警。未合并前不能声称 main 已采用新判定。
+
 检查复用`npm run check`、`test:security`、`test:maintenance`和`test:browser:ci`，另做npm audit、GitHub只读状态、六页公网资源/内链、主图和动画生命周期、桌面/手机静态截图、三次浏览器LCP采样、Firefox/WebKit基本访问。兼容性是Linux引擎，不能冒充实体Safari或手机。
 
 打开 [Actions巡检入口](https://github.com/Loraine-Dev/Loraine-Dev.github.io/actions/workflows/weekly-maintenance.yml) 的运行Summary可看中文报告；`weekly-evidence`保留结构化报告及截图90天。[维护Issue #3](https://github.com/Loraine-Dev/Loraine-Dev.github.io/issues/3)通过唯一机器人marker长期追踪；相同故障只更新已有记录，新指纹或恢复才评论提及所有者。正常周次报告“本周检查正常”，没有创建新Issue。Issue即使恢复后关闭，下一次仍更新同一条，异常可重新打开；关闭不是定时任务停止。通知取决于你GitHub的关注/通知设置，不承诺直接发送到ChatGPT。

@@ -10,6 +10,90 @@ export const performanceRegression = (samples, before) =>
   before > 0 &&
   median(samples) > before * 1.5 &&
   median(samples) > before + 500;
+
+export function auditCheck(audit, outcome) {
+  const v = audit?.metadata?.vulnerabilities;
+  const levels = ["info", "low", "moderate", "high", "critical"];
+  const valid =
+    audit?.auditReportVersion === 2 &&
+    !audit.error &&
+    audit.vulnerabilities &&
+    typeof audit.vulnerabilities === "object" &&
+    !Array.isArray(audit.vulnerabilities) &&
+    v &&
+    [...levels, "total"].every(
+      (k) => Number.isSafeInteger(v[k]) && v[k] >= 0,
+    ) &&
+    levels.reduce((total, k) => total + v[k], 0) === v.total &&
+    (v.total !== 0 || Object.keys(audit.vulnerabilities).length === 0);
+  if (!valid)
+    return {
+      ok: false,
+      detail: "npm audit结果缺失、无效或服务不可用；无法确认依赖安全",
+    };
+  if (v.total > 0)
+    return {
+      ok: false,
+      detail: `已知漏洞合计 ${v.total}（低${v.low}、中等${v.moderate}、高${v.high}、严重${v.critical}）`,
+    };
+  return {
+    ok: outcome === "success",
+    detail:
+      outcome === "success"
+        ? "有效审计报告：已知漏洞合计 0"
+        : "审计命令未成功，零值报告不能作为通过依据",
+  };
+}
+
+export function summarizeMainFailures(
+  runs,
+  { now = Date.now(), currentRunId } = {},
+) {
+  const recent = runs.filter(
+    (r) =>
+      r.head_branch === "main" &&
+      String(r.id) !== String(currentRunId) &&
+      Date.parse(r.created_at) > now - 7 * 86400000,
+  );
+  const failures = recent.filter((r) =>
+    ["failure", "timed_out", "startup_failure", "action_required"].includes(
+      r.conclusion,
+    ),
+  );
+  const maintenance = failures.filter(
+    (r) => r.path === ".github/workflows/weekly-maintenance.yml",
+  );
+  const recovered = [],
+    unresolved = [];
+  for (const failure of failures.filter((r) => !maintenance.includes(r))) {
+    const succeededLater = recent.some(
+      (r) =>
+        r.conclusion === "success" &&
+        r.status === "completed" &&
+        Date.parse(r.created_at) > Date.parse(failure.created_at) &&
+        (failure.workflow_id != null
+          ? r.workflow_id === failure.workflow_id
+          : failure.path && r.path === failure.path),
+    );
+    (succeededLater ? recovered : unresolved).push(failure);
+  }
+  // Retain prior maintenance alerts as history. Re-alerting on this workflow's own
+  // alert would perpetuate it forever; current audit/build/browser/live checks
+  // independently decide whether the underlying risk is still present.
+  const ids = (items) =>
+    items
+      .slice(0, 5)
+      .map((r) => r.id)
+      .join(",") || "无";
+  return {
+    ok: unresolved.length === 0,
+    total: failures.length,
+    recovered,
+    unresolved,
+    maintenance,
+    detail: `近7天失败 ${failures.length}；未恢复 ${unresolved.length}（${ids(unresolved)}）；同工作流后续成功已恢复 ${recovered.length}（${ids(recovered)}）；巡检历史 ${maintenance.length}（${ids(maintenance)}），风险由本轮检查单独判断`,
+  };
+}
 export function summarize({
   checks = [],
   unknown = [],

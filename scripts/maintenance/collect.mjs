@@ -1,7 +1,12 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { appendFileSync } from "node:fs";
 import { api, repo, findTracker } from "./github.mjs";
-import { summarize, readState } from "./model.mjs";
+import {
+  summarize,
+  readState,
+  auditCheck,
+  summarizeMainFailures,
+} from "./model.mjs";
 import { probe } from "./probe.mjs";
 import { checkOnline } from "./online.mjs";
 const checks = [],
@@ -22,13 +27,10 @@ try {
       "",
     ),
   );
-  check(
-    "npm-audit",
-    audit.metadata?.vulnerabilities?.total === 0,
-    `已知漏洞合计 ${audit.metadata?.vulnerabilities?.total ?? "未知"}`,
-  );
+  const result = auditCheck(audit, process.env.RESULT_AUDIT);
+  check("npm-audit", result.ok, result.detail);
 } catch {
-  unknown.push("npm audit服务不可用或结果缺失");
+  check("npm-audit", false, "npm audit服务不可用或结果缺失；无法确认依赖安全");
 }
 let previous = {};
 try {
@@ -65,19 +67,14 @@ else
   unknown.push(
     "GITHUB_TOKEN无Dependabot告警读取权限；由GitHub原生告警通知所有者，不扩权",
   );
-const runs = response("actions/runs?per_page=100");
+const runs = response("actions/runs?branch=main&per_page=100");
 if (runs.ok) {
-  const failed = runs.data.workflow_runs.filter(
-    (r) =>
-      r.head_branch === "main" &&
-      ["failure", "timed_out"].includes(r.conclusion) &&
-      Date.parse(r.created_at) > Date.now() - 7 * 86400000,
-  );
-  check(
-    "recent-main-actions",
-    failed.length === 0,
-    `近7天main失败运行 ${failed.length}`,
-  );
+  const result = summarizeMainFailures(runs.data.workflow_runs, {
+    currentRunId: process.env.GITHUB_RUN_ID,
+  });
+  check("recent-main-actions", result.ok, result.detail);
+  if (runs.data.total_count > runs.data.workflow_runs.length)
+    unknown.push("Actions历史超出100条读取范围，失败统计可能不完整");
 } else unknown.push("Actions历史读取不可用");
 const pages = response("pages");
 if (pages.ok)
