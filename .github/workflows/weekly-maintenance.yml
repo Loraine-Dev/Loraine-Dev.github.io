@@ -61,6 +61,7 @@ jobs:
           ACCEPT_VISUAL_BASELINE: ${{ inputs.accept_visual_baseline }}
           RESULT_BUILD: ${{ steps.build.outcome }}
           RESULT_SECURITY: ${{ steps.security.outcome }}
+          RESULT_AUDIT: ${{ steps.audit.outcome }}
           RESULT_BROWSER: ${{ steps.browser.outcome }}
         run: node scripts/maintenance/collect.mjs
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
