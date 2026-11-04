@@ -41,10 +41,10 @@
     "review:v1": "node scripts/prepare-v1-review.mjs"
   },
   "dependencies": {
-    "three": "0.186.1"
+    "three": "0.187.0"
   },
   "devDependencies": {
-    "@types/three": "0.186.0",
+    "@types/three": "0.187.0",
     "lighthouse": "13.5.0",
     "playwright": "1.62.1",
     "prettier": "3.9.10",
