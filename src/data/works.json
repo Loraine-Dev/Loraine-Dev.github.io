@@ -1,5 +1,21 @@
 [
   {
+    "slug": "hepai-town",
+    "title": "合拍小镇",
+    "englishLabel": "CASUAL GAME / OPEN TEST",
+    "status": "已上线 · 测试中",
+    "statusEnglish": "Open Test",
+    "genre": "节奏休闲小游戏",
+    "platforms": "TapTap（设备支持以游戏页为准）",
+    "phase": "已在 TapTap 开放测试，版本与体验方式以公开游戏页为准。",
+    "description": "跟着节拍，体验小镇日常。弥洛生的首款已上线小游戏，现已在 TapTap 开放测试。",
+    "cover": "images/works/hepai-town.webp",
+    "play": {
+      "url": "https://www.taptap.cn/app/1036533",
+      "confirmed": true
+    }
+  },
+  {
     "slug": "wonder-partners",
     "title": "奇妙拍档",
     "englishLabel": "RHYTHM GAME / EARLY EXPLORATION",

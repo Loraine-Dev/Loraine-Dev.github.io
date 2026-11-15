@@ -1,6 +1,26 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+
+test("released test game and planning project have separate truthful status and links", async () => {
+  const html = await readFile("works/index.html", "utf8");
+  const live = html.match(
+    /<section class="work-feature" id="hepai-town">([\s\S]*?)<\/section>/,
+  )?.[1];
+  const planned = html.match(
+    /<section class="work-feature" id="wonder-partners">([\s\S]*?)<\/section>/,
+  )?.[1];
+  assert(live, "new game is present");
+  assert(planned, "planning project is preserved");
+  assert.match(live, /测试/);
+  assert.match(live, /https:\/\/www.taptap.cn\/app\/1036533/);
+  assert.doesNotMatch(live, /目前没有公开|计划平台|developer\.taptap/);
+  assert.match(planned, /In Planning/);
+  assert.doesNotMatch(planned, /href="https:\/\/www.taptap/);
+  const home = await readFile("index.html", "utf8");
+  assert.match(home, /《合拍小镇》/);
+  assert.doesNotMatch(home, /了解计划作品|计划面向手机与 PC/);
+});
 test("all six content routes have canonical, title, main and shared navigation", async () => {
   for (const route of [
     "",

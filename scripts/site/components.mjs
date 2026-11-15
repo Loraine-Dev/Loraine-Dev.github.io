@@ -2,7 +2,7 @@ import { escape as e } from "./markdown.mjs";
 import { githubChannel } from "./channels.mjs";
 export const routes = [
   ["", "首页", "HOME"],
-  ["works", "计划作品", "WORKS"],
+  ["works", "作品", "WORKS"],
   ["philosophy", "创作理念", "PHILOSOPHY"],
   ["about", "关于弥洛生", "ABOUT"],
   ["journal", "创作记录", "JOURNAL"],
