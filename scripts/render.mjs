@@ -47,7 +47,7 @@ home = home
     /<title>[\s\S]*?<\/title>/,
     meta(
       "弥洛生 MILOQEN — 让想象拥有生命。",
-      "弥洛生 MILOQEN，原创游戏与互动艺术。探索品牌概念世界，了解策划中的原创节奏游戏《奇妙拍档》。",
+      "弥洛生 MILOQEN，原创游戏与互动艺术。探索品牌概念世界，体验已开放测试的《合拍小镇》，了解策划中的《奇妙拍档》。",
     ),
   )
   .replace(/<meta name="robots" content="noindex,nofollow"\s*\/>/, "")
@@ -81,7 +81,7 @@ for (const [route, zh] of routes.slice(1))
       route,
       `${zh} — 弥洛生 MILOQEN`,
       route === "works"
-        ? "《奇妙拍档》，策划与研究中的原创节奏游戏，计划平台手机与 PC。"
+        ? "《合拍小镇》已在 TapTap 开放测试；《奇妙拍档》仍处于策划与研究阶段。"
         : copy[route]?.intro || "弥洛生 MILOQEN",
       innerContent(route, data, works, copy, posts),
       "../",

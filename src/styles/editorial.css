@@ -194,6 +194,36 @@ summary:focus-visible {
 .home-score {
   display: block;
 }
+.work-icon {
+  margin: 0;
+  background: #142428;
+  aspect-ratio: 4/5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 32px;
+}
+.work-icon img {
+  width: min(65%, 270px);
+  height: auto;
+}
+.work-icon figcaption {
+  color: var(--muted);
+  font: 10px/1.8 var(--sans);
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+.home-score .work-icon {
+  aspect-ratio: 2.15;
+}
+@media (max-width: 700px) {
+  .work-icon,
+  .home-score .work-icon {
+    aspect-ratio: 1.2;
+  }
+}
 .score-art {
   position: relative;
   color: #add0d0;
